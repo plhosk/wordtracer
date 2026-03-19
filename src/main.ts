@@ -64,6 +64,7 @@ const MOVE_DEADZONE_BY_POINTER: Record<string, number> = {
 const DEFAULT_SETTINGS: SavedSettings = {
   autoAdvance: false,
   theme: 'dark',
+  alwaysShowHint: false,
 };
 
 const app = document.querySelector<HTMLDivElement>('#app');
@@ -86,6 +87,7 @@ app.innerHTML = `
         <p id="completion-summary" class="completion-summary"></p>
         <section class="status-row">
           <p id="feedback" class="feedback"><span id="feedback-prefix" class="feedback-prefix"></span><span id="feedback-word" class="feedback-word"></span></p>
+          <p id="persistent-hint" class="persistent-hint" hidden></p>
         </section>
       </section>
     </section>
@@ -144,16 +146,23 @@ app.innerHTML = `
 
         <div class="settings-content">
           <label class="setting-row setting-row-switch">
-            <span class="setting-label">Auto-advance after level completion</span>
+            <span class="setting-label">Light mode</span>
             <span class="switch">
-              <input id="auto-advance" class="switch-input" type="checkbox" />
+              <input id="light-theme" class="switch-input" type="checkbox" />
               <span class="switch-ui" aria-hidden="true"></span>
             </span>
           </label>
           <label class="setting-row setting-row-switch">
-            <span class="setting-label">Light mode</span>
+            <span class="setting-label">Always show hint</span>
             <span class="switch">
-              <input id="light-theme" class="switch-input" type="checkbox" />
+              <input id="always-show-hint" class="switch-input" type="checkbox" />
+              <span class="switch-ui" aria-hidden="true"></span>
+            </span>
+          </label>
+          <label class="setting-row setting-row-switch">
+            <span class="setting-label">Auto-advance after level completion</span>
+            <span class="switch">
+              <input id="auto-advance" class="switch-input" type="checkbox" />
               <span class="switch-ui" aria-hidden="true"></span>
             </span>
           </label>
@@ -283,6 +292,8 @@ const cancelRefreshHintButton = required('#cancel-refresh-hint') as HTMLButtonEl
 const confirmRefreshHintButton = required('#confirm-refresh-hint') as HTMLButtonElement;
 const autoAdvanceInput = required('#auto-advance') as HTMLInputElement;
 const lightThemeInput = required('#light-theme') as HTMLInputElement;
+const alwaysShowHintInput = required('#always-show-hint') as HTMLInputElement;
+const persistentHintEl = required('#persistent-hint') as HTMLParagraphElement;
 const resetProgressButton = required('#reset-progress') as HTMLButtonElement;
 const resetProgressModal = required('#reset-progress-modal');
 const cancelResetProgressButton = required('#cancel-reset-progress') as HTMLButtonElement;
@@ -541,6 +552,16 @@ function bindStaticEvents(): void {
     saveState();
   });
 
+  alwaysShowHintInput.addEventListener('change', () => {
+    settings.alwaysShowHint = alwaysShowHintInput.checked;
+    if (!settings.alwaysShowHint) {
+      persistentHintEl.hidden = true;
+    } else {
+      updatePersistentHint();
+    }
+    saveState();
+  });
+
   resetProgressButton.addEventListener('click', () => {
     openResetProgressModal();
   });
@@ -599,6 +620,7 @@ function render(): void {
   renderBonus(state);
   renderWheel(level);
   refreshDictionaryButton();
+  updatePersistentHint();
   if (!levelPackModal.hidden) {
     renderLevelPackModal();
   }
@@ -607,6 +629,7 @@ function render(): void {
 function renderSettings(): void {
   autoAdvanceInput.checked = settings.autoAdvance;
   lightThemeInput.checked = settings.theme === 'light';
+  alwaysShowHintInput.checked = settings.alwaysShowHint;
   applyTheme();
 }
 
@@ -1121,6 +1144,9 @@ function onWheelPointerUp(event: PointerEvent): void {
     handleWordResult(result, submitted);
     render();
     saveState();
+    if (result === 'solved' || result === 'bonus') {
+      updatePersistentHint();
+    }
   }
 }
 
@@ -1377,6 +1403,7 @@ function loadSettings(raw: SavedGameState['settings']): SavedSettings {
   return {
     autoAdvance: typeof raw?.autoAdvance === 'boolean' ? raw.autoAdvance : DEFAULT_SETTINGS.autoAdvance,
     theme,
+    alwaysShowHint: typeof raw?.alwaysShowHint === 'boolean' ? raw.alwaysShowHint : DEFAULT_SETTINGS.alwaysShowHint,
   };
 }
 
@@ -1514,6 +1541,32 @@ async function getUnguessedWordHint(): Promise<HintResult | null> {
   );
 }
 
+async function updatePersistentHint(): Promise<void> {
+  if (!settings.alwaysShowHint) {
+    persistentHintEl.hidden = true;
+    return;
+  }
+
+  const hint = await getUnguessedWordHint();
+  if (!hint) {
+    persistentHintEl.hidden = true;
+    return;
+  }
+
+  const state = gameManager.getCurrentLevelState();
+  state.hints.currentHintCanonical = hint.canonical;
+
+  if (!state.hints.hintedCanonicals.has(hint.canonical)) {
+    state.hints.hintedCanonicals.add(hint.canonical);
+    state.hints.hintCount += 1;
+  }
+
+  const e = hint.excerpt;
+  persistentHintEl.textContent = (e.truncatedStart ? '...' : '') + e.text + (e.truncatedEnd ? '...' : '');
+  persistentHintEl.hidden = false;
+  saveState();
+}
+
 async function openHintModal(): Promise<void> {
   closeBonusModal(false);
   closeDictionaryModal(false);
@@ -1586,24 +1639,19 @@ function closeRefreshHintModal(returnToHint: boolean): void {
 
 async function refreshHint(): Promise<void> {
   const state = gameManager.getCurrentLevelState();
-  
+
   if (state.hints.hintRefreshUsed || !state.hints.currentHintCanonical) {
     return;
   }
 
   state.hints.excludedHintCanonicals.add(state.hints.currentHintCanonical);
   state.hints.hintRefreshUsed = true;
-
-  if (state.hints.hintedCanonicals.has(state.hints.currentHintCanonical)) {
-    state.hints.hintedCanonicals.delete(state.hints.currentHintCanonical);
-    state.hints.hintCount -= 1;
-  }
-
   state.hints.currentHintCanonical = null;
 
   const newHint = await getUnguessedWordHint();
   if (!newHint) {
     hintText.textContent = 'No hints available.';
+    persistentHintEl.hidden = true;
     modalRefreshHintButton.disabled = true;
     hintModal.hidden = false;
     hintButton.setAttribute('aria-expanded', 'true');
@@ -1622,6 +1670,9 @@ async function refreshHint(): Promise<void> {
   const e = newHint.excerpt;
   const displayExcerpt = (e.truncatedStart ? '...' : '') + e.text + (e.truncatedEnd ? '...' : '');
   hintText.textContent = displayExcerpt;
+  if (settings.alwaysShowHint) {
+    persistentHintEl.textContent = displayExcerpt;
+  }
 
   modalRefreshHintButton.disabled = true;
   hintModal.hidden = false;

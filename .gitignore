@@ -20,6 +20,8 @@ data/raw/re-enable/**/*.txt
 data/raw/webster/**/*.txt
 data/raw/webster/**/*.json
 data/raw/wikipedia/**/*.txt
+data/raw/wordnet/**/*.json
+data/raw/wordnet/**/*.gz
 
 # OS/editor noise
 .DS_Store

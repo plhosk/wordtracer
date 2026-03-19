@@ -347,6 +347,19 @@ button:disabled {
   color: var(--muted);
 }
 
+.persistent-hint {
+  position: fixed;
+  bottom: 4px;
+  inset-inline: 0;
+  font-size: 0.8em;
+  color: var(--muted);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+
 .grid {
   padding: 0;
   width: min(var(--grid-max-size), 100%);
@@ -916,8 +929,8 @@ button:disabled {
 
 .settings-separator {
   border: 0;
-  border-top: 1px solid var(--wall);
-  margin: 8px 0;
+  border-top: 1px solid var(--grid-line-soft);
+  margin: 12px -16px;
 }
 
 .reset-progress-btn {
@@ -1142,6 +1155,9 @@ button:disabled {
   justify-content: space-between;
   align-items: center;
   gap: 12px;
+  padding: 0 16px 12px;
+  margin: 0 -16px 12px;
+  border-bottom: 1px solid var(--grid-line-soft);
 }
 
 .settings-head h2 {

@@ -40,6 +40,7 @@ export interface SavedLevelState {
 export interface SavedSettings {
   autoAdvance: boolean;
   theme: 'dark' | 'light';
+  alwaysShowHint: boolean;
 }
 
 export interface SavedGameState {
@@ -99,6 +100,7 @@ export const DEFAULT_TOKEN_ORDER_MODE: TokenOrderMode = 'forward';
 export const DEFAULT_SETTINGS: SavedSettings = {
   autoAdvance: false,
   theme: 'dark',
+  alwaysShowHint: false,
 };
 
 export function normalizeWord(word: string): string {
