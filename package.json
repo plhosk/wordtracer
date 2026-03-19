@@ -18,6 +18,7 @@
     "android:icons": "node scripts/android_icons.mjs && npx @capacitor/assets generate --android && npm run cap:sync",
     "android:build": "node scripts/android_build_debug.mjs",
     "android:build-signed": "npm run cap:sync && npx cap build android",
+    "icons:web": "magick public/icon1680cropped.png -define icon:auto-resize=16,32,48 public/favicon.ico && magick public/icon1680cropped.png -resize 32x32 public/favicon.png",
     "preview": "npm run build && vite preview --host",
     "levels:build": "uv run python -u scripts/generate_all.py @scripts/levels_build.args"
   },
