@@ -1,7 +1,7 @@
 import { cp, mkdir, stat } from 'node:fs/promises';
 import process from 'node:process';
 
-const sourceIconPath = 'public/icon3000.png';
+const sourceIconPath = 'images/icon3000.png';
 const resourcesDir = 'resources';
 const targetIconPath = 'resources/icon.png';
 
