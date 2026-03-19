@@ -1,0 +1,25 @@
+dist/
+node_modules/
+plans/
+
+# Server saved games directory
+savedgames/
+
+# Python env/cache
+.venv/
+**/__pycache__/
+*.pyc
+
+# Generated pipeline artifacts
+data/processed/
+data/generated/
+
+# Word lists
+data/raw/blocklists/**/*.json
+data/raw/re-enable/**/*.txt
+data/raw/webster/**/*.txt
+data/raw/webster/**/*.json
+data/raw/wikipedia/**/*.txt
+
+# OS/editor noise
+.DS_Store

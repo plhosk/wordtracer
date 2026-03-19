@@ -1,0 +1,45 @@
+{
+  "name": "wordtracer",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "check": "echo tsc: && tsc --noEmit && tsc --noEmit --project tsconfig.server.json && echo eslint: && eslint",
+    "build": "tsc && vite build",
+    "build:server": "tsc --project tsconfig.server.json",
+    "build:all": "npm run build && npm run build:server",
+    "start:server": "node dist/server/server.js",
+    "server": "npm run build:server && npm run start:server",
+    "server:watch": "nodemon --watch src --ext ts --exec node scripts/server_watch_exec.mjs",
+    "cap:sync": "npm run build && npx cap sync",
+    "android:open": "npx cap open android",
+    "android:run": "npm run cap:sync && npx cap run android",
+    "android:icons": "node scripts/android_icons.mjs && npx @capacitor/assets generate --android && npm run cap:sync",
+    "android:build": "node scripts/android_build_debug.mjs",
+    "android:build-signed": "npm run cap:sync && npx cap build android",
+    "preview": "npm run build && vite preview --host",
+    "levels:build": "uv run python -u scripts/generate_all.py @scripts/levels_build.args"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^8.2.0",
+    "@eslint/css": "^0.14.1",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^25.5.0",
+    "eslint": "^10.0.3",
+    "globals": "^17.4.0",
+    "nodemon": "^3.1.14",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.57.1",
+    "vite": "^7.3.1"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.2.0",
+    "@capacitor/core": "^8.2.0",
+    "@capacitor/preferences": "^8.0.1"
+  }
+}

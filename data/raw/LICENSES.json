@@ -1,0 +1,32 @@
+[
+  {
+    "id": "webster",
+    "name": "Webster's Unabridged Dictionary",
+    "url": "https://www.gutenberg.org/ebooks/29765",
+    "license": "Public domain"
+  },
+  {
+    "id": "re-enable",
+    "name": "Re-Enable word list",
+    "url": "https://github.com/JakesMD/Re-Enable",
+    "license": "MIT"
+  },
+  {
+    "id": "wikipedia",
+    "name": "Wikipedia word frequency",
+    "url": "https://github.com/IlyaSemenov/wikipedia-word-frequency",
+    "license": "MIT"
+  },
+  {
+    "id": "wordfreq",
+    "name": "wordfreq",
+    "url": "https://github.com/rspeer/wordfreq",
+    "license": "Apache 2.0 / CC BY-SA 4.0"
+  },
+  {
+    "id": "profane-words",
+    "name": "Profane words blocklist",
+    "url": "https://github.com/zautumnz/profane-words",
+    "license": "WTFPL"
+  }
+]

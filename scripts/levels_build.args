@@ -1,0 +1,22 @@
+# Default parameters for npm run levels:build.
+# Pipeline map and knob priorities: scripts/levels_build_tuning.md
+# Keep this file focused on high-level profile knobs.
+--seed 12345678
+--group-count-max 52
+--group-size-targets 12,18,24,30,50
+--group-size-undershoot-ratio 0.25
+--group-oversamples 56,56,64,80,5
+--combo-pool-max-words 30000
+--wheel-sampling-pool-max 3000
+--group-freq-floors 3.30,3.25,3.15,3.05
+--group-difficulty-target-avg-freq-start 4.35
+--group-difficulty-target-avg-freq-end 2.75
+--group-min-answers 4,5,6,7,8
+--group-strict-novelty-early-groups 4
+--group-reuse-budget-ratio 0.10
+--group-cross-pack-short-word-max-reuse 1
+--group-cross-pack-long-word-max-reuse 1
+--group-cross-pack-late-short-word-max-reuse 8
+--group-cross-pack-late-long-word-max-reuse 10
+--group-three-letter-signature-early-groups 4
+--group-difficulty-target-weight 2.5
