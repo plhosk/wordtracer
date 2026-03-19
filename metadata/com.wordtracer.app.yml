@@ -32,7 +32,7 @@ Builds:
       - assembleRelease
     output: app/build/outputs/apk/release/app-release-unsigned.apk
 
-AutoUpdateMode: Version
-UpdateCheckMode: Tags
+AutoUpdateMode: Version v%v
+UpdateCheckMode: Tags ^v(\d+\.)?(\d+\.)?(\*|\d+)$
 CurrentVersion: 1.0.0
 CurrentVersionCode: 1
