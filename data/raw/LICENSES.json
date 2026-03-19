@@ -24,6 +24,12 @@
     "license": "Apache 2.0 / CC BY-SA 4.0"
   },
   {
+    "id": "wordnet",
+    "name": "WordNet 3.0",
+    "url": "https://wordnet.princeton.edu/",
+    "license": "WordNet 3.0 license"
+  },
+  {
     "id": "profane-words",
     "name": "Profane words blocklist",
     "url": "https://github.com/zautumnz/profane-words",

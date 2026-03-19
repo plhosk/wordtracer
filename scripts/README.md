@@ -17,7 +17,8 @@ High-level tuning guidance lives in `scripts/levels_build_tuning.md`.
 - `score_levels.py` - scores and ranks candidate levels
 - `export_levels.py` - assembles final packs with novelty/difficulty constraints
 - `analyze_levels_bundle.py` - reports bundle quality metrics and repeated-word/token CSVs
-- `build_dictionary_lookup.py` - builds app dictionary lookup JSON from bundle + source dictionary
+- `build_wordnet_dictionary.py` - flattens WordNet source into fallback word->definition JSON
+- `build_dictionary_lookup.py` - builds app dictionary lookup JSON from bundle + layered dictionary sources
 
 ## Supporting tools
 

@@ -34,3 +34,9 @@ Machine-readable source inventory lives in `data/raw/LICENSES.json`.
 - Upstream note: `wordfreq` includes additional notice and attribution details
   for some bundled data; see upstream `NOTICE.md`
 - Used by this project during level generation
+
+### WordNet 3.0
+
+- Source: <https://wordnet.princeton.edu/>
+- License: WordNet 3.0 license
+- Local input: `data/raw/wordnet/wordnet.json` (from `wordnet-to-json` conversion)

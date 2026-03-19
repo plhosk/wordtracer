@@ -74,6 +74,21 @@ def parse_args() -> argparse.Namespace:
         help="Source dictionary JSON used to build app lookup data.",
     )
     parser.add_argument(
+        "--wordnet-source",
+        default=str(project_path("data", "raw", "wordnet", "wordnet.json")),
+        help="Source WordNet JSON used for fallback dictionary definitions.",
+    )
+    parser.add_argument(
+        "--wordnet-dictionary",
+        default=str(project_path("data", "processed", "wordnet_dictionary.json")),
+        help="Output path for flattened WordNet fallback dictionary.",
+    )
+    parser.add_argument(
+        "--wordnet-dictionary-stats",
+        default=str(project_path("data", "processed", "wordnet_dictionary_stats.json")),
+        help="Output path for WordNet fallback dictionary stats.",
+    )
+    parser.add_argument(
         "--combo-sizes",
         default="1,2",
         help="Comma-separated combo sizes (default: 1,2).",
@@ -1429,6 +1444,17 @@ def main() -> None:
         args.combo_sizes,
     )
 
+    run(
+        script_dir,
+        str(script_dir / "build_wordnet_dictionary.py"),
+        "--source",
+        str(args.wordnet_source),
+        "--out",
+        str(args.wordnet_dictionary),
+        "--stats-out",
+        str(args.wordnet_dictionary_stats),
+    )
+
     run_grouped_pipeline(script_dir, args)
 
     run(script_dir, str(script_dir / "analyze_levels_bundle.py"))
@@ -1440,6 +1466,8 @@ def main() -> None:
         str(levels_bundle_path),
         "--dictionary",
         str(args.dictionary_source),
+        "--fallback-dictionary",
+        str(args.wordnet_dictionary),
         "--split",
         "--split-dir",
         str(project_path("src", "data")),

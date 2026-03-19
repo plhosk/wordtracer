@@ -20,12 +20,23 @@ def load_licenses() -> list[dict]:
     return data if isinstance(data, list) else []
 
 
-def filter_licenses_for_dictionary(licenses: list[dict]) -> list[dict]:
+def filter_licenses_for_dictionary(
+    licenses: list[dict], dictionary_license_ids: set[str]
+) -> list[dict]:
     return [
         {"name": item["name"], "url": item["url"], "license": item["license"]}
         for item in licenses
-        if item["id"] == "webster"
+        if item["id"] in dictionary_license_ids
     ]
+
+
+def infer_dictionary_license_id(path: Path) -> str | None:
+    normalized = str(path).lower()
+    if "webster" in normalized:
+        return "webster"
+    if "wordnet" in normalized:
+        return "wordnet"
+    return None
 
 
 def parse_args() -> argparse.Namespace:
@@ -47,6 +58,12 @@ def parse_args() -> argparse.Namespace:
         "--dictionary",
         default=str(project_path("data", "raw", "webster", "webster.json")),
         help="Path to source dictionary JSON.",
+    )
+    parser.add_argument(
+        "--fallback-dictionary",
+        action="append",
+        default=[],
+        help="Fallback dictionary JSON path (repeatable, checked after --dictionary).",
     )
     parser.add_argument(
         "--split",
@@ -155,14 +172,10 @@ def collect_lookup_words_from_split_files(levels_dir: Path) -> set[str]:
     return words
 
 
-def build_lookup_data(
-    dictionary_path: Path,
-    bundle_path: Path | None = None,
-    levels_dir: Path | None = None,
-) -> tuple[dict[str, str | None], dict[str, str], list[str], int, int]:
-    dictionary_payload = load_json(dictionary_path)
+def load_dictionary(path: Path) -> dict[str, str]:
+    dictionary_payload = load_json(path)
     if not isinstance(dictionary_payload, dict):
-        raise SystemExit("Dictionary JSON must be an object: word -> definition")
+        raise SystemExit(f"Dictionary JSON must be an object: {path}")
 
     dictionary: dict[str, str] = {}
     for key, value in dictionary_payload.items():
@@ -174,7 +187,33 @@ def build_lookup_data(
             if cleaned:
                 dictionary[normalized] = cleaned
 
-    if not dictionary:
+    return dictionary
+
+
+def build_lookup_data(
+    dictionary_paths: list[Path],
+    bundle_path: Path | None = None,
+    levels_dir: Path | None = None,
+) -> tuple[
+    dict[str, str | None],
+    dict[str, str],
+    list[str],
+    int,
+    int,
+    dict[str, int],
+    list[str],
+]:
+    dictionaries: list[tuple[str, dict[str, str]]] = []
+    dictionary_sources: list[str] = []
+    for path in dictionary_paths:
+        dictionary = load_dictionary(path)
+        if not dictionary:
+            continue
+        source = path_for_meta(path)
+        dictionaries.append((source, dictionary))
+        dictionary_sources.append(source)
+
+    if not dictionaries:
         raise SystemExit("No usable dictionary entries found.")
 
     # Prefer bundle if provided, otherwise fall back to split files
@@ -193,17 +232,29 @@ def build_lookup_data(
     unresolved: list[str] = []
     direct_match_count = 0
     lemma_match_count = 0
+    fallback_match_count = 0
+
+    def find_canonical(target_word: str) -> tuple[str, str] | None:
+        for source, dictionary in dictionaries:
+            if target_word in dictionary:
+                return target_word, source
+        return None
 
     for word in sorted(lookup_words):
-        canonical = word if word in dictionary else None
+        resolved = find_canonical(word)
+        canonical = resolved[0] if resolved else None
+        source = resolved[1] if resolved else None
         if canonical is None:
             for pos in ("VERB", "NOUN", "ADJ"):
                 lemma = getLemma(word, pos)
                 if lemma:
                     lemma_normalized = normalize_word(lemma[0])
-                    if lemma_normalized and lemma_normalized in dictionary:
-                        canonical = lemma_normalized
-                        break
+                    if lemma_normalized:
+                        resolved = find_canonical(lemma_normalized)
+                        if resolved:
+                            canonical = resolved[0]
+                            source = resolved[1]
+                            break
 
         if canonical is None:
             lookup[word] = None
@@ -211,24 +262,45 @@ def build_lookup_data(
             continue
 
         lookup[word] = canonical
-        definitions[canonical] = dictionary[canonical]
+        for dictionary_source, dictionary in dictionaries:
+            if dictionary_source == source:
+                definitions[canonical] = dictionary[canonical]
+                break
         if canonical == word:
             direct_match_count += 1
         else:
             lemma_match_count += 1
+        if source != dictionaries[0][0]:
+            fallback_match_count += 1
 
-    return lookup, definitions, unresolved, direct_match_count, lemma_match_count
+    match_stats = {
+        "directMatchCount": direct_match_count,
+        "lemmaMatchCount": lemma_match_count,
+        "fallbackMatchCount": fallback_match_count,
+    }
+
+    return (
+        lookup,
+        definitions,
+        unresolved,
+        direct_match_count,
+        lemma_match_count,
+        match_stats,
+        dictionary_sources,
+    )
 
 
 def write_split_files(
     split_dir: Path,
     source_path: Path,
-    dictionary_path: Path,
+    dictionary_paths: list[Path],
     lookup: dict[str, str | None],
     definitions: dict[str, str],
     unresolved: list[str],
     direct_match_count: int,
     lemma_match_count: int,
+    match_stats: dict[str, int],
+    dictionary_sources: list[str],
 ) -> None:
     split_dir.mkdir(parents=True, exist_ok=True)
 
@@ -253,17 +325,24 @@ def write_split_files(
         save_json(letter_file, letter_payload)
 
     word_count = len(lookup)
-    licenses = filter_licenses_for_dictionary(load_licenses())
+    dictionary_license_ids = {
+        inferred
+        for inferred in (infer_dictionary_license_id(path) for path in dictionary_paths)
+        if inferred is not None
+    }
+    licenses = filter_licenses_for_dictionary(load_licenses(), dictionary_license_ids)
     meta_payload = {
         "meta": {
             "sourceLevels": path_for_meta(source_path),
-            "sourceDictionary": path_for_meta(dictionary_path),
+            "sourceDictionary": dictionary_sources[0] if dictionary_sources else "",
+            "sourceDictionaries": dictionary_sources,
             "wordCount": word_count,
             "mappedWordCount": word_count - len(unresolved),
             "definitionCount": len(definitions),
             "unresolvedWordCount": len(unresolved),
             "directMatchCount": direct_match_count,
             "lemmaMatchCount": lemma_match_count,
+            "fallbackMatchCount": int(match_stats.get("fallbackMatchCount", 0)),
             "letterCount": len(all_letters),
             "licenses": licenses,
         },
@@ -284,15 +363,23 @@ def write_split_files(
 
 def main() -> None:
     args = parse_args()
-    dictionary_path = resolve_path(args.dictionary)
+    dictionary_paths = [resolve_path(args.dictionary)] + [
+        resolve_path(raw) for raw in args.fallback_dictionary
+    ]
 
     bundle_path = resolve_path(args.bundle) if args.bundle else None
     levels_dir = resolve_path(args.levels_dir) if args.levels_dir else None
 
-    lookup, definitions, unresolved, direct_match_count, lemma_match_count = (
-        build_lookup_data(
-            dictionary_path, bundle_path=bundle_path, levels_dir=levels_dir
-        )
+    (
+        lookup,
+        definitions,
+        unresolved,
+        direct_match_count,
+        lemma_match_count,
+        match_stats,
+        dictionary_sources,
+    ) = build_lookup_data(
+        dictionary_paths, bundle_path=bundle_path, levels_dir=levels_dir
     )
 
     # Source path for metadata: prefer bundle, otherwise levels_dir
@@ -309,12 +396,14 @@ def main() -> None:
         write_split_files(
             split_dir,
             source_path,
-            dictionary_path,
+            dictionary_paths,
             lookup,
             definitions,
             unresolved,
             direct_match_count,
             lemma_match_count,
+            match_stats,
+            dictionary_sources,
         )
     else:
         raise SystemExit("Only --split mode is supported. Please use --split flag.")

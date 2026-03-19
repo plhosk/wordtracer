@@ -73,6 +73,25 @@ export function findDefinitionBoundary(
   return -1;
 }
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function maskSpoilerWords(text: string, wordsToAvoid: string[]): string {
+  let output = text;
+  const replacement = '[redacted]';
+  const uniqueWords = [...new Set(wordsToAvoid.filter((word) => word.length >= 2))].sort(
+    (a, b) => b.length - a.length
+  );
+
+  for (const word of uniqueWords) {
+    const pattern = new RegExp(`(^|[^a-z])(${escapeRegExp(word)})(?=$|[^a-z])`, 'gi');
+    output = output.replace(pattern, (_full, prefix) => `${prefix}${replacement}`);
+  }
+
+  return output;
+}
+
 export function sanitizeHintExcerpt(
   definition: string,
   wordsToAvoid: string[]
@@ -84,10 +103,6 @@ export function sanitizeHintExcerpt(
     def = def.slice(listStart);
   }
 
-  if (def.length <= 50) {
-    return { text: def.trim(), truncatedStart: false, truncatedEnd: false };
-  }
-
   const lowerDef = def.toLowerCase();
   const targetLength = 60;
 
@@ -97,6 +112,14 @@ export function sanitizeHintExcerpt(
       hasSpoilers = true;
       break;
     }
+  }
+
+  if (def.length <= targetLength) {
+    if (!hasSpoilers) {
+      return { text: def.trim(), truncatedStart: false, truncatedEnd: false };
+    }
+    const masked = maskSpoilerWords(def, wordsToAvoid).trim();
+    return { text: masked, truncatedStart: false, truncatedEnd: false };
   }
 
   if (!hasSpoilers) {
