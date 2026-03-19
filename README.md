@@ -6,40 +6,47 @@ Fully offline and ad-free.
 
 ## Start Playing
 
+Play online: https://plhosk.github.io/wordtracer/
+
+Or clone the Git repository and play locally (requires Git and Node.js v20 or newer):
+
 ```bash
+git clone https://github.com/plhosk/wordtracer.git
+cd wordtracer
 npm install
 npm run dev
 ```
 
-Then open the local Vite URL shown in your terminal.
+Then open the local Vite URL shown in your terminal. Default: `http://localhost:5173`
 
-## How It Plays
+## How To Play
 
-- Swipe across the letter wheel to build a word.
-- Correct answers reveal letters on the board.
-- Complete every answer in the grid to finish the level.
-- Use the swap button to reverse multi-letter tokens when a word needs the other direction.
+- Swipe across the wheel to build a word from the available tokens.
+- Correct answers reveal words on the board.
+- Use the swap button below the wheel to reverse multi-letter tokens when a word needs the other direction.
+- Need a hint? Try the hint button.
+- Guess all the words correctly to finish the level and unlock the next one.
+- Comes with 2,484 levels of increasing difficulty.
 
 ## Features
 
-- Crossword-like hidden grid that fills in as you solve words
-- Swipe-based letter wheel input for mouse and touch
-- Bonus word tracking
-- Optional dictionary lookups for found words
-- Spoiler-light hint system with one refresh per level
+- Look up swiped words in the built-in dictionary
+- Hint system shows a partial dictionary entry
 - Multiple level packs with saved progress
 - Light and dark themes
-- Web and Android support via Vite and Capacitor
+- Web and Android support using Vite and Capacitor
 
 ## API
 
-An optional Node server exposes the game through a REST API for tools, agents, and external clients. See how many levels your LLM agent can solve!
+An optional Node server exposes the game through a REST API for tools, agents, and external clients.
 
 ```bash
 npm run server:watch
 ```
 
-The API runs on `http://localhost:3001` by default. Full endpoint documentation lives in `API.md`.
+The API runs on `http://localhost:3001` by default. Full endpoint documentation lives in `API.md`: https://github.com/plhosk/wordtracer/blob/main/API.md
+
+See how many levels your local LLM agent can solve without help! Suggested AI prompt: `Read API.md. Solve levels starting with A1 using python httpx requests. The server is at http://localhost:3001. Make one API call at a time using uv run python -c.`
 
 ## Level Generation
 
