@@ -8,7 +8,11 @@ Fully offline and ad-free.
 
 Play online: https://plhosk.github.io/wordtracer/
 
-Or clone the Git repository and play locally (requires Git and Node.js v20 or newer):
+<img src="images/screenshot2.png" alt="Word Tracer gameplay" width="360" />
+
+## Play Locally
+
+Clone the Git repository to play locally (requires Git and Node.js v20 or newer):
 
 ```bash
 git clone https://github.com/plhosk/wordtracer.git

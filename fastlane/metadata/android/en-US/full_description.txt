@@ -1,0 +1,8 @@
+Word Tracer is a crossword-like puzzle game where you find hidden words from a swipeable letter wheel.
+
+Features:
+- Multiple level packs with progressive difficulty
+- Hint system
+- Light and dark themes
+- Offline play
+- No ads or tracking

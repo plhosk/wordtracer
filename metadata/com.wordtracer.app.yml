@@ -1,0 +1,38 @@
+Categories:
+  - Games
+License: MIT
+AuthorName: Paul Hoskinson
+SourceCode: https://github.com/plhosk/wordtracer
+IssueTracker: https://github.com/plhosk/wordtracer/issues
+
+AutoName: Word Tracer
+Summary: A crossword-like word puzzle game
+Description: |-
+    Word Tracer is a crossword-like puzzle game where you find hidden words from a swipeable letter wheel.
+
+    Features:
+    - Multiple level packs with progressive difficulty
+    - Hint system
+    - Light and dark themes
+    - Offline play
+    - No ads or tracking
+
+RepoType: git
+Repo: https://github.com/plhosk/wordtracer
+
+Builds:
+  - versionName: 1.0.0
+    versionCode: 1
+    commit: fd82d50b170393c1d57e1ecf324aa5a6792c8f12
+    subdir: android
+    init:
+      - npm ci --prefix ..
+      - npm --prefix .. run cap:sync
+    gradle:
+      - assembleRelease
+    output: app/build/outputs/apk/release/app-release-unsigned.apk
+
+AutoUpdateMode: None
+UpdateCheckMode: None
+CurrentVersion: 1.0.0
+CurrentVersionCode: 1
