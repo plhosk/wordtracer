@@ -23,7 +23,7 @@ Repo: https://github.com/plhosk/wordtracer
 Builds:
   - versionName: 1.0.0
     versionCode: 1
-    commit: fd82d50b170393c1d57e1ecf324aa5a6792c8f12
+    commit: v1.0.0
     subdir: android
     init:
       - npm ci --prefix ..
@@ -32,7 +32,7 @@ Builds:
       - assembleRelease
     output: app/build/outputs/apk/release/app-release-unsigned.apk
 
-AutoUpdateMode: None
-UpdateCheckMode: None
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
 CurrentVersion: 1.0.0
 CurrentVersionCode: 1
