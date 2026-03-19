@@ -954,6 +954,19 @@ button:disabled {
   padding: 4px 10px;
 }
 
+.settings-about {
+  margin: 2px 0 0;
+  text-align: left;
+  font-size: 0.88rem;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+.settings-about a {
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
+
 .panel {
   padding: 0;
 }

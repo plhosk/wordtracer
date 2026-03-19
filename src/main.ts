@@ -172,6 +172,11 @@ app.innerHTML = `
           </div>
           <hr class="settings-separator" />
           <button id="reset-progress" type="button" class="reset-progress-btn">Reset progress</button>
+          <hr class="settings-separator" />
+          <p class="settings-about">
+            Word Tracer v${__APP_VERSION__}<br />
+            <a href="https://github.com/plhosk/wordtracer" target="_blank" rel="noopener noreferrer">https://github.com/plhosk/wordtracer</a>
+          </p>
         </div>
       </div>
     </section>
