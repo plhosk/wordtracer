@@ -8,22 +8,22 @@ IssueTracker: https://github.com/plhosk/wordtracer/issues
 AutoName: Word Tracer
 Summary: A crossword-like word puzzle game
 Description: |-
-    Word Tracer is a crossword-like puzzle game where you find hidden words from a swipeable letter wheel.
+  Word Tracer is a word puzzle game with crossword-style boards and a swipeable letter wheel.
+  Trace words to reveal the grid, discover bonus words, and clear levels with increasing difficulty.
 
-    Features:
-    - Multiple level packs with progressive difficulty
-    - Hint system
-    - Light and dark themes
-    - Offline play
-    - No ads or tracking
+  Features:
+  - Thousands of levels across multiple packs
+  - Built-in dictionary lookups and hint system
+  - Offline play
+  - No ads or tracking
 
 RepoType: git
 Repo: https://github.com/plhosk/wordtracer
 
 Builds:
-  - versionName: 1.0.0
-    versionCode: 1
-    commit: v1.0.0
+  - versionName: 1.0.1
+    versionCode: 2
+    commit: v1.0.1
     subdir: android
     init:
       - npm ci --prefix ..
@@ -34,5 +34,5 @@ Builds:
 
 AutoUpdateMode: Version v%v
 UpdateCheckMode: Tags ^v(\d+\.)?(\d+\.)?(\*|\d+)$
-CurrentVersion: 1.0.0
-CurrentVersionCode: 1
+CurrentVersion: 1.0.1
+CurrentVersionCode: 2
