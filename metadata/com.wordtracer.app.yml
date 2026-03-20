@@ -22,10 +22,9 @@ Builds:
     init:
       - npm ci --prefix ../..
       - npm --prefix ../.. run cap:sync
-    prebuild:
-      - sed -i '/foojay-resolver-convention/d' ../settings.gradle
     gradle:
       - yes
+    prebuild: sed -i '/foojay-resolver-convention/d' ../settings.gradle
     scandelete:
       - node_modules
 
