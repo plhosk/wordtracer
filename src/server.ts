@@ -835,6 +835,40 @@ async function handleJumpLevel(
   }
 }
 
+async function handleResetLevel(
+  req: import('node:http').IncomingMessage,
+  res: import('node:http').ServerResponse,
+  sessionId: string
+): Promise<void> {
+  const cached = await getSession(sessionId);
+
+  if (!cached) {
+    sendError(res, 404, 'NOT_FOUND', 'Session not found');
+    return;
+  }
+
+  try {
+    const body = await parseJsonBody<{ version: number }>(req);
+
+    if (body.version !== cached.version) {
+      sendError(res, 409, 'VERSION_MISMATCH', 'Session was modified by another request');
+      return;
+    }
+
+    cached.gameManager.resetCurrentLevelProgress();
+
+    await persistSession(sessionId, cached);
+
+    sendJson(res, 200, {
+      version: cached.version,
+      level: buildLevelName(cached.gameManager.getCurrentLevel()),
+      state: buildSessionLevelInfo(cached),
+    });
+  } catch (e) {
+    sendError(res, 400, 'BAD_REQUEST', (e as Error).message);
+  }
+}
+
 async function handleListSessions(
   _req: import('node:http').IncomingMessage,
   res: import('node:http').ServerResponse
@@ -1098,6 +1132,11 @@ async function handleRequest(
     const jumpMatch = path.match(/^\/api\/games\/([^/]+)\/jump$/);
     if (req.method === 'POST' && jumpMatch) {
       return handleJumpLevel(req, res, jumpMatch[1]);
+    }
+
+    const resetLevelMatch = path.match(/^\/api\/games\/([^/]+)\/reset-level$/);
+    if (req.method === 'POST' && resetLevelMatch) {
+      return handleResetLevel(req, res, resetLevelMatch[1]);
     }
 
     const dictionaryMatch = path.match(/^\/api\/dictionary\/([^/]+)$/);

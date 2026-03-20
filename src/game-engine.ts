@@ -849,6 +849,12 @@ export class GameStateManager {
     this.currentIndexInGroup = 0;
     this.tokenOrderMode = DEFAULT_TOKEN_ORDER_MODE;
   }
+
+  resetCurrentLevelProgress(): void {
+    const levelId = this.getCurrentLevel().id;
+    this.levelStates.delete(levelId);
+    this.tokenOrderMode = DEFAULT_TOKEN_ORDER_MODE;
+  }
   
   getSolvedWords(): string[] {
     return [...this.getCurrentLevelState().solved];

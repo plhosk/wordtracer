@@ -923,21 +923,31 @@ button:disabled {
 .reset-progress-btn {
   border: 2px solid var(--bad);
   color: var(--bad);
-  justify-self: end;
+}
+
+.reset-level-btn {
+  border: 2px solid var(--wall);
+}
+
+.settings-reset-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-top: 4px;
 }
 
 .settings-debug {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 6px;
-  margin-top: 8px;
 }
 
 .settings-debug button {
   border: 2px solid var(--wall);
-  font-size: 0.85rem;
   padding: 4px 10px;
 }
 
@@ -1167,6 +1177,10 @@ button:disabled {
 .settings-content {
   display: grid;
   gap: 10px;
+}
+
+.settings-button {
+  font-size: 0.85rem;
 }
 
 ul {

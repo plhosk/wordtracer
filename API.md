@@ -124,6 +124,21 @@ Switches to a different level. Progress is automatically persisted, and any prev
 
 Example: `{ "levelName": "A5", "version": 3 }`
 
+### Reset Current Level
+
+```
+POST /api/games/:id/reset-level
+```
+
+Clears progress for the current level only (solved words, bonus words, and hint state) while keeping overall game and pack progress intact.
+
+**Body:** `{ "version": number }`
+
+**Returns:**
+- `version` - Updated game version
+- `level` - Current level name
+- `state` - Current level state payload (same shape as `GET /api/games/:id/level`)
+
 ---
 
 ## Game Management

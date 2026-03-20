@@ -166,12 +166,15 @@ app.innerHTML = `
               <span class="switch-ui" aria-hidden="true"></span>
             </span>
           </label>
-          <div class="settings-debug">
-            <button id="debug-copy-state" type="button">Debug: copy game state</button>
-            <button id="debug-copy-level" type="button">Debug: copy level state</button>
-          </div>
           <hr class="settings-separator" />
-          <button id="reset-progress" type="button" class="reset-progress-btn">Reset progress</button>
+          <div class="settings-debug">
+            <button id="debug-copy-level" type="button" class="settings-button">Debug: copy level state</button>
+            <button id="debug-copy-state" type="button" class="settings-button">Debug: copy game state</button>
+          </div>
+          <div class="settings-reset-actions">
+            <button id="reset-level" type="button" class="settings-button reset-level-btn">Reset level</button>
+            <button id="reset-progress" type="button" class="settings-button reset-progress-btn">Reset all progress</button>
+          </div>
           <hr class="settings-separator" />
           <p class="settings-about">
             Word Tracer v${__APP_VERSION__}<br />
@@ -194,7 +197,7 @@ app.innerHTML = `
         <p class="small">This clears solved words, bonus words, and unlocked levels.</p>
         <div class="confirm-actions">
           <button id="cancel-reset-progress" type="button">Cancel</button>
-          <button id="confirm-reset-progress" type="button" class="danger-btn" disabled><span class="timer-text">5s</span> Reset progress</button>
+          <button id="confirm-reset-progress" type="button" class="danger-btn" disabled><span class="timer-text">5s</span> Reset all progress</button>
         </div>
       </div>
     </section>
@@ -299,6 +302,7 @@ const autoAdvanceInput = required('#auto-advance') as HTMLInputElement;
 const lightThemeInput = required('#light-theme') as HTMLInputElement;
 const alwaysShowHintInput = required('#always-show-hint') as HTMLInputElement;
 const persistentHintEl = required('#persistent-hint') as HTMLParagraphElement;
+const resetLevelButton = required('#reset-level') as HTMLButtonElement;
 const resetProgressButton = required('#reset-progress') as HTMLButtonElement;
 const resetProgressModal = required('#reset-progress-modal');
 const cancelResetProgressButton = required('#cancel-reset-progress') as HTMLButtonElement;
@@ -559,6 +563,14 @@ function bindStaticEvents(): void {
     } else {
       updatePersistentHint();
     }
+    saveState();
+  });
+
+  resetLevelButton.addEventListener('click', () => {
+    closeSettingsActivity();
+    resetCurrentLevelProgress();
+    setFeedback('Level reset.', 'muted');
+    render();
     saveState();
   });
 
@@ -1714,6 +1726,13 @@ async function resetAllProgress(): Promise<void> {
   clearRecentSolvedCells();
   clearSelection();
   preloadAdjacentGroups();
+}
+
+function resetCurrentLevelProgress(): void {
+  gameManager.resetCurrentLevelProgress();
+  clearCompletionSummaryCarryover();
+  clearRecentSolvedCells();
+  clearSelection();
 }
 
 async function ensureGroupLoaded(groupId: string): Promise<void> {
