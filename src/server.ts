@@ -31,6 +31,7 @@ import {
   hasDictionaryEntry as sharedHasDictionaryEntry,
   getDictionaryEntry as sharedGetDictionaryEntry,
   type DictionaryLookup,
+  type DictionaryHintRelatedForms,
 } from './dictionary.js';
 import {
   getUnguessedWordHint as sharedGetUnguessedWordHint,
@@ -97,6 +98,7 @@ let levelGroups: RuntimeLevelGroup[] = [];
 let groupDefinitions: LevelGroupDefinition[] = [];
 
 let dictionaryLookup: DictionaryLookup = {};
+let dictionaryHintRelatedForms: DictionaryHintRelatedForms = {};
 const dictionaryCache = new Map<string, DictionaryLetterFile>();
 
 interface CachedSession {
@@ -160,6 +162,7 @@ async function loadDictionaryData(): Promise<void> {
 
   const dictMeta: DictionaryMeta = JSON.parse(dictMetaRaw);
   dictionaryLookup = dictMeta.lookup ?? {};
+  dictionaryHintRelatedForms = dictMeta.hintRelatedForms ?? {};
 
   console.log(`Loaded dictionary with ${Object.keys(dictionaryLookup).length} lookup entries`);
 }
@@ -903,6 +906,7 @@ async function handleGetHint(
     state.hints.excludedHintCanonicals,
     state.hints.currentHintCanonical,
     dictionaryLookup,
+    dictionaryHintRelatedForms,
     getDictionaryEntry,
     loadDictionaryLetter
   );
@@ -976,6 +980,7 @@ async function handleRefreshHint(
     state.hints.excludedHintCanonicals,
     state.hints.currentHintCanonical,
     dictionaryLookup,
+    dictionaryHintRelatedForms,
     getDictionaryEntry,
     loadDictionaryLetter
   );

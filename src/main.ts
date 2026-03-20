@@ -146,16 +146,16 @@ app.innerHTML = `
 
         <div class="settings-content">
           <label class="setting-row setting-row-switch">
-            <span class="setting-label">Light mode</span>
+            <span class="setting-label">Always show hint</span>
             <span class="switch">
-              <input id="light-theme" class="switch-input" type="checkbox" />
+              <input id="always-show-hint" class="switch-input" type="checkbox" />
               <span class="switch-ui" aria-hidden="true"></span>
             </span>
           </label>
           <label class="setting-row setting-row-switch">
-            <span class="setting-label">Always show hint</span>
+            <span class="setting-label">Light mode</span>
             <span class="switch">
-              <input id="always-show-hint" class="switch-input" type="checkbox" />
+              <input id="light-theme" class="switch-input" type="checkbox" />
               <span class="switch-ui" aria-hidden="true"></span>
             </span>
           </label>
@@ -693,15 +693,8 @@ function renderTokenOrderToggle(levelDone: boolean): void {
   nextLevelInlineButton.setAttribute('aria-hidden', canGoNext ? 'false' : 'true');
 }
 
-function triggerSwapButtonFlash(): void {
-  swapTokensButton.classList.remove('clear-btn-flash');
-  void swapTokensButton.offsetWidth;
-  swapTokensButton.classList.add('clear-btn-flash');
-}
-
 function swapTokenOrder(): void {
   gameManager.toggleTokenOrder();
-  triggerSwapButtonFlash();
   clearSelection();
   render();
 }
@@ -1525,6 +1518,7 @@ async function getUnguessedWordHint(): Promise<HintResult | null> {
     state.hints.excludedHintCanonicals,
     state.hints.currentHintCanonical,
     lookup,
+    dataLoader.getDictionaryHintRelatedForms(),
     getDictionaryEntry,
     (letter) => dataLoader.loadDictionaryLetter(letter)
   );

@@ -1,5 +1,11 @@
 import { type Level, type DictionaryLetterFile } from './types.js';
-import { type DictionaryEntry, type DictionaryLookup } from './dictionary.js';
+import {
+  type DictionaryEntry,
+  type DictionaryLookup,
+  type DictionaryHintRelatedForms,
+} from './dictionary.js';
+
+const HINT_TARGET_LENGTH = 60;
 
 export interface HintExcerpt {
   text: string;
@@ -34,12 +40,17 @@ export function getWordsToAvoidInHint(
   canonical: string,
   lookup: DictionaryLookup,
   level: Level,
-  solvedWords: Set<string>
+  solvedWords: Set<string>,
+  hintRelatedForms: DictionaryHintRelatedForms
 ): string[] {
   const words = new Set<string>();
   const normalizedCanonical = canonical.toLowerCase();
 
   words.add(normalizedCanonical);
+
+  for (const related of hintRelatedForms[normalizedCanonical] ?? []) {
+    words.add(related.toLowerCase());
+  }
 
   for (const [word, wordCanonical] of Object.entries(lookup)) {
     if (wordCanonical === normalizedCanonical) {
@@ -97,14 +108,15 @@ export function sanitizeHintExcerpt(
   wordsToAvoid: string[]
 ): HintExcerpt {
   let def = definition;
+  const targetLength = HINT_TARGET_LENGTH;
+  const listSearchLimit = targetLength * 2;
 
-  const listStart = def.indexOf('1. ');
+  const listStart = def.slice(0, listSearchLimit).indexOf('1. ');
   if (listStart !== -1) {
     def = def.slice(listStart);
   }
 
   const lowerDef = def.toLowerCase();
-  const targetLength = 60;
 
   let hasSpoilers = false;
   for (const word of wordsToAvoid) {
@@ -284,6 +296,7 @@ export async function getUnguessedWordHint(
   excludedCanonicals: Set<string>,
   currentHintCanonical: string | null,
   lookup: DictionaryLookup,
+  hintRelatedForms: DictionaryHintRelatedForms,
   loadEntry: (word: string) => Promise<DictionaryEntry | null>,
   loadLetterFile: (letter: string) => Promise<DictionaryLetterFile>
 ): Promise<HintResult | null> {
@@ -291,7 +304,13 @@ export async function getUnguessedWordHint(
     const letterData = await loadLetterFile(currentHintCanonical[0]);
     const definition = letterData.definitions[currentHintCanonical];
     if (definition) {
-      const wordsToAvoid = getWordsToAvoidInHint(currentHintCanonical, lookup, level, solvedWords);
+      const wordsToAvoid = getWordsToAvoidInHint(
+        currentHintCanonical,
+        lookup,
+        level,
+        solvedWords,
+        hintRelatedForms
+      );
       const excerpt = sanitizeHintExcerpt(definition, wordsToAvoid);
       return { canonical: currentHintCanonical, excerpt };
     }
@@ -311,7 +330,13 @@ export async function getUnguessedWordHint(
     if (entry.canonical === currentHintCanonical) {
       continue;
     }
-    const wordsToAvoid = getWordsToAvoidInHint(entry.canonical, lookup, level, solvedWords);
+    const wordsToAvoid = getWordsToAvoidInHint(
+      entry.canonical,
+      lookup,
+      level,
+      solvedWords,
+      hintRelatedForms
+    );
     const excerpt = sanitizeHintExcerpt(entry.definition, wordsToAvoid);
     return { canonical: entry.canonical, excerpt };
   }

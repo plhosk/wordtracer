@@ -22,6 +22,7 @@ interface LoadedMetaData {
   dictionaryMeta: DictionaryMeta['meta'] | null;
   dictionaryLetters: string[];
   dictionaryLookup: Record<string, string | null>;
+  dictionaryHintRelatedForms: Record<string, string[]>;
 }
 
 interface LoadedLevelData {
@@ -40,6 +41,7 @@ class DataLoader {
   private dictionaryMeta: DictionaryMeta['meta'] | null = null;
   private dictionaryLetters: string[] = [];
   private dictionaryLookup: Record<string, string | null> = {};
+  private dictionaryHintRelatedForms: Record<string, string[]> = {};
 
   private levelCache: Map<string, Level[]> = new Map();
   private dictionaryCache: Map<string, DictionaryLetterFile> = new Map();
@@ -73,6 +75,7 @@ class DataLoader {
     this.dictionaryMeta = dictMetaData.meta ?? null;
     this.dictionaryLetters = dictMetaData.letters ?? [];
     this.dictionaryLookup = dictMetaData.lookup ?? {};
+    this.dictionaryHintRelatedForms = dictMetaData.hintRelatedForms ?? {};
 
     return {
       levelsMeta: this.levelsMeta,
@@ -80,6 +83,7 @@ class DataLoader {
       dictionaryMeta: this.dictionaryMeta,
       dictionaryLetters: this.dictionaryLetters,
       dictionaryLookup: this.dictionaryLookup,
+      dictionaryHintRelatedForms: this.dictionaryHintRelatedForms,
     };
   }
 
@@ -148,6 +152,10 @@ class DataLoader {
 
   getDictionaryLookup(): Record<string, string | null> {
     return this.dictionaryLookup;
+  }
+
+  getDictionaryHintRelatedForms(): Record<string, string[]> {
+    return this.dictionaryHintRelatedForms;
   }
 
   getGroupDefinitions(): LevelGroupDefinition[] {

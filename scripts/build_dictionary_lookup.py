@@ -7,7 +7,7 @@ from common import load_json, normalize_word, now_iso, project_path, save_json
 
 try:
     import lemminflect
-    from lemminflect import getLemma
+    from lemminflect import getAllInflections, getAllLemmas, getLemma
 except ImportError as error:  # pragma: no cover - surfaced as CLI error
     raise SystemExit(
         "Missing dependency: lemminflect. Run `uv sync` in the project root to install dependencies."
@@ -190,6 +190,106 @@ def load_dictionary(path: Path) -> dict[str, str]:
     return dictionary
 
 
+def iter_normalized_forms(raw_values: object) -> set[str]:
+    forms: set[str] = set()
+    if isinstance(raw_values, dict):
+        values = raw_values.values()
+    else:
+        values = []
+
+    for item in values:
+        if isinstance(item, str):
+            normalized = normalize_word(item)
+            if normalized:
+                forms.add(normalized)
+            continue
+        if not isinstance(item, (list, tuple, set)):
+            continue
+        for value in item:
+            normalized = normalize_word(str(value))
+            if normalized:
+                forms.add(normalized)
+    return forms
+
+
+def collect_related_forms(word: str) -> set[str]:
+    related = {word}
+
+    direct_lemmas = iter_normalized_forms(getAllLemmas(word))
+    direct_inflections = iter_normalized_forms(getAllInflections(word))
+    related.update(direct_lemmas)
+    related.update(direct_inflections)
+
+    for lemma in direct_lemmas:
+        related.update(iter_normalized_forms(getAllInflections(lemma)))
+
+    return related
+
+
+COMMON_SUFFIXES = (
+    "iest",
+    "ing",
+    "ier",
+    "est",
+    "ers",
+    "er",
+    "ed",
+    "es",
+    "s",
+)
+
+
+def simplified_forms(word: str) -> set[str]:
+    forms = {word}
+    current = word
+    while True:
+        stripped = None
+        for suffix in COMMON_SUFFIXES:
+            if current.endswith(suffix) and len(current) - len(suffix) >= 3:
+                stripped = current[: -len(suffix)]
+                break
+        if not stripped:
+            break
+        if stripped in forms:
+            break
+        forms.add(stripped)
+        current = stripped
+    return forms
+
+
+def common_prefix_len(a: str, b: str) -> int:
+    max_len = min(len(a), len(b))
+    idx = 0
+    while idx < max_len and a[idx] == b[idx]:
+        idx += 1
+    return idx
+
+
+def longest_common_subsequence_len(a: str, b: str) -> int:
+    if not a or not b:
+        return 0
+    rows = len(a) + 1
+    cols = len(b) + 1
+    dp = [[0] * cols for _ in range(rows)]
+    for i in range(1, rows):
+        for j in range(1, cols):
+            if a[i - 1] == b[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] + 1
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+    return dp[-1][-1]
+
+
+def has_stem_similarity(canonical: str, candidate: str) -> bool:
+    for left in simplified_forms(canonical):
+        for right in simplified_forms(candidate):
+            if common_prefix_len(left, right) >= 3:
+                return True
+            if longest_common_subsequence_len(left, right) >= 3:
+                return True
+    return False
+
+
 def build_lookup_data(
     dictionary_paths: list[Path],
     bundle_path: Path | None = None,
@@ -197,6 +297,7 @@ def build_lookup_data(
 ) -> tuple[
     dict[str, str | None],
     dict[str, str],
+    dict[str, list[str]],
     list[str],
     int,
     int,
@@ -229,6 +330,7 @@ def build_lookup_data(
 
     lookup: dict[str, str | None] = {}
     definitions: dict[str, str] = {}
+    canonical_to_words: dict[str, set[str]] = {}
     unresolved: list[str] = []
     direct_match_count = 0
     lemma_match_count = 0
@@ -262,6 +364,7 @@ def build_lookup_data(
             continue
 
         lookup[word] = canonical
+        canonical_to_words.setdefault(canonical, set()).add(word)
         for dictionary_source, dictionary in dictionaries:
             if dictionary_source == source:
                 definitions[canonical] = dictionary[canonical]
@@ -279,9 +382,26 @@ def build_lookup_data(
         "fallbackMatchCount": fallback_match_count,
     }
 
+    hint_related_forms: dict[str, list[str]] = {}
+    lookup_words = set(lookup)
+    for canonical, words in canonical_to_words.items():
+        related: set[str] = set(words)
+        candidates: set[str] = set()
+        for word in words:
+            candidates.update(collect_related_forms(word))
+        filtered = sorted(
+            form
+            for form in candidates
+            if form in lookup_words
+            and len(form) >= 3
+            and has_stem_similarity(canonical, form)
+        )
+        hint_related_forms[canonical] = sorted(related.union(filtered))
+
     return (
         lookup,
         definitions,
+        hint_related_forms,
         unresolved,
         direct_match_count,
         lemma_match_count,
@@ -296,6 +416,7 @@ def write_split_files(
     dictionary_paths: list[Path],
     lookup: dict[str, str | None],
     definitions: dict[str, str],
+    hint_related_forms: dict[str, list[str]],
     unresolved: list[str],
     direct_match_count: int,
     lemma_match_count: int,
@@ -348,6 +469,7 @@ def write_split_files(
         },
         "letters": all_letters,
         "lookup": lookup,
+        "hintRelatedForms": hint_related_forms,
     }
     meta_path = split_dir / "dictionary._meta.json"
     save_json(meta_path, meta_payload)
@@ -373,6 +495,7 @@ def main() -> None:
     (
         lookup,
         definitions,
+        hint_related_forms,
         unresolved,
         direct_match_count,
         lemma_match_count,
@@ -399,6 +522,7 @@ def main() -> None:
             dictionary_paths,
             lookup,
             definitions,
+            hint_related_forms,
             unresolved,
             direct_match_count,
             lemma_match_count,

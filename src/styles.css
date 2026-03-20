@@ -27,8 +27,8 @@
   --next-level-bg: #4cb86e;
   --bad: #e85a50;
   --bonus: #e7bd69;
-  --recent-solved-bg: var(--wheel-bg);
-  --wheel-bg: #153a66;
+  --recent-solved-bg: #153a66;
+  --wheel-bg: #1a4372;
   --chip-bg: #d9dee5;
   --chip-text: #000000;
   --chip-selected-bg: #000000;
@@ -158,8 +158,8 @@
   --next-level-bg: #5dd88a;
   --bad: #b42218;
   --bonus: #b56a00;
-  --recent-solved-bg: var(--wheel-bg);
-  --wheel-bg: #bdd3ea;
+  --recent-solved-bg: #bdd3ea;
+  --wheel-bg: #c7dbef;
   --chip-bg: #ffffff;
   --swap-btn-border: #5a8ac4;
   --swap-btn-text: #111111;
@@ -230,11 +230,6 @@ h1 {
   min-height: unset;
   font-size: calc(0.92rem * var(--compact-scale));
   line-height: 1.2;
-}
-
-.level-pack-button:hover {
-  border-color: var(--accent);
-  color: var(--accent);
 }
 
 h2 {
@@ -351,9 +346,9 @@ button:disabled {
   position: fixed;
   bottom: calc(4px + var(--safe-bottom));
   inset-inline: 0;
-  padding-inline: max(8px, var(--safe-left)) max(8px, var(--safe-right));
+  padding-inline: max(12px, var(--safe-left)) max(12px, var(--safe-right));
   font-size: 0.8em;
-  color: var(--muted);
+  color: var(--text);
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
@@ -802,15 +797,6 @@ button:disabled {
 .dictionary-open-btn:disabled .dictionary-icon,
 .modal-refresh-hint-btn:disabled .refresh-hint-icon {
   opacity: 0.95;
-}
-
-.dictionary-open-btn:not(:disabled):hover,
-.bonus-open-btn:hover,
-.hint-open-btn:hover,
-.clear-btn:hover,
-.modal-refresh-hint-btn:not(:disabled):hover {
-  border-color: var(--accent);
-  color: var(--accent);
 }
 
 .clear-btn:active {

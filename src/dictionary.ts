@@ -9,6 +9,10 @@ export interface DictionaryLookup {
   [word: string]: string | null;
 }
 
+export interface DictionaryHintRelatedForms {
+  [canonical: string]: string[];
+}
+
 export function hasDictionaryEntry(
   lookup: DictionaryLookup,
   word: string

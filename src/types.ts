@@ -87,6 +87,7 @@ export interface DictionaryMeta {
   };
   letters: string[];
   lookup: Record<string, string | null>;
+  hintRelatedForms?: Record<string, string[]>;
 }
 
 export interface DictionaryLetterFile {
