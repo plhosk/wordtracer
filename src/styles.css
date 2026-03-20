@@ -13,6 +13,7 @@
   --safe-inset: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
   --screen-pad: 16px;
   --screen-pad-mobile: 12px;
+  --overlay-scrim-opacity: 0;
   color-scheme: dark;
   --bg: #0d1420;
   --text: #e7efff;
@@ -25,7 +26,7 @@
   --complete: #3a9d5c;
   --next-level: var(--complete);
   --next-level-bg: #4cb86e;
-  --bad: #e85a50;
+  --bad: #d96d67;
   --bonus: #e7bd69;
   --recent-solved-bg: #153a66;
   --wheel-bg: #1a4372;
@@ -156,7 +157,7 @@
   --complete: #0a8f39;
   --next-level: #22c457;
   --next-level-bg: #5dd88a;
-  --bad: #b42218;
+  --bad: #a94a44;
   --bonus: #b56a00;
   --recent-solved-bg: #bdd3ea;
   --wheel-bg: #c7dbef;
@@ -225,7 +226,7 @@ h1 {
   justify-self: start;
   border: 2px solid var(--swap-btn-border);
   color: var(--text);
-  background: transparent;
+  background: var(--bg);
   padding: 4px 10px;
   min-height: unset;
   font-size: calc(0.92rem * var(--compact-scale));
@@ -240,7 +241,7 @@ h2 {
 button {
   border: 0;
   border-radius: 8px;
-  background: transparent;
+  background: var(--bg);
   color: var(--text);
   font: inherit;
   font-size: 0.92rem;
@@ -265,6 +266,7 @@ button:disabled {
 }
 
 .status-row {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -273,6 +275,18 @@ button:disabled {
   /* eslint-disable-next-line css/no-invalid-properties */
   font-size: var(--feedback-font-size);
   color: var(--muted);
+}
+
+.status-row::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  background: rgb(0 0 0 / var(--overlay-scrim-opacity));
+  z-index: -1;
 }
 
 .feedback {
@@ -344,15 +358,19 @@ button:disabled {
 
 .persistent-hint {
   position: fixed;
-  bottom: calc(4px + var(--safe-bottom));
+  height: 2.0em;
+  bottom: calc(var(--safe-bottom));
   inset-inline: 0;
   padding-inline: max(12px, var(--safe-left)) max(12px, var(--safe-right));
+  padding-block: 4px;
   font-size: 0.8em;
   color: var(--text);
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  border-radius: 8px;
+  background: rgb(0 0 0 / var(--overlay-scrim-opacity));
   pointer-events: none;
 }
 
@@ -402,18 +420,18 @@ button:disabled {
   display: grid;
   place-items: center;
   font-weight: 700;
-  font-size: calc(var(--grid-max-size) * 22 / 520);
+  font-size: calc(var(--grid-max-size) * 24 / 520);
   letter-spacing: 0.01em;
   line-height: 1;
-  padding-top: 2px;
+  padding-top: 0;
   color: var(--muted);
-  background: transparent;
+  background: var(--bg);
   position: relative;
   z-index: 1;
 }
 
 .cell-hidden {
-  background: transparent;
+  background: var(--bg);
 }
 
 .cell-empty {
@@ -422,7 +440,7 @@ button:disabled {
 
 .cell-revealed {
   color: var(--text);
-  background: transparent;
+  background: var(--bg);
 }
 
 .cell-recent-solved {
@@ -444,6 +462,7 @@ button:disabled {
 }
 
 .board-status {
+  position: relative;
   display: grid;
   justify-items: center;
   gap: 8px;
@@ -693,7 +712,7 @@ button:disabled {
 
 .next-level-btn,
 .clear-btn {
-  background: transparent;
+  background: var(--bg);
 }
 
 .next-level-btn {
@@ -717,7 +736,7 @@ button:disabled {
   border-radius: 8px;
   font-size: calc(1.08rem * var(--compact-scale));
   line-height: 1;
-  background: transparent;
+  background: var(--bg);
 }
 
 .bonus-open-btn {
@@ -1054,7 +1073,7 @@ button:disabled {
   height: 36px;
   padding: 0;
   border-radius: 8px;
-  background: transparent;
+  background: var(--bg);
 }
 
 .modal-refresh-hint-btn .refresh-hint-icon {
@@ -1264,6 +1283,10 @@ li.solved {
 
   .grid {
     width: min(74dvh, 62vw);
+  }
+
+  .cell {
+    font-size: calc(min(74dvh, 62vw) * 24 / 520);
   }
 
   .board-status {
