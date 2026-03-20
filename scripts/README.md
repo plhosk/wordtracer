@@ -24,4 +24,5 @@ High-level tuning guidance lives in `scripts/levels_build_tuning.md`.
 
 - `tune_wheel_token_shapes.py` - helper for wheel-shape sweep experiments
 - `set_release_version.py` - updates app/F-Droid release version fields
+- `fdroid_prepare_release.py` - validates release fields and copies app metadata into fdroiddata
 - `common.py` - shared helpers used by multiple scripts

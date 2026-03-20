@@ -83,7 +83,8 @@ npm run cap:sync      # build web assets and sync them into Capacitor
 npm run android:build # build a debug APK
 npm run android:open  # open the Android project in Android Studio
 npm run android:run   # sync and run the app on Android
-npm run release:set-version -- 1.0.2  # bump app + F-Droid release versions
+npm run release:set-version -- x.x.x  # bump app + F-Droid release versions
+npm run fdroid:prepare-release -- x.x.x --fdroiddata ~/fdroiddata --fdroidserver ~/fdroidserver  # copy metadata and print next commands
 ```
 
 ## Licensing

@@ -1,6 +1,6 @@
 {
   "name": "wordtracer",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "type": "module",
   "scripts": {
@@ -19,6 +19,7 @@
     "android:build": "node scripts/android_build_debug.mjs",
     "android:build-signed": "npm run cap:sync && npx cap build android",
     "release:set-version": "uv run python scripts/set_release_version.py",
+    "fdroid:prepare-release": "uv run python scripts/fdroid_prepare_release.py",
     "icons:web": "magick images/icon1680cropped.png -define icon:auto-resize=16,32,48 public/favicon.ico && magick images/icon1680cropped.png -resize 32x32 public/favicon.png",
     "preview": "npm run build && vite preview --host",
     "levels:build": "uv run python -u scripts/generate_all.py @scripts/levels_build.args"

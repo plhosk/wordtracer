@@ -11,7 +11,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Update app and F-Droid release version fields in one step."
     )
-    parser.add_argument("version", help="Version string, e.g. 1.0.2")
+    parser.add_argument("version", help="Version string (e.g. X.X.X)")
     parser.add_argument(
         "--version-code",
         type=int,
