@@ -185,6 +185,24 @@ app.innerHTML = `
     </section>
 
     <section
+      id="reset-level-modal"
+      class="confirm-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="reset-level-title"
+      hidden
+    >
+      <div class="confirm-card">
+        <h2 id="reset-level-title">Reset this level?</h2>
+        <p class="small">This clears solved words, bonus words, and hint state for the current level.</p>
+        <div class="confirm-actions">
+          <button id="cancel-reset-level" type="button">Cancel</button>
+          <button id="confirm-reset-level" type="button">Reset level</button>
+        </div>
+      </div>
+    </section>
+
+    <section
       id="reset-progress-modal"
       class="confirm-modal"
       role="dialog"
@@ -303,6 +321,9 @@ const lightThemeInput = required('#light-theme') as HTMLInputElement;
 const alwaysShowHintInput = required('#always-show-hint') as HTMLInputElement;
 const persistentHintEl = required('#persistent-hint') as HTMLParagraphElement;
 const resetLevelButton = required('#reset-level') as HTMLButtonElement;
+const resetLevelModal = required('#reset-level-modal');
+const cancelResetLevelButton = required('#cancel-reset-level') as HTMLButtonElement;
+const confirmResetLevelButton = required('#confirm-reset-level') as HTMLButtonElement;
 const resetProgressButton = required('#reset-progress') as HTMLButtonElement;
 const resetProgressModal = required('#reset-progress-modal');
 const cancelResetProgressButton = required('#cancel-reset-progress') as HTMLButtonElement;
@@ -436,6 +457,12 @@ function bindStaticEvents(): void {
     }
   });
 
+  resetLevelModal.addEventListener('click', (event) => {
+    if (event.target === resetLevelModal) {
+      closeResetLevelModal(true);
+    }
+  });
+
   bonusModal.addEventListener('click', (event) => {
     if (event.target === bonusModal) {
       closeBonusModal(true);
@@ -450,6 +477,10 @@ function bindStaticEvents(): void {
 
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
+      if (!resetLevelModal.hidden) {
+        closeResetLevelModal(true);
+        return;
+      }
       if (!resetProgressModal.hidden) {
         closeResetProgressModal(true);
         return;
@@ -567,7 +598,15 @@ function bindStaticEvents(): void {
   });
 
   resetLevelButton.addEventListener('click', () => {
-    closeSettingsActivity();
+    openResetLevelModal();
+  });
+
+  cancelResetLevelButton.addEventListener('click', () => {
+    closeResetLevelModal(true);
+  });
+
+  confirmResetLevelButton.addEventListener('click', () => {
+    closeResetLevelModal(false);
     resetCurrentLevelProgress();
     setFeedback('Level reset.', 'muted');
     render();
@@ -594,8 +633,8 @@ function bindStaticEvents(): void {
     const state = gameManager.serialize();
     state.settings = settings;
     const json = JSON.stringify(state, null, 2);
-    await copyToClipboard(json);
-    setFeedback('Game state copied to clipboard.', 'muted');
+    await copyToClipboard(encodeBase64Utf8(json));
+    setFeedback('Game state (base64) copied to clipboard.', 'muted');
   });
 
   debugCopyLevelButton.addEventListener('click', async () => {
@@ -610,8 +649,8 @@ function bindStaticEvents(): void {
       tokenOrderMode: gameManager.getTokenOrderMode(),
     };
     const json = JSON.stringify(stateData, null, 2);
-    await copyToClipboard(json);
-    setFeedback('Level state copied to clipboard.', 'muted');
+    await copyToClipboard(encodeBase64Utf8(json));
+    setFeedback('Level state (base64) copied to clipboard.', 'muted');
   });
 }
 
@@ -1058,6 +1097,7 @@ function onDocumentPointerMove(event: PointerEvent): void {
     || !bonusModal.hidden
     || !dictionaryModal.hidden
     || !levelPackModal.hidden
+    || !resetLevelModal.hidden
     || !resetProgressModal.hidden
   ) {
     return;
@@ -1695,6 +1735,22 @@ function openResetProgressModal(): void {
   }, 1000);
 }
 
+function openResetLevelModal(): void {
+  settingsActivity.hidden = true;
+  resetLevelModal.hidden = false;
+  cancelResetLevelButton.focus();
+}
+
+function closeResetLevelModal(restoreFocus: boolean): void {
+  if (resetLevelModal.hidden) {
+    return;
+  }
+  resetLevelModal.hidden = true;
+  if (restoreFocus) {
+    resetLevelButton.focus();
+  }
+}
+
 function closeResetProgressModal(restoreFocus: boolean): void {
   if (resetProgressTimer) {
     clearInterval(resetProgressTimer);
@@ -1777,6 +1833,23 @@ function required(selector: string): HTMLElement {
     throw new Error(`Missing element: ${selector}`);
   }
   return node;
+}
+
+function encodeBase64Utf8(text: string): string {
+  const bytes = new TextEncoder().encode(text);
+  const parts: string[] = [];
+  const chunkSize = 0x8000;
+
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    const end = Math.min(i + chunkSize, bytes.length);
+    let chunk = '';
+    for (let j = i; j < end; j += 1) {
+      chunk += String.fromCharCode(bytes[j]);
+    }
+    parts.push(chunk);
+  }
+
+  return btoa(parts.join(''));
 }
 
 async function copyToClipboard(text: string): Promise<void> {
