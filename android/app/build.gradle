@@ -16,7 +16,18 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    buildFeatures {
+        resValues true
+    }
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+            resValue "string", "app_name", "Word Tracer Debug"
+            resValue "string", "title_activity_main", "Word Tracer Debug"
+            resValue "string", "package_name", "com.wordtracer.app.debug"
+            resValue "string", "custom_url_scheme", "com.wordtracer.app.debug"
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

@@ -349,8 +349,9 @@ button:disabled {
 
 .persistent-hint {
   position: fixed;
-  bottom: 4px;
+  bottom: calc(4px + var(--safe-bottom));
   inset-inline: 0;
+  padding-inline: max(8px, var(--safe-left)) max(8px, var(--safe-right));
   font-size: 0.8em;
   color: var(--muted);
   text-align: center;

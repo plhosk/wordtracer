@@ -479,13 +479,8 @@ function bindStaticEvents(): void {
   });
 
   nextLevelInlineButton.addEventListener('click', async () => {
-    const result = gameManager.advanceToNextLevel();
-    if (!result.advanced) return;
-    
-    if (result.needsGroupLoad && result.nextGroupId) {
-      const levels = await dataLoader.loadGroupLevels(result.nextGroupId);
-      gameManager.setGroupLevels(result.nextGroupId, levels);
-    }
+    const advanced = await advanceToNextLevelEnsuringLoaded();
+    if (!advanced) return;
     
     clearCompletionSummaryCarryover();
     clearFeedback();
@@ -575,9 +570,9 @@ function bindStaticEvents(): void {
     closeResetProgressModal(true);
   });
 
-  confirmResetProgressButton.addEventListener('click', () => {
+  confirmResetProgressButton.addEventListener('click', async () => {
     closeResetProgressModal(false);
-    resetAllProgress();
+    await resetAllProgress();
     setFeedback('All progress reset.', 'muted');
     render();
     saveState();
@@ -682,7 +677,7 @@ function renderLevelPackModal(): void {
       button.classList.add('level-pack-item-unstarted');
     }
     button.addEventListener('click', () => {
-      jumpToGroup(group.index);
+      void jumpToGroup(group.index);
     });
     item.appendChild(button);
     levelPackList.appendChild(item);
@@ -1354,13 +1349,8 @@ async function completeCurrentLevel(): Promise<void> {
   }
 
   completionSummaryCarryover = formatCompletionSummary(gameManager.getCurrentLevelState());
-  const result = gameManager.advanceToNextLevel();
-  if (!result.advanced) return;
-  
-  if (result.needsGroupLoad && result.nextGroupId) {
-    const levels = await dataLoader.loadGroupLevels(result.nextGroupId);
-    gameManager.setGroupLevels(result.nextGroupId, levels);
-  }
+  const advanced = await advanceToNextLevelEnsuringLoaded();
+  if (!advanced) return;
   
   clearRecentSolvedCells();
   preloadAdjacentGroups();
@@ -1453,23 +1443,17 @@ function closeLevelPackModal(restoreFocus: boolean): void {
   }
 }
 
-function jumpToGroup(groupIndex: number): void {
+async function jumpToGroup(groupIndex: number): Promise<void> {
   const targetGroup = levelGroups.find((group) => group.index === groupIndex);
   if (!targetGroup) {
     return;
   }
   const targetIndex = firstUnfinishedGroupLevelIndex(targetGroup);
-  const result = gameManager.jumpToLevel(targetGroup.id, targetIndex);
-  if (result.needsGroupLoad) {
-    closeLevelPackModal(false);
-    dataLoader.loadGroupLevels(targetGroup.id).then((levels) => {
-      gameManager.setGroupLevels(targetGroup.id, levels);
-      preloadAdjacentGroups();
-      render();
-      saveState();
-    });
+  const jumped = await jumpToLevelEnsuringLoaded(targetGroup.id, targetIndex);
+  if (!jumped) {
     return;
   }
+
   clearCompletionSummaryCarryover();
   clearFeedback();
   clearRecentSolvedCells();
@@ -1721,11 +1705,53 @@ function closeResetProgressModal(restoreFocus: boolean): void {
   }
 }
 
-function resetAllProgress(): void {
+async function resetAllProgress(): Promise<void> {
   gameManager.resetAllProgress();
+
+  const jumpedToA1 = await jumpToLevelEnsuringLoaded('A', 0);
+  if (!jumpedToA1) {
+    const firstGroupId = gameManager.getCurrentGroupId();
+    if (firstGroupId) {
+      await ensureGroupLoaded(firstGroupId);
+    }
+  }
+
   clearCompletionSummaryCarryover();
   clearRecentSolvedCells();
   clearSelection();
+  preloadAdjacentGroups();
+}
+
+async function ensureGroupLoaded(groupId: string): Promise<void> {
+  if (gameManager.hasGroupLoaded(groupId)) {
+    return;
+  }
+
+  const levels = await dataLoader.loadGroupLevels(groupId);
+  gameManager.setGroupLevels(groupId, levels);
+}
+
+async function advanceToNextLevelEnsuringLoaded(): Promise<boolean> {
+  const result = gameManager.advanceToNextLevel();
+  if (!result.advanced) {
+    return false;
+  }
+
+  if (result.needsGroupLoad && result.nextGroupId) {
+    await ensureGroupLoaded(result.nextGroupId);
+  }
+
+  return true;
+}
+
+async function jumpToLevelEnsuringLoaded(groupId: string, indexInGroup: number): Promise<boolean> {
+  const result = gameManager.jumpToLevel(groupId, indexInGroup);
+  if (!result.jumped) {
+    return false;
+  }
+
+  await ensureGroupLoaded(groupId);
+  return true;
 }
 
 function pointerDeadzone(pointerType: string): number {
