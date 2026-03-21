@@ -28,5 +28,5 @@ High-level tuning guidance lives in `scripts/levels_build_tuning.md`.
 - `android_release_preflight.mjs` - validates clean tagged release state and aligned versions
 - `android_build_release_unsigned.mjs` - deterministic unsigned release APK build flow
 - `android_sign_release.mjs` - signs release APK with pinned apksigner and verifies certs
-- `ci_fdroid_parity.sh` - shared container runner for parity and release-candidate F-Droid CI jobs
+- `ci_fdroid_parity.sh` - container runner for F-Droid parity check CI job
 - `common.py` - shared helpers used by multiple scripts

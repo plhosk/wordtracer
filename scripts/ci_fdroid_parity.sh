@@ -1,15 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-MODE="${1:-}"
+MODE="${1:-parity}"
 
-if [[ -z "${MODE}" ]]; then
-  echo "usage: bash scripts/ci_fdroid_parity.sh <parity|release-candidate>" >&2
-  exit 2
-fi
-
-if [[ "${MODE}" != "parity" && "${MODE}" != "release-candidate" ]]; then
-  echo "invalid mode: ${MODE}" >&2
+if [[ "${MODE}" != "parity" ]]; then
+  echo "usage: bash scripts/ci_fdroid_parity.sh [parity]" >&2
   exit 2
 fi
 
@@ -36,6 +31,11 @@ mkdir -p "${fdroidserver}"
 curl --silent --show-error --location https://gitlab.com/fdroid/fdroidserver/-/archive/master/fdroidserver-master.tar.gz | tar -xz --directory="${fdroidserver}" --strip-components=1
 python3 -m pip install --break-system-packages --upgrade -e "${fdroidserver}"
 
+gradlew_fdroid=/opt/gradlew-fdroid
+rm -rf "${gradlew_fdroid}"
+git clone --quiet --depth 1 https://gitlab.com/fdroid/gradlew-fdroid.git "${gradlew_fdroid}"
+chmod 0755 "${gradlew_fdroid}/gradlew-fdroid"
+
 if [[ -e .git ]]; then
   mv .git /tmp/workspace-git
   trap 'mv /tmp/workspace-git .git' EXIT
@@ -53,7 +53,7 @@ EOF
 
 cat > config.yml << "EOF"
 sdk_path: /opt/android-sdk
-gradle: /workspace/build/com.wordtracer.app/android/gradlew
+gradle: /opt/gradlew-fdroid/gradlew-fdroid
 EOF
 
 export PATH="${ANDROID_SDK_ROOT}/build-tools/${ANDROID_BUILD_TOOLS}:$PATH"
@@ -65,9 +65,5 @@ node --version
 npm --version
 apksigner version
 
-if [[ "${MODE}" == "parity" ]]; then
-  "${fdroidserver}/fdroid" lint com.wordtracer.app
-  "${fdroidserver}/fdroid" build -v -l --stop --test com.wordtracer.app
-else
-  "${fdroidserver}/fdroid" build -v -l --stop com.wordtracer.app
-fi
+"${fdroidserver}/fdroid" lint com.wordtracer.app
+"${fdroidserver}/fdroid" build -v -l --stop --test com.wordtracer.app
