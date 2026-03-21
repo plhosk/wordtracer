@@ -68,8 +68,27 @@ jobs:
           for f in tmp/*.apk unsigned/*.apk unsigned/binaries/*.apk logs/*.log; do
             cp "$f" parity-artifacts/
           done
+          UNSIGNED_APK="build/com.wordtracer.app/android/app/build/outputs/apk/release/app-release-unsigned.apk"
+          if [ -f "${UNSIGNED_APK}" ]; then
+            cp "${UNSIGNED_APK}" parity-artifacts/parity-app-release-unsigned.apk
+          fi
           if ls parity-artifacts/*.apk >/dev/null 2>&1; then
-            sha256sum parity-artifacts/*.apk > parity-artifacts/SHA256SUMS.txt
+            sha256sum parity-artifacts/*.apk | sort > parity-artifacts/SHA256SUMS.txt
+            {
+              echo "### F-Droid Parity APK Hashes"
+              echo
+              while IFS= read -r line; do
+                file_name=$(echo "${line}" | awk '{print $2}')
+                hash_value=$(echo "${line}" | awk '{print $1}')
+                echo "- ${file_name}: ${hash_value}"
+              done < parity-artifacts/SHA256SUMS.txt
+            } >> "${GITHUB_STEP_SUMMARY}"
+          else
+            {
+              echo "### F-Droid Parity APK Hashes"
+              echo
+              echo "- no APK artifacts were produced"
+            } >> "${GITHUB_STEP_SUMMARY}"
           fi
 
       - name: Upload parity artifacts
