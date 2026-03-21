@@ -53,17 +53,25 @@ jobs:
             bash -lc '
               set -euo pipefail
               apt-get update
-              apt-get install -y --no-install-recommends ca-certificates git python3 python3-pip default-jdk-headless unzip nodejs npm
-              python3 -m pip install --break-system-packages --upgrade fdroidserver
+              apt-get install -y --no-install-recommends ca-certificates curl git python3 python3-pip default-jdk-headless unzip nodejs npm
+              fdroidserver=/opt/fdroidserver
+              mkdir -p "${fdroidserver}"
+              curl --silent --show-error --location https://gitlab.com/fdroid/fdroidserver/-/archive/master/fdroidserver-master.tar.gz | tar -xz --directory="${fdroidserver}" --strip-components=1
+              python3 -m pip install --break-system-packages --upgrade -e "${fdroidserver}"
+              mkdir -p config
+              cat > config/categories.yml << "EOF"
+              Games:
+                name: Games
+              EOF
               export PATH="${ANDROID_SDK_ROOT}/build-tools/${ANDROID_BUILD_TOOLS}:$PATH"
               python3 --version
-              fdroid --version
+              ${fdroidserver}/fdroid --version
               java -version
               node --version
               npm --version
               apksigner version
-              fdroid lint com.wordtracer.app
-              fdroid build -v -l --stop --test com.wordtracer.app
+              ${fdroidserver}/fdroid lint com.wordtracer.app
+              ${fdroidserver}/fdroid build -v -l --stop --test com.wordtracer.app
             '
 
       - name: Collect parity artifacts
@@ -123,10 +131,13 @@ jobs:
             bash -lc '
               set -euo pipefail
               apt-get update
-              apt-get install -y --no-install-recommends ca-certificates git python3 python3-pip default-jdk-headless unzip nodejs npm
-              python3 -m pip install --break-system-packages --upgrade fdroidserver
+              apt-get install -y --no-install-recommends ca-certificates curl git python3 python3-pip default-jdk-headless unzip nodejs npm
+              fdroidserver=/opt/fdroidserver
+              mkdir -p "${fdroidserver}"
+              curl --silent --show-error --location https://gitlab.com/fdroid/fdroidserver/-/archive/master/fdroidserver-master.tar.gz | tar -xz --directory="${fdroidserver}" --strip-components=1
+              python3 -m pip install --break-system-packages --upgrade -e "${fdroidserver}"
               export PATH="${ANDROID_SDK_ROOT}/build-tools/${ANDROID_BUILD_TOOLS}:$PATH"
-              fdroid build -v -l --stop com.wordtracer.app
+              ${fdroidserver}/fdroid build -v -l --stop com.wordtracer.app
             '
 
       - name: Collect release candidate artifacts
