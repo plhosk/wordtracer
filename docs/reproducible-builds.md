@@ -60,7 +60,11 @@ The workflow `fdroid-parity.yml` mirrors the F-Droid metadata build path and run
 - `fdroid lint com.wordtracer.app`
 - `fdroid build -v -l --stop --test com.wordtracer.app`
 
+It executes those commands inside a Debian forky container while mounting the CI Android SDK.
+
 This is a parity check against F-Droid tooling and metadata behavior (including upstream binary verification when `Binaries` is set).
+
+When parity passes, the same workflow runs a non-test `fdroid build` and uploads `fdroid-release-candidate-artifacts` (including unsigned APKs and hashes) for release signing.
 
 ## Debugging Mismatches
 

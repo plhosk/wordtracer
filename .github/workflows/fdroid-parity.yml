@@ -15,7 +15,6 @@ env:
   JAVA_VERSION: "21"
   ANDROID_PLATFORM: "android-36"
   ANDROID_BUILD_TOOLS: "36.0.0"
-  FDROIDSERVER_VERSION: "2.4.0"
 
 jobs:
   parity:
@@ -25,11 +24,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag || github.ref }}
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -43,34 +37,34 @@ jobs:
       - name: Install Android SDK packages
         run: sdkmanager --install "platform-tools" "platforms;${ANDROID_PLATFORM}" "build-tools;${ANDROID_BUILD_TOOLS}"
 
-      - name: Mirror metadata npm install path
-        run: |
-          echo "deb https://deb.debian.org/debian forky main" | sudo tee /etc/apt/sources.list.d/forky.list
-          sudo apt-get update
-          sudo apt-get install -y -t forky npm
-
-      - name: Install fdroidserver
-        run: python -m pip install --upgrade "fdroidserver==${FDROIDSERVER_VERSION}"
-
-      - name: Show tool versions
-        run: |
-          python --version
-          fdroid --version
-          java -version
-          npm --version
-          apksigner version
-
-      - name: Lint metadata
+      - name: Run parity build in Debian forky container
         env:
           ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
           ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
-        run: fdroid lint com.wordtracer.app
-
-      - name: Build and verify via fdroid
-        env:
-          ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
-          ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
-        run: fdroid build -v -l --stop --test com.wordtracer.app
+        run: |
+          docker run --rm \
+            -e ANDROID_HOME=/opt/android-sdk \
+            -e ANDROID_SDK_ROOT=/opt/android-sdk \
+            -e ANDROID_BUILD_TOOLS="${ANDROID_BUILD_TOOLS}" \
+            -v "${GITHUB_WORKSPACE}:/workspace" \
+            -v "${ANDROID_SDK_ROOT}:/opt/android-sdk" \
+            -w /workspace \
+            debian:forky-slim \
+            bash -lc '
+              set -euo pipefail
+              apt-get update
+              apt-get install -y --no-install-recommends ca-certificates git python3 python3-pip default-jdk-headless unzip nodejs npm
+              python3 -m pip install --break-system-packages --upgrade fdroidserver
+              export PATH="${ANDROID_SDK_ROOT}/build-tools/${ANDROID_BUILD_TOOLS}:$PATH"
+              python3 --version
+              fdroid --version
+              java -version
+              node --version
+              npm --version
+              apksigner version
+              fdroid lint com.wordtracer.app
+              fdroid build -v -l --stop --test com.wordtracer.app
+            '
 
       - name: Collect parity artifacts
         if: always()
@@ -90,4 +84,67 @@ jobs:
         with:
           name: fdroid-parity-artifacts
           path: parity-artifacts
+          if-no-files-found: warn
+
+  release_candidate:
+    runs-on: ubuntu-24.04
+    needs: parity
+    steps:
+      - name: Checkout release ref
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag || github.ref }}
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: sdkmanager --install "platform-tools" "platforms;${ANDROID_PLATFORM}" "build-tools;${ANDROID_BUILD_TOOLS}"
+
+      - name: Build release candidate in Debian forky container
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
+          ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
+        run: |
+          docker run --rm \
+            -e ANDROID_HOME=/opt/android-sdk \
+            -e ANDROID_SDK_ROOT=/opt/android-sdk \
+            -e ANDROID_BUILD_TOOLS="${ANDROID_BUILD_TOOLS}" \
+            -v "${GITHUB_WORKSPACE}:/workspace" \
+            -v "${ANDROID_SDK_ROOT}:/opt/android-sdk" \
+            -w /workspace \
+            debian:forky-slim \
+            bash -lc '
+              set -euo pipefail
+              apt-get update
+              apt-get install -y --no-install-recommends ca-certificates git python3 python3-pip default-jdk-headless unzip nodejs npm
+              python3 -m pip install --break-system-packages --upgrade fdroidserver
+              export PATH="${ANDROID_SDK_ROOT}/build-tools/${ANDROID_BUILD_TOOLS}:$PATH"
+              fdroid build -v -l --stop com.wordtracer.app
+            '
+
+      - name: Collect release candidate artifacts
+        if: always()
+        run: |
+          mkdir -p release-candidate-artifacts
+          shopt -s nullglob
+          for f in unsigned/*.apk unsigned/binaries/*.apk logs/*.log; do
+            cp "$f" release-candidate-artifacts/
+          done
+          if ls release-candidate-artifacts/*.apk >/dev/null 2>&1; then
+            sha256sum release-candidate-artifacts/*.apk > release-candidate-artifacts/SHA256SUMS.txt
+          fi
+
+      - name: Upload release candidate artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fdroid-release-candidate-artifacts
+          path: release-candidate-artifacts
           if-no-files-found: warn
