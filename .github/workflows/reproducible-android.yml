@@ -150,8 +150,8 @@ jobs:
           {
             echo "### Unsigned APK Hashes"
             echo
-            echo "- \\`sha_a\\`: \\`${SHA_A}\\`"
-            echo "- \\`sha_b\\`: \\`${SHA_B}\\`"
+            echo "- sha_a: ${SHA_A}"
+            echo "- sha_b: ${SHA_B}"
           } >> "${GITHUB_STEP_SUMMARY}"
           if [ "${SHA_A}" = "${SHA_B}" ]; then
             echo "Unsigned APKs are reproducible"
