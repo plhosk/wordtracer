@@ -24,7 +24,7 @@ High-level tuning guidance lives in `scripts/levels_build_tuning.md`.
 
 - `tune_wheel_token_shapes.py` - helper for wheel-shape sweep experiments
 - `set_release_version.py` - updates app/F-Droid release version fields
-- `fdroid_prepare_release.py` - validates release fields and copies app metadata into fdroiddata
+- `fdroid_prepare_release.py` - validates release fields and normalizes metadata commit to a git hash
 - `android_release_preflight.mjs` - validates clean tagged release state and aligned versions
 - `android_build_release_unsigned.mjs` - deterministic unsigned release APK build flow
 - `android_sign_release.mjs` - signs release APK with pinned apksigner and verifies certs

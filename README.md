@@ -88,7 +88,7 @@ npm run android:build:release:unsigned  # reproducible unsigned release APK buil
 npm run android:sign:release  # sign unsigned release APK with pinned apksigner (requires env vars)
 npm run android:release:repro  # run preflight + unsigned build + signing
 npm run release:set-version -- x.x.x  # bump app + F-Droid release versions
-npm run fdroid:prepare-release -- x.x.x --fdroiddata ~/fdroiddata --fdroidserver ~/fdroidserver  # copy metadata and print next commands
+npm run fdroid:prepare-release -- x.x.x  # normalize metadata commit to git hash for this release
 ```
 
 Reproducible Android release runbook: `docs/reproducible-builds.md`

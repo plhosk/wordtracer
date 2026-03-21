@@ -4,33 +4,15 @@ import argparse
 import json
 import re
 import subprocess
-from pathlib import Path
 
 from common import project_path
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description=(
-            "Prepare F-Droid metadata for a release without pushing any changes."
-        )
+        description="Normalize local F-Droid metadata commit to a git hash."
     )
     parser.add_argument("version", help="Release version (X.Y.Z)")
-    parser.add_argument(
-        "--fdroiddata",
-        required=True,
-        help="Path to local fdroiddata checkout.",
-    )
-    parser.add_argument(
-        "--application-id",
-        default="com.wordtracer.app",
-        help="F-Droid application id / metadata file stem.",
-    )
-    parser.add_argument(
-        "--fdroidserver",
-        required=True,
-        help="Path to local fdroidserver checkout used to run fdroid via uv.",
-    )
     parser.add_argument(
         "--dry-run",
         action="store_true",
@@ -104,16 +86,21 @@ def read_versions() -> tuple[str, str, int, str, int, str, int]:
     )
 
 
-def check_local_tag_exists(version: str) -> bool:
+def resolve_tag_commit(version: str) -> tuple[str, str]:
     tag = f"v{version}"
     result = subprocess.run(
-        ["git", "tag", "--list", tag],
+        ["git", "rev-parse", f"{tag}^{{commit}}"],
         cwd=project_path(),
         check=False,
         capture_output=True,
         text=True,
     )
-    return tag in result.stdout.split()
+    if result.returncode != 0:
+        raise SystemExit(f"Could not resolve tag {tag} to a commit hash")
+    commit_hash = result.stdout.strip()
+    if not re.fullmatch(r"[0-9a-f]{40}", commit_hash):
+        raise SystemExit(f"Resolved commit for {tag} is not a 40-char git hash")
+    return tag, commit_hash
 
 
 def main() -> None:
@@ -164,86 +151,52 @@ def main() -> None:
         )
 
     version_code = unique_codes[0]
-    source_metadata = project_path("metadata", "com.wordtracer.app.yml")
-    fdroiddata_root = Path(args.fdroiddata).expanduser().resolve()
-    fdroidserver_root = Path(args.fdroidserver).expanduser().resolve()
-    if not fdroiddata_root.exists() or not fdroiddata_root.is_dir():
-        raise SystemExit(f"fdroiddata path not found: {fdroiddata_root}")
-    if not fdroidserver_root.exists() or not fdroidserver_root.is_dir():
-        raise SystemExit(f"fdroidserver path not found: {fdroidserver_root}")
-    target_metadata = fdroiddata_root / "metadata" / f"{args.application_id}.yml"
-    if not target_metadata.parent.exists() or not target_metadata.parent.is_dir():
-        raise SystemExit(
-            f"fdroiddata metadata directory not found: {target_metadata.parent}"
-        )
-
-    source_text = source_metadata.read_text(encoding="utf-8")
-    target_exists = target_metadata.exists()
-    target_text = target_metadata.read_text(encoding="utf-8") if target_exists else ""
-    changed = source_text != target_text
+    metadata_path = project_path("metadata", "com.wordtracer.app.yml")
+    metadata_text = metadata_path.read_text(encoding="utf-8")
+    previous_commit = must_match(
+        r"^\s*commit:\s*(\S+)\s*$", metadata_text, "metadata commit"
+    )
+    tag, commit_hash = resolve_tag_commit(args.version)
+    updated_metadata_text = re.sub(
+        r"^(\s*commit:\s*).*(\s*)$",
+        rf"\g<1>{commit_hash}\g<2>",
+        metadata_text,
+        count=1,
+        flags=re.MULTILINE,
+    )
+    changed = updated_metadata_text != metadata_text
 
     print(f"Release version: {args.version}")
     print(f"Release code: {version_code}")
-    print(f"Source metadata: {source_metadata}")
-    print(f"Target metadata: {target_metadata}")
-    print(f"fdroidserver: {fdroidserver_root}")
+    print(f"Metadata: {metadata_path}")
+    print(f"Tag: {tag}")
+    print(f"Previous metadata commit: {previous_commit}")
+    print(f"Resolved commit hash: {commit_hash}")
     print(f"Metadata changed: {'yes' if changed else 'no'}")
 
     warnings: list[str] = []
-    has_binaries = has_match(r"^\s*Binaries:\s*\S+\s*$", source_text)
-    has_build_binary = has_match(r"^\s*binary:\s*\S+\s*$", source_text)
+    has_binaries = has_match(r"^\s*Binaries:\s*\S+\s*$", metadata_text)
+    has_build_binary = has_match(r"^\s*binary:\s*\S+\s*$", metadata_text)
     if not has_binaries and not has_build_binary:
         warnings.append(
             "metadata missing Binaries/build binary URL for reproducible upstream verification"
         )
-    if not has_match(r"^\s*AllowedAPKSigningKeys:\s*(?:\S.*)?$", source_text):
+    if not has_match(r"^\s*AllowedAPKSigningKeys:\s*(?:\S.*)?$", metadata_text):
         warnings.append("metadata missing AllowedAPKSigningKeys")
     if warnings:
         print("Warnings:")
         for warning in warnings:
             print(f"  - {warning}")
 
-    if not args.dry_run and changed:
-        target_metadata.write_text(source_text, encoding="utf-8")
-        print("Copied metadata into fdroiddata checkout")
-    elif args.dry_run:
-        print("Dry run: metadata not copied")
+    if args.dry_run:
+        print("Dry run: metadata not updated")
+        return
 
-    tag = f"v{args.version}"
-    has_local_tag = check_local_tag_exists(args.version)
-    if has_local_tag:
-        print(f"Local tag exists: {tag}")
+    if changed:
+        metadata_path.write_text(updated_metadata_text, encoding="utf-8")
+        print("Updated metadata commit to git hash")
     else:
-        print(f"Local tag missing: {tag}")
-
-    branch_name = f"update-wordtracer-{args.version}"
-    print("\nNext commands (not run):")
-    print(f"  cd {project_path()}")
-    print("  git status")
-    if not has_local_tag:
-        print(f'  git tag -a {tag} -m "Release {tag}"')
-    print("  git push origin <your-branch>")
-    print(f"  git push origin {tag}")
-    print(f"  cd {fdroiddata_root}")
-    print(f"  git checkout -b {branch_name}")
-    print(
-        "  "
-        f"uv run --project {fdroidserver_root} --directory {fdroiddata_root} "
-        f"fdroid lint {args.application_id}"
-    )
-    print(
-        "  "
-        f"uv run --project {fdroidserver_root} --directory {fdroiddata_root} "
-        f"fdroid checkupdates --allow-dirty {args.application_id}"
-    )
-    print(
-        "  "
-        f"uv run --project {fdroidserver_root} --directory {fdroiddata_root} "
-        f"fdroid build -v -l {args.application_id}"
-    )
-    print(f"  git add metadata/{args.application_id}.yml")
-    print(f'  git commit -m "Update Word Tracer to {args.version} ({version_code})"')
-    print(f"  git push -u origin {branch_name}")
+        print("Metadata already uses this git hash")
 
 
 if __name__ == "__main__":
