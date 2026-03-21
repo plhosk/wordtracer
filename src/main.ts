@@ -56,6 +56,7 @@ const STORAGE_KEY = 'wordtracer-state-v2';
 const IS_ANDROID = Capacitor.getPlatform() === 'android';
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const BASE_WHEEL_SIZE = 216;
+const DEFAULT_TOKEN_SWAP_ANIMATION_MS = 100;
 
 const MOVE_DEADZONE_BY_POINTER: Record<string, number> = {
   mouse: 7,
@@ -66,6 +67,7 @@ const DEFAULT_SETTINGS: SavedSettings = {
   autoAdvance: false,
   theme: 'dark',
   alwaysShowHint: false,
+  disableSwapAnimation: false,
 };
 
 const app = document.querySelector<HTMLDivElement>('#app');
@@ -112,6 +114,7 @@ const confirmRefreshHintButton = required('#confirm-refresh-hint') as HTMLButton
 const autoAdvanceInput = required('#auto-advance') as HTMLInputElement;
 const lightThemeInput = required('#light-theme') as HTMLInputElement;
 const alwaysShowHintInput = required('#always-show-hint') as HTMLInputElement;
+const disableSwapAnimationInput = required('#disable-swap-animation') as HTMLInputElement;
 const persistentHintEl = required('#persistent-hint') as HTMLParagraphElement;
 const resetLevelButton = required('#reset-level') as HTMLButtonElement;
 const resetLevelModal = required('#reset-level-modal');
@@ -151,6 +154,8 @@ let completionSummaryCarryover = '';
 let recentSolvedCells = new Set<string>();
 let previewingSelection = false;
 let wheelSize = BASE_WHEEL_SIZE;
+let tokenSwapAnimationTimer: ReturnType<typeof window.setTimeout> | null = null;
+let tokenSwapAnimationSequence = 0;
 
 void init();
 
@@ -399,6 +404,11 @@ function bindStaticEvents(): void {
     saveState();
   });
 
+  disableSwapAnimationInput.addEventListener('change', () => {
+    settings.disableSwapAnimation = disableSwapAnimationInput.checked;
+    saveState();
+  });
+
   resetLevelButton.addEventListener('click', () => {
     openResetLevelModal();
   });
@@ -483,6 +493,7 @@ function renderSettings(): void {
   autoAdvanceInput.checked = settings.autoAdvance;
   lightThemeInput.checked = settings.theme === 'light';
   alwaysShowHintInput.checked = settings.alwaysShowHint;
+  disableSwapAnimationInput.checked = settings.disableSwapAnimation;
   applyTheme();
 }
 
@@ -513,21 +524,22 @@ function renderLevelPackModal(): void {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'level-pack-item';
+    const isCurrentGroup = group.index === currentGroupIndex;
     const solved = groupSolvedLevels(group);
     const total = group.levelCount;
     button.textContent = `${group.id}\n${solved}/${total}`;
+    if (isCurrentGroup) {
+      button.classList.add('level-pack-item-current');
+      button.setAttribute('aria-current', 'true');
+    }
     if (total > 0 && solved >= total) {
       button.classList.add('level-pack-item-complete');
     } else if (solved > 0) {
       button.classList.add('level-pack-item-in-progress');
-      if (group.index === currentGroupIndex) {
-        button.classList.add('level-pack-item-current');
-        button.setAttribute('aria-current', 'true');
-      }
-    } else if (group.index === currentGroupIndex) {
-      button.setAttribute('aria-current', 'true');
     } else {
-      button.classList.add('level-pack-item-unstarted');
+      if (!isCurrentGroup) {
+        button.classList.add('level-pack-item-unstarted');
+      }
     }
     button.addEventListener('click', () => {
       void jumpToGroup(group.index);
@@ -547,9 +559,131 @@ function renderTokenOrderToggle(levelDone: boolean): void {
 }
 
 function swapTokenOrder(): void {
+  stopTokenSwapAnimation();
   gameManager.toggleTokenOrder();
   clearSelection();
   render();
+  runTokenSwapAnimation();
+}
+
+function runTokenSwapAnimation(): void {
+  if (settings.disableSwapAnimation) {
+    return;
+  }
+
+  stopTokenSwapAnimation();
+  tokenSwapAnimationSequence += 1;
+  const sequence = tokenSwapAnimationSequence;
+
+  wheelEl.classList.remove('wheel-swapping');
+  finalizeWheelTokenSwapAnimation();
+  prepareWheelTokenSwapAnimation();
+  void wheelEl.offsetWidth;
+  wheelEl.classList.add('wheel-swapping');
+
+  tokenSwapAnimationTimer = window.setTimeout(() => {
+    if (sequence !== tokenSwapAnimationSequence) {
+      return;
+    }
+    wheelEl.classList.remove('wheel-swapping');
+    finalizeWheelTokenSwapAnimation();
+    tokenSwapAnimationTimer = null;
+  }, getTokenSwapAnimationMs());
+}
+
+function stopTokenSwapAnimation(): void {
+  tokenSwapAnimationSequence += 1;
+  if (tokenSwapAnimationTimer !== null) {
+    window.clearTimeout(tokenSwapAnimationTimer);
+    tokenSwapAnimationTimer = null;
+  }
+  wheelEl.classList.remove('wheel-swapping');
+  finalizeWheelTokenSwapAnimation();
+}
+
+function getTokenSwapAnimationMs(): number {
+  const raw = getComputedStyle(document.documentElement).getPropertyValue('--token-swap-ms').trim();
+  if (!raw) {
+    return DEFAULT_TOKEN_SWAP_ANIMATION_MS;
+  }
+  if (raw.endsWith('ms')) {
+    const value = Number.parseFloat(raw);
+    return Number.isFinite(value) ? value : DEFAULT_TOKEN_SWAP_ANIMATION_MS;
+  }
+  if (raw.endsWith('s')) {
+    const value = Number.parseFloat(raw);
+    return Number.isFinite(value) ? value * 1000 : DEFAULT_TOKEN_SWAP_ANIMATION_MS;
+  }
+  const value = Number.parseFloat(raw);
+  return Number.isFinite(value) ? value : DEFAULT_TOKEN_SWAP_ANIMATION_MS;
+}
+
+function prepareWheelTokenSwapAnimation(): void {
+  wheelEl.querySelectorAll<HTMLElement>('.wheel-letter').forEach((node) => {
+    const finalToken = node.textContent?.trim() ?? '';
+    if (finalToken.length < 2) {
+      return;
+    }
+
+    const startToken = finalToken.split('').reverse().join('');
+    if (startToken === finalToken) {
+      return;
+    }
+
+    node.dataset.swapFinalToken = finalToken;
+    node.textContent = '';
+    node.classList.add('wheel-letter-swap-active');
+
+    const layer = document.createElement('span');
+    layer.className = 'wheel-letter-glyph-layer';
+
+    for (let index = 0; index < startToken.length; index += 1) {
+      const glyph = document.createElement('span');
+      glyph.className = 'wheel-letter-glyph';
+      glyph.textContent = startToken[index];
+      layer.appendChild(glyph);
+    }
+
+    node.appendChild(layer);
+
+    const finalMeasureLayer = document.createElement('span');
+    finalMeasureLayer.className = 'wheel-letter-glyph-layer wheel-letter-glyph-layer-measure';
+    for (let index = 0; index < finalToken.length; index += 1) {
+      const glyph = document.createElement('span');
+      glyph.className = 'wheel-letter-glyph';
+      glyph.textContent = finalToken[index];
+      finalMeasureLayer.appendChild(glyph);
+    }
+    node.appendChild(finalMeasureLayer);
+
+    const glyphs = Array.from(layer.querySelectorAll<HTMLElement>('.wheel-letter-glyph'));
+    const finalGlyphs = Array.from(finalMeasureLayer.querySelectorAll<HTMLElement>('.wheel-letter-glyph'));
+    const startCenters = glyphs.map((glyph) => {
+      const rect = glyph.getBoundingClientRect();
+      return rect.left + rect.width / 2;
+    });
+    const finalCenters = finalGlyphs.map((glyph) => {
+      const rect = glyph.getBoundingClientRect();
+      return rect.left + rect.width / 2;
+    });
+
+    finalMeasureLayer.remove();
+
+    for (let index = 0; index < glyphs.length; index += 1) {
+      const targetCenter = finalCenters[glyphs.length - 1 - index];
+      const shiftPx = targetCenter - startCenters[index];
+      glyphs[index].style.setProperty('--swap-shift', `${shiftPx.toFixed(2)}px`);
+    }
+  });
+}
+
+function finalizeWheelTokenSwapAnimation(): void {
+  wheelEl.querySelectorAll<HTMLElement>('.wheel-letter-swap-active').forEach((node) => {
+    const finalToken = node.dataset.swapFinalToken ?? '';
+    node.classList.remove('wheel-letter-swap-active');
+    delete node.dataset.swapFinalToken;
+    node.textContent = finalToken;
+  });
 }
 
 function preloadAdjacentGroups(): void {
@@ -1080,6 +1214,7 @@ function renderFeedback(text: string, trailingWord = ''): void {
 }
 
 function updateSelectionPreview(): void {
+  syncWheelSelectionClasses();
   const word = activeWord();
   if (word) {
     previewingSelection = true;
@@ -1099,6 +1234,14 @@ function updateSelectionPreview(): void {
     ? `feedback${splitClass} ${feedbackToneClass}`
     : `feedback${splitClass}`;
   refreshDictionaryButton();
+}
+
+function syncWheelSelectionClasses(): void {
+  const selected = new Set(activeSelection);
+  const letters = wheelEl.querySelectorAll<HTMLElement>('.wheel-letter');
+  letters.forEach((node, index) => {
+    node.classList.toggle('selected', selected.has(index));
+  });
 }
 
 function drawSelectionPath(): void {
@@ -1246,6 +1389,10 @@ function loadSettings(raw: SavedGameState['settings']): SavedSettings {
     autoAdvance: typeof raw?.autoAdvance === 'boolean' ? raw.autoAdvance : DEFAULT_SETTINGS.autoAdvance,
     theme,
     alwaysShowHint: typeof raw?.alwaysShowHint === 'boolean' ? raw.alwaysShowHint : DEFAULT_SETTINGS.alwaysShowHint,
+    disableSwapAnimation:
+      typeof raw?.disableSwapAnimation === 'boolean'
+        ? raw.disableSwapAnimation
+        : DEFAULT_SETTINGS.disableSwapAnimation,
   };
 }
 
@@ -1261,6 +1408,7 @@ function openSettingsActivity(): void {
   closeLevelPackModal(false);
   settingsActivity.hidden = false;
   menuButton.setAttribute('aria-expanded', 'true');
+  closeMenuButton.focus();
 }
 
 function closeSettingsActivity(): void {
@@ -1276,6 +1424,11 @@ function openLevelPackModal(): void {
   renderLevelPackModal();
   levelPackModal.hidden = false;
   levelPackButton.setAttribute('aria-expanded', 'true');
+  const currentGroupButton = levelPackList.querySelector<HTMLButtonElement>('button[aria-current="true"]');
+  if (currentGroupButton) {
+    currentGroupButton.focus();
+    return;
+  }
   closeLevelPackModalButton.focus();
 }
 
@@ -1603,26 +1756,43 @@ async function ensureGroupLoaded(groupId: string): Promise<void> {
 }
 
 async function advanceToNextLevelEnsuringLoaded(): Promise<boolean> {
+  const previousGroupId = gameManager.getCurrentGroupId();
+  const previousIndexInGroup = gameManager.getCurrentIndexInGroup();
+  const previousTokenOrderMode = gameManager.getTokenOrderMode();
   const result = gameManager.advanceToNextLevel();
   if (!result.advanced) {
     return false;
   }
 
-  if (result.needsGroupLoad && result.nextGroupId) {
-    await ensureGroupLoaded(result.nextGroupId);
+  try {
+    if (result.needsGroupLoad && result.nextGroupId) {
+      await ensureGroupLoaded(result.nextGroupId);
+    }
+    return true;
+  } catch {
+    gameManager.jumpToLevel(previousGroupId, previousIndexInGroup);
+    gameManager.setTokenOrderMode(previousTokenOrderMode);
+    return false;
   }
-
-  return true;
 }
 
 async function jumpToLevelEnsuringLoaded(groupId: string, indexInGroup: number): Promise<boolean> {
+  const previousGroupId = gameManager.getCurrentGroupId();
+  const previousIndexInGroup = gameManager.getCurrentIndexInGroup();
+  const previousTokenOrderMode = gameManager.getTokenOrderMode();
   const result = gameManager.jumpToLevel(groupId, indexInGroup);
   if (!result.jumped) {
     return false;
   }
 
-  await ensureGroupLoaded(groupId);
-  return true;
+  try {
+    await ensureGroupLoaded(groupId);
+    return true;
+  } catch {
+    gameManager.jumpToLevel(previousGroupId, previousIndexInGroup);
+    gameManager.setTokenOrderMode(previousTokenOrderMode);
+    return false;
+  }
 }
 
 function pointerDeadzone(pointerType: string): number {

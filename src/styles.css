@@ -21,7 +21,7 @@
   --wall: #7f98bd;
   --grid-line-soft: #22344d;
   --grid-line-strong: #5d86c5;
-  --accent: #3a7bd9;
+  --accent: #2f7ef2;
   --feedback-good: #5aa9ff;
   --complete: #3a9d5c;
   --next-level: var(--complete);
@@ -36,11 +36,10 @@
   --swap-btn-border: #6f8eb8;
   --swap-btn-text: #dce9ff;
   --swap-btn-bg: rgb(35 67 110 / 0.62);
-  --swap-btn-flash-border: #9fc1f5;
-  --swap-btn-flash-bg: rgb(83 126 189 / 0.75);
   --dictionary-disabled-tone: #2a3d55;
   --wheel-size: clamp(130px, min(54vw, 54vh), 238px);
   --token-size: calc(var(--wheel-size) * 42 / 216);
+  --token-swap-ms: 80ms;
   --feedback-font-size: calc(1.08rem * var(--compact-scale));
   --feedback-line-height: calc(1.08rem * var(--compact-scale) * 1.2);
   --feedback-min-height: calc(1.4rem * var(--compact-scale));
@@ -152,7 +151,7 @@
   --wall: #111111;
   --grid-line-soft: #cddbef;
   --grid-line-strong: #2e5f99;
-  --accent: #0b63d1;
+  --accent: #2a7ff0;
   --feedback-good: #006fe8;
   --complete: #0a8f39;
   --next-level: #22c457;
@@ -160,13 +159,11 @@
   --bad: #a94a44;
   --bonus: #b56a00;
   --recent-solved-bg: #bdd3ea;
-  --wheel-bg: #c7dbef;
+  --wheel-bg: #b7cde6;
   --chip-bg: #ffffff;
   --swap-btn-border: #5a8ac4;
   --swap-btn-text: #111111;
   --swap-btn-bg: #e7f0fb;
-  --swap-btn-flash-border: #6f90c0;
-  --swap-btn-flash-bg: #d8e7fb;
   --dictionary-disabled-tone: #c5d0dc;
 }
 
@@ -231,11 +228,11 @@ h1 {
 }
 
 .level-pack-button {
-  justify-self: start;
+  justify-self: end;
   border: 2px solid var(--swap-btn-border);
   color: var(--text);
   background: var(--bg);
-  padding: 4px 10px;
+  padding: 6px 10px;
   min-height: unset;
   font-size: calc(0.92rem * var(--compact-scale));
   line-height: 1.2;
@@ -342,10 +339,6 @@ button:disabled {
 
 .feedback-pop {
   animation: feedback-pop 750ms ease-out;
-}
-
-.feedback-shake {
-  animation: feedback-shake 180ms ease;
 }
 
 .feedback-good {
@@ -647,8 +640,41 @@ button:disabled {
 }
 
 .wheel-letter.selected {
-  background: var(--chip-selected-bg);
+  box-shadow: 0 0 0 3px var(--accent);
+}
+
+.wheel-letter-swap-active {
+  color: transparent;
+}
+
+.wheel-letter-glyph-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.wheel-letter-glyph-layer-measure {
+  visibility: hidden;
+}
+
+.wheel-letter-glyph {
+  --swap-shift: 0px;
+  display: inline-block;
+  transform: translateX(0);
+  transition: transform var(--token-swap-ms) linear;
+  color: var(--chip-text);
+}
+
+.wheel-letter.selected .wheel-letter-glyph {
   color: #ffffff;
+}
+
+.wheel-swapping .wheel-letter-glyph {
+  transform: translateX(var(--swap-shift));
 }
 
 .wheel-actions {
@@ -660,7 +686,7 @@ button:disabled {
 .next-level-btn {
   position: absolute;
   right: 0;
-  bottom: calc(172px * var(--compact-scale));
+  bottom: calc(230px * var(--compact-scale));
   display: grid;
   place-items: center;
   min-width: calc(64px * var(--compact-scale));
@@ -679,7 +705,7 @@ button:disabled {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transition: opacity 100ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity var(--token-swap-ms) cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .clear-btn {
@@ -696,15 +722,15 @@ button:disabled {
   font-size: calc(0.96rem * var(--compact-scale));
   border: 2px solid var(--swap-btn-border);
   color: var(--swap-btn-border);
-  transition: transform 80ms ease, border-color 120ms ease, background-color 120ms ease;
+  transition: none;
 }
 
 .swap-icon {
-  width: calc(36px * var(--compact-scale));
-  height: calc(20px * var(--compact-scale));
+  width: calc(24px * var(--compact-scale));
+  height: calc(24px * var(--compact-scale));
   fill: none;
   stroke: currentColor;
-  stroke-width: 1;
+  stroke-width: 2;
   vector-effect: non-scaling-stroke;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -713,9 +739,11 @@ button:disabled {
 .next-level-btn,
 .dictionary-open-btn,
 .bonus-open-btn,
-.hint-open-btn {
+.hint-open-btn,
+.settings-open-btn {
   border: 2px solid var(--swap-btn-border);
   color: var(--swap-btn-text);
+  touch-action: manipulation;
 }
 
 .next-level-btn,
@@ -731,7 +759,8 @@ button:disabled {
 
 .dictionary-open-btn,
 .bonus-open-btn,
-.hint-open-btn {
+.hint-open-btn,
+.settings-open-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -749,7 +778,7 @@ button:disabled {
 
 .bonus-open-btn {
   right: 0;
-  bottom: calc(-2px * var(--compact-scale));
+  bottom: calc(56px * var(--compact-scale));
   top: auto;
   transform: none;
   color: var(--swap-btn-border);
@@ -757,7 +786,7 @@ button:disabled {
 
 .hint-open-btn {
   right: 0;
-  bottom: calc(56px * var(--compact-scale));
+  bottom: calc(114px * var(--compact-scale));
   top: auto;
   transform: none;
   color: var(--swap-btn-border);
@@ -765,15 +794,23 @@ button:disabled {
 
 .dictionary-open-btn {
   right: 0;
-  bottom: calc(114px * var(--compact-scale));
+  bottom: calc(172px * var(--compact-scale));
+  top: auto;
+  transform: none;
+  color: var(--swap-btn-border);
+}
+
+.settings-open-btn {
+  right: 0;
+  bottom: calc(-2px * var(--compact-scale));
   top: auto;
   transform: none;
   color: var(--swap-btn-border);
 }
 
 .dictionary-icon {
-  width: calc(21px * var(--compact-scale));
-  height: calc(21px * var(--compact-scale));
+  width: calc(24px * var(--compact-scale));
+  height: calc(24px * var(--compact-scale));
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
@@ -783,8 +820,8 @@ button:disabled {
 }
 
 .bonus-icon {
-  width: calc(21px * var(--compact-scale));
-  height: calc(21px * var(--compact-scale));
+  width: calc(24px * var(--compact-scale));
+  height: calc(24px * var(--compact-scale));
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
@@ -793,8 +830,18 @@ button:disabled {
 }
 
 .hint-icon {
-  width: calc(21px * var(--compact-scale));
-  height: calc(21px * var(--compact-scale));
+  width: calc(24px * var(--compact-scale));
+  height: calc(24px * var(--compact-scale));
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.settings-icon {
+  width: calc(24px * var(--compact-scale));
+  height: calc(24px * var(--compact-scale));
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
@@ -803,8 +850,8 @@ button:disabled {
 }
 
 .refresh-hint-icon {
-  width: calc(21px * var(--compact-scale));
-  height: calc(21px * var(--compact-scale));
+  width: calc(24px * var(--compact-scale));
+  height: calc(24px * var(--compact-scale));
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
@@ -824,25 +871,6 @@ button:disabled {
 .dictionary-open-btn:disabled .dictionary-icon,
 .modal-refresh-hint-btn:disabled .refresh-hint-icon {
   opacity: 0.95;
-}
-
-.clear-btn:active {
-  transform: translate(-50%, -50%) scale(0.97);
-}
-
-.clear-btn-flash {
-  animation: swap-flash 180ms ease-out;
-}
-
-@keyframes swap-flash {
-  0% {
-    border-color: var(--swap-btn-flash-border);
-    background-color: var(--swap-btn-flash-bg);
-  }
-  100% {
-    border-color: var(--swap-btn-border);
-    background-color: var(--swap-btn-bg);
-  }
 }
 
 .setting-row {
@@ -1077,16 +1105,17 @@ button:disabled {
   color: var(--swap-btn-border);
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: calc(42px * var(--compact-scale));
+  height: calc(42px * var(--compact-scale));
+  min-height: calc(42px * var(--compact-scale));
   padding: 0;
   border-radius: 8px;
   background: var(--bg);
 }
 
 .modal-refresh-hint-btn .refresh-hint-icon {
-  width: 18px;
-  height: 18px;
+  width: calc(21px * var(--compact-scale));
+  height: calc(21px * var(--compact-scale));
 }
 
 .level-pack-card {
@@ -1241,21 +1270,6 @@ li.solved {
   }
 }
 
-@keyframes feedback-shake {
-  0% {
-    transform: translateX(0);
-  }
-  33% {
-    transform: translateX(-2px);
-  }
-  66% {
-    transform: translateX(2px);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
 @media (orientation: landscape) and (max-height: 460px) {
   :root {
     --wheel-offset: calc(30px * var(--compact-scale));
@@ -1326,10 +1340,6 @@ gap: calc(9px * var(--compact-scale));
 
   .clear-btn {
     transform: translate(calc(-50% - var(--wheel-offset)), -50%);
-  }
-
-  .clear-btn:active {
-    transform: translate(calc(-50% - var(--wheel-offset)), -50%) scale(0.97);
   }
 
   .wheel-controls {

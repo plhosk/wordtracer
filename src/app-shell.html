@@ -1,8 +1,8 @@
 <main class="shell">
   <header class="topbar">
-    <button id="level-pack-button" type="button" class="level-pack-button" aria-haspopup="dialog" aria-expanded="false"></button>
+    <div aria-hidden="true"></div>
     <h1>Word Tracer</h1>
-    <button id="menu-button" type="button" class="menu-button" aria-label="Open menu" aria-expanded="false">☰</button>
+    <button id="level-pack-button" type="button" class="level-pack-button" aria-haspopup="dialog" aria-expanded="false"></button>
   </header>
 
   <section class="board-stack">
@@ -27,13 +27,13 @@
       <section class="wheel-controls">
         <div class="wheel-actions">
           <button id="swap-tokens" type="button" class="clear-btn" aria-label="Swap token order">
-            <svg class="swap-icon" viewBox="0 0 20 14" aria-hidden="true" focusable="false">
-              <path d="M2 4H18" />
-              <path d="M18 4 14 1" />
-              <path d="M18 4 14 7" />
-              <path d="M18 10H2" />
-              <path d="M2 10 6 7" />
-              <path d="M2 10 6 13" />
+            <svg class="swap-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M2 7H22" />
+              <path d="M22 7 18 3" />
+              <path d="M22 7 18 11" />
+              <path d="M22 17H2" />
+              <path d="M2 17 6 13" />
+              <path d="M2 17 6 21" />
             </svg>
           </button>
           <button id="next-level-inline" type="button" class="next-level-btn" aria-hidden="true" disabled>Next
@@ -56,6 +56,12 @@ Level</button>
           <button id="bonus-button" type="button" class="bonus-open-btn" aria-label="Bonus words" aria-expanded="false">
             <svg class="bonus-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path d="m12 3.3 2.8 5.6 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2-4.5-4.4 6.2-.9z" />
+            </svg>
+          </button>
+          <button id="menu-button" type="button" class="settings-open-btn" aria-label="Open settings" aria-expanded="false">
+            <svg class="settings-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <circle cx="12" cy="12" r="3.8" />
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" />
             </svg>
           </button>
         </div>
@@ -86,9 +92,16 @@ Level</button>
           </span>
         </label>
         <label class="setting-row setting-row-switch">
-          <span class="setting-label">Auto-advance after level completion</span>
+          <span class="setting-label">Auto-advance to next level</span>
           <span class="switch">
             <input id="auto-advance" class="switch-input" type="checkbox" />
+            <span class="switch-ui" aria-hidden="true"></span>
+          </span>
+        </label>
+        <label class="setting-row setting-row-switch">
+          <span class="setting-label">Disable swap animation</span>
+          <span class="switch">
+            <input id="disable-swap-animation" class="switch-input" type="checkbox" />
             <span class="switch-ui" aria-hidden="true"></span>
           </span>
         </label>

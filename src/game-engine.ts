@@ -41,6 +41,7 @@ export interface SavedSettings {
   autoAdvance: boolean;
   theme: 'dark' | 'light';
   alwaysShowHint: boolean;
+  disableSwapAnimation: boolean;
 }
 
 export interface SavedGameState {
@@ -101,6 +102,7 @@ export const DEFAULT_SETTINGS: SavedSettings = {
   autoAdvance: false,
   theme: 'dark',
   alwaysShowHint: false,
+  disableSwapAnimation: false,
 };
 
 export function normalizeWord(word: string): string {
