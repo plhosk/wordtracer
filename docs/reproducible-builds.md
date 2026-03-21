@@ -53,6 +53,15 @@ The workflow `reproducible-android.yml` builds the same tag twice (`build_a`, `b
 - Match: workflow passes.
 - Mismatch: workflow fails and uploads diagnostics.
 
+## F-Droid Parity Check
+
+The workflow `fdroid-parity.yml` mirrors the F-Droid metadata build path and runs:
+
+- `fdroid lint com.wordtracer.app`
+- `fdroid build -v -l --stop --test com.wordtracer.app`
+
+This is a parity check against F-Droid tooling and metadata behavior (including upstream binary verification when `Binaries` is set).
+
 ## Debugging Mismatches
 
 Start with:

@@ -1,0 +1,93 @@
+name: F-Droid Parity
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to verify (vX.Y.Z)"
+        required: true
+        type: string
+
+env:
+  JAVA_VERSION: "21"
+  ANDROID_PLATFORM: "android-36"
+  ANDROID_BUILD_TOOLS: "36.0.0"
+  FDROIDSERVER_VERSION: "2.4.0"
+
+jobs:
+  parity:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout release ref
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag || github.ref }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: sdkmanager --install "platform-tools" "platforms;${ANDROID_PLATFORM}" "build-tools;${ANDROID_BUILD_TOOLS}"
+
+      - name: Mirror metadata npm install path
+        run: |
+          echo "deb https://deb.debian.org/debian forky main" | sudo tee /etc/apt/sources.list.d/forky.list
+          sudo apt-get update
+          sudo apt-get install -y -t forky npm
+
+      - name: Install fdroidserver
+        run: python -m pip install --upgrade "fdroidserver==${FDROIDSERVER_VERSION}"
+
+      - name: Show tool versions
+        run: |
+          python --version
+          fdroid --version
+          java -version
+          npm --version
+          apksigner version
+
+      - name: Lint metadata
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
+          ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
+        run: fdroid lint com.wordtracer.app
+
+      - name: Build and verify via fdroid
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
+          ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
+        run: fdroid build -v -l --stop --test com.wordtracer.app
+
+      - name: Collect parity artifacts
+        if: always()
+        run: |
+          mkdir -p parity-artifacts
+          shopt -s nullglob
+          for f in tmp/*.apk unsigned/*.apk unsigned/binaries/*.apk logs/*.log; do
+            cp "$f" parity-artifacts/
+          done
+          if ls parity-artifacts/*.apk >/dev/null 2>&1; then
+            sha256sum parity-artifacts/*.apk > parity-artifacts/SHA256SUMS.txt
+          fi
+
+      - name: Upload parity artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fdroid-parity-artifacts
+          path: parity-artifacts
+          if-no-files-found: warn
