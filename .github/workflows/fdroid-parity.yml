@@ -31,6 +31,12 @@ jobs:
           distribution: temurin
           java-version: ${{ env.JAVA_VERSION }}
 
+      - name: Checkout CI tooling
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: ci-tools
+
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
@@ -52,7 +58,7 @@ jobs:
             -v "${ANDROID_SDK_ROOT}:/opt/android-sdk" \
             -w /workspace \
             debian:forky-slim \
-            bash scripts/ci_fdroid_parity.sh parity
+            bash ci-tools/scripts/ci_fdroid_parity.sh parity
 
       - name: Collect parity artifacts
         if: always()
@@ -89,6 +95,12 @@ jobs:
           distribution: temurin
           java-version: ${{ env.JAVA_VERSION }}
 
+      - name: Checkout CI tooling
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: ci-tools
+
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
@@ -110,7 +122,7 @@ jobs:
             -v "${ANDROID_SDK_ROOT}:/opt/android-sdk" \
             -w /workspace \
             debian:forky-slim \
-            bash scripts/ci_fdroid_parity.sh release-candidate
+            bash ci-tools/scripts/ci_fdroid_parity.sh release-candidate
 
       - name: Collect release candidate artifacts
         if: always()
