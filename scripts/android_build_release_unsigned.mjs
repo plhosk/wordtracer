@@ -1,4 +1,6 @@
 import { execFileSync, spawn } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import process from 'node:process';
 
 const npmCmd = process.platform === 'win32' ? 'npm.cmd' : 'npm';
@@ -64,7 +66,10 @@ async function main() {
     process.exit(gradleCode);
   }
 
-  console.log('unsigned apk: android/app/build/outputs/apk/release/app-release-unsigned.apk');
+  const apkPath = 'android/app/build/outputs/apk/release/app-release-unsigned.apk';
+  const apkSha256 = createHash('sha256').update(readFileSync(apkPath)).digest('hex');
+  console.log(`unsigned apk: ${apkPath}`);
+  console.log(`sha256sum: ${apkSha256}  ${apkPath}`);
 }
 
 await main();
