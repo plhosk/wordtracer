@@ -8,7 +8,7 @@ Fully offline and ad-free.
 
 Play online: https://plhosk.github.io/wordtracer/
 
-<img src="images/screenshot2.png" alt="Word Tracer gameplay" width="360" />
+<img src="images/screenshot2.png" alt="Word Tracer gameplay" width="180" />
 
 ## Play Locally
 
