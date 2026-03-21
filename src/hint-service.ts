@@ -84,8 +84,96 @@ export function findDefinitionBoundary(
   return -1;
 }
 
+export function findDoubleLineBreak(
+  definition: string,
+  startPos: number,
+  searchLimit: number,
+  noRepeatLimit: number
+): number {
+  const searchEnd = Math.min(startPos + searchLimit, definition.length);
+  const doubleBreak = definition.indexOf('\n\n', startPos);
+  if (doubleBreak === -1 || doubleBreak >= searchEnd) {
+    return -1;
+  }
+  const afterBreak = doubleBreak + 2;
+  const repeatEnd = Math.min(afterBreak + noRepeatLimit, definition.length);
+  const nextBreak = definition.indexOf('\n\n', afterBreak);
+  if (nextBreak !== -1 && nextBreak < repeatEnd) {
+    return -1;
+  }
+  return afterBreak;
+}
+
+function endsAtCleanBoundary(text: string, pos: number): boolean {
+  if (pos <= 0 || pos > text.length) return false;
+  const beforeSpoiler = text.slice(0, pos).trim();
+  if (beforeSpoiler.length < 20) return false;
+  const lastChar = beforeSpoiler.slice(-1);
+  return ['.', ';', ')', ']'].includes(lastChar);
+}
+
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+interface SpoilerMatch {
+  index: number;
+  length: number;
+}
+
+function findSpoilerWithBoundary(
+  text: string,
+  wordsToAvoid: string[],
+  startPos: number,
+  endPos: number
+): SpoilerMatch | null {
+  const uniqueWords = [...new Set(wordsToAvoid.filter((w) => w.length >= 2))];
+  let earliest: SpoilerMatch | null = null;
+
+  for (const word of uniqueWords) {
+    const pattern = new RegExp(`(^|[^a-z])(${escapeRegExp(word)})(?=$|[^a-z])`, 'gi');
+    let match;
+    while ((match = pattern.exec(text)) !== null) {
+      const wordStart = match.index + match[1].length;
+
+      if (wordStart >= startPos && wordStart < endPos) {
+        if (!earliest || wordStart < earliest.index) {
+          earliest = { index: wordStart, length: match[2].length };
+        }
+      }
+
+      if (pattern.lastIndex <= match.index) {
+        pattern.lastIndex = match.index + 1;
+      }
+    }
+  }
+
+  return earliest;
+}
+
+function findFirstSpoiler(text: string, wordsToAvoid: string[]): SpoilerMatch | null {
+  return findSpoilerWithBoundary(text, wordsToAvoid, 0, text.length);
+}
+
+function findAllSpoilers(text: string, wordsToAvoid: string[]): Array<{ start: number; end: number }> {
+  const ranges: Array<{ start: number; end: number }> = [];
+  const uniqueWords = [...new Set(wordsToAvoid.filter((w) => w.length >= 2))];
+
+  for (const word of uniqueWords) {
+    const pattern = new RegExp(`(^|[^a-z])(${escapeRegExp(word)})(?=$|[^a-z])`, 'gi');
+    let match;
+    while ((match = pattern.exec(text)) !== null) {
+      const wordStart = match.index + match[1].length;
+      const wordEnd = wordStart + match[2].length;
+      ranges.push({ start: wordStart, end: wordEnd });
+
+      if (pattern.lastIndex <= match.index) {
+        pattern.lastIndex = match.index + 1;
+      }
+    }
+  }
+
+  return ranges;
 }
 
 function maskSpoilerWords(text: string, wordsToAvoid: string[]): string {
@@ -109,22 +197,17 @@ export function sanitizeHintExcerpt(
 ): HintExcerpt {
   let def = definition;
   const targetLength = HINT_TARGET_LENGTH;
-  const listSearchLimit = targetLength * 2;
+  const listSearchLimit = targetLength * 4;
 
-  const listStart = def.slice(0, listSearchLimit).indexOf('1. ');
-  if (listStart !== -1) {
+  // Only slice to numbered definition if it starts at line beginning
+  const listMatch = def.slice(0, listSearchLimit).match(/(?:^|\n)(1\. )/);
+  if (listMatch) {
+    const listStart = listMatch.index! + (listMatch[0].length - listMatch[1].length);
     def = def.slice(listStart);
   }
 
-  const lowerDef = def.toLowerCase();
-
-  let hasSpoilers = false;
-  for (const word of wordsToAvoid) {
-    if (word.length >= 2 && lowerDef.includes(word)) {
-      hasSpoilers = true;
-      break;
-    }
-  }
+  const firstSpoiler = findFirstSpoiler(def, wordsToAvoid);
+  const hasSpoilers = firstSpoiler !== null;
 
   if (def.length <= targetLength) {
     if (!hasSpoilers) {
@@ -145,45 +228,30 @@ export function sanitizeHintExcerpt(
   while (startIndex <= def.length - targetLength && iterations < maxIterations) {
     iterations++;
 
-    let foundSpoiler = false;
-    for (const word of wordsToAvoid) {
-      if (word.length < 2) continue;
-      const wordIndex = lowerDef.indexOf(word, startIndex);
-      if (wordIndex !== -1 && wordIndex < startIndex + targetLength) {
-        startIndex = wordIndex + word.length + 1;
-        foundSpoiler = true;
-        break;
-      }
-    }
-
-    if (!foundSpoiler) {
+    const spoiler = findSpoilerWithBoundary(def, wordsToAvoid, startIndex, startIndex + targetLength);
+    if (spoiler) {
+      startIndex = spoiler.index + spoiler.length + 1;
+    } else {
       if (startIndex > 0) {
-        let firstSpoilerStart = def.length;
-        for (const word of wordsToAvoid) {
-          if (word.length < 2) continue;
-          const wordIndex = lowerDef.indexOf(word);
-          if (wordIndex !== -1 && wordIndex < firstSpoilerStart) {
-            firstSpoilerStart = wordIndex;
+        const firstSpoilerPos = findFirstSpoiler(def, wordsToAvoid);
+        const firstSpoilerStart = firstSpoilerPos ? firstSpoilerPos.index : def.length;
+
+        const hasNumberedList = /(?:^|\n)1\. /.test(def);
+        const textBeforeSpoiler = def.slice(0, firstSpoilerStart).trim();
+        // Use text up to spoiler if: no numbered list, OR text ends at clean boundary
+        if (firstSpoilerStart >= targetLength / 2) {
+          if (!hasNumberedList || endsAtCleanBoundary(def, firstSpoilerStart)) {
+            return { text: textBeforeSpoiler, truncatedStart: false, truncatedEnd: false };
           }
         }
 
-        const hasNumberedList = /\d+\.\s/.test(def);
-        if (!hasNumberedList && firstSpoilerStart >= targetLength / 2) {
-          return buildExcerpt(def, 0, firstSpoilerStart, false);
+        let boundaryPos = findDefinitionBoundary(def, startIndex, def.length);
+        if (boundaryPos === -1) {
+          boundaryPos = findDoubleLineBreak(def, startIndex, targetLength * 2, targetLength * 4);
         }
-
-        const boundaryPos = findDefinitionBoundary(def, startIndex, def.length);
         if (boundaryPos !== -1 && boundaryPos < startIndex + targetLength * 4) {
-          let isClean = true;
-          for (const word of wordsToAvoid) {
-            if (word.length < 2) continue;
-            const wordIndex = lowerDef.indexOf(word, boundaryPos);
-            if (wordIndex !== -1 && wordIndex < boundaryPos + targetLength) {
-              isClean = false;
-              break;
-            }
-          }
-          if (isClean) {
+          const spoilerAtBoundary = findSpoilerWithBoundary(def, wordsToAvoid, boundaryPos, boundaryPos + targetLength);
+          if (!spoilerAtBoundary) {
             startIndex = boundaryPos;
           }
         }
@@ -192,31 +260,18 @@ export function sanitizeHintExcerpt(
     }
   }
 
-  const hasNumberedList = /\d+\.\s/.test(def);
-  let firstSpoilerStart = def.length;
-  for (const word of wordsToAvoid) {
-    if (word.length < 2) continue;
-    const wordIndex = lowerDef.indexOf(word);
-    if (wordIndex !== -1 && wordIndex < firstSpoilerStart) {
-      firstSpoilerStart = wordIndex;
+  const hasNumberedList = /(?:^|\n)1\. /.test(def);
+  const firstSpoilerPos = findFirstSpoiler(def, wordsToAvoid);
+  const firstSpoilerStart = firstSpoilerPos ? firstSpoilerPos.index : def.length;
+
+  if (firstSpoilerStart >= targetLength / 2) {
+    const textBeforeSpoiler = def.slice(0, firstSpoilerStart).trim();
+    if (!hasNumberedList || endsAtCleanBoundary(def, firstSpoilerStart)) {
+      return { text: textBeforeSpoiler, truncatedStart: false, truncatedEnd: false };
     }
   }
 
-  if (!hasNumberedList && firstSpoilerStart >= targetLength / 2) {
-    return buildExcerpt(def, 0, firstSpoilerStart, false);
-  }
-
-  const spoilerRanges: Array<{ start: number; end: number }> = [];
-  for (const word of wordsToAvoid) {
-    if (word.length < 2) continue;
-    let pos = 0;
-    while (pos < def.length) {
-      const wordIndex = lowerDef.indexOf(word, pos);
-      if (wordIndex === -1) break;
-      spoilerRanges.push({ start: wordIndex, end: wordIndex + word.length });
-      pos = wordIndex + 1;
-    }
-  }
+  const spoilerRanges = findAllSpoilers(def, wordsToAvoid);
 
   spoilerRanges.sort((a, b) => a.start - b.start);
 
@@ -253,15 +308,28 @@ export function sanitizeHintExcerpt(
 
   let regionStart = bestRegion.start;
   if (regionStart > 0) {
-    const boundaryPos = findDefinitionBoundary(def, regionStart, bestRegion.end);
+    let boundaryPos = findDefinitionBoundary(def, regionStart, bestRegion.end);
+    if (boundaryPos === -1) {
+      boundaryPos = findDoubleLineBreak(def, regionStart, targetLength * 2, targetLength * 4);
+    }
     if (boundaryPos !== -1) {
       regionStart = boundaryPos;
     }
   }
 
-  const excerpt = def.slice(regionStart, bestRegion.end).trim();
+  let excerpt = def.slice(regionStart, bestRegion.end).trim();
   const truncatedStart = regionStart > 0;
   const truncatedEnd = bestRegion.end < def.length;
+
+  // Strip leading punctuation when starting mid-sentence
+  if (truncatedStart) {
+    const numberedPrefix = excerpt.match(/^(\d+\.\s)/);
+    if (numberedPrefix) {
+      excerpt = numberedPrefix[1] + excerpt.slice(numberedPrefix[1].length).replace(/^[,;:\-.–—\s]+/, '');
+    } else {
+      excerpt = excerpt.replace(/^[,;:\-.–—\s]+/, '');
+    }
+  }
 
   return { text: excerpt, truncatedStart, truncatedEnd };
 }
@@ -274,6 +342,17 @@ export function buildExcerpt(
 ): HintExcerpt {
   let excerpt = definition.slice(startIndex);
   let truncatedEnd = false;
+
+  // Strip leading punctuation when starting mid-sentence
+  if (truncatedStart) {
+    // Keep numbered prefixes like "1. " or "2. "
+    const numberedPrefix = excerpt.match(/^(\d+\.\s)/);
+    if (numberedPrefix) {
+      excerpt = numberedPrefix[1] + excerpt.slice(numberedPrefix[1].length).replace(/^[,;:\-.–—\s]+/, '');
+    } else {
+      excerpt = excerpt.replace(/^[,;:\-.–—\s]+/, '');
+    }
+  }
 
   if (excerpt.length > targetLength) {
     const lastSpace = excerpt.lastIndexOf(' ', targetLength);
