@@ -141,10 +141,18 @@ jobs:
           fi
           SHA_A=$(sha256sum "${APK_A}" | cut -d ' ' -f1)
           SHA_B=$(sha256sum "${APK_B}" | cut -d ' ' -f1)
+          echo "sha_a=${SHA_A}"
+          echo "sha_b=${SHA_B}"
           {
             echo "sha_a=${SHA_A}"
             echo "sha_b=${SHA_B}"
           } > diagnostics/hashes.txt
+          {
+            echo "### Unsigned APK Hashes"
+            echo
+            echo "- \\`sha_a\\`: \\`${SHA_A}\\`"
+            echo "- \\`sha_b\\`: \\`${SHA_B}\\`"
+          } >> "${GITHUB_STEP_SUMMARY}"
           if [ "${SHA_A}" = "${SHA_B}" ]; then
             echo "Unsigned APKs are reproducible"
             exit 0
@@ -169,3 +177,11 @@ jobs:
         with:
           name: reproducibility-diagnostics
           path: diagnostics
+
+      - name: Upload hash report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reproducibility-hashes
+          path: diagnostics/hashes.txt
+          if-no-files-found: warn
