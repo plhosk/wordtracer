@@ -35,6 +35,7 @@ export interface SavedLevelState {
   solved: string[];
   bonus: string[];
   hints?: SavedHintState;
+  completed?: boolean;
 }
 
 export interface SavedSettings {
@@ -194,13 +195,13 @@ export function hydrateLevelState(saved: SavedLevelState): LevelState {
   };
 }
 
-export function serializeLevelState(state: LevelState): SavedLevelState {
+export function serializeLevelState(state: LevelState, completed?: boolean): SavedLevelState {
   const hasHintData = 
     state.hints.hintCount > 0 || 
     state.hints.excludedHintCanonicals.size > 0 || 
     state.hints.currentHintCanonical !== null;
 
-  return {
+  const serialized: SavedLevelState = {
     solved: [...state.solved],
     bonus: [...state.bonus],
     hints: hasHintData ? {
@@ -211,6 +212,12 @@ export function serializeLevelState(state: LevelState): SavedLevelState {
       currentHintCanonical: state.hints.currentHintCanonical,
     } : undefined,
   };
+
+  if (completed === true) {
+    serialized.completed = true;
+  }
+
+  return serialized;
 }
 
 export function buildOccupiedCells(level: Level): Set<string> {
@@ -664,6 +671,7 @@ export function formatCompletionSummary(state: LevelState): string {
 
 export class GameStateManager {
   private levelStates: Map<string, LevelState> = new Map();
+  private completedLevelIds: Set<string> = new Set();
   private currentGroupId: string;
   private currentIndexInGroup: number;
   private tokenOrderMode: TokenOrderMode;
@@ -676,6 +684,7 @@ export class GameStateManager {
     initialLevels: Level[],
     initialState?: {
       levelStates?: Map<string, LevelState>;
+      completedLevelIds?: Set<string>;
       tokenOrderMode?: TokenOrderMode;
       currentGroupId?: string;
       currentIndexInGroup?: number;
@@ -689,6 +698,9 @@ export class GameStateManager {
     
     if (initialState?.levelStates) {
       this.levelStates = initialState.levelStates;
+    }
+    if (initialState?.completedLevelIds) {
+      this.completedLevelIds = initialState.completedLevelIds;
     }
   }
 
@@ -749,7 +761,11 @@ export class GameStateManager {
   submitWord(word: string): SubmitWordResult {
     const level = this.getCurrentLevel();
     const state = this.getCurrentLevelState();
-    return submitWord(word, level, state, this.tokenOrderMode);
+    const result = submitWord(word, level, state, this.tokenOrderMode);
+    if (isLevelComplete(level, state.solved)) {
+      this.completedLevelIds.add(level.id);
+    }
+    return result;
   }
   
   isCurrentLevelComplete(): boolean {
@@ -846,6 +862,7 @@ export class GameStateManager {
  
   resetAllProgress(): void {
     this.levelStates.clear();
+    this.completedLevelIds.clear();
     const firstGroup = this.groupDefinitions[0];
     this.currentGroupId = firstGroup?.id ?? '';
     this.currentIndexInGroup = 0;
@@ -855,6 +872,7 @@ export class GameStateManager {
   resetCurrentLevelProgress(): void {
     const levelId = this.getCurrentLevel().id;
     this.levelStates.delete(levelId);
+    this.completedLevelIds.delete(levelId);
     this.tokenOrderMode = DEFAULT_TOKEN_ORDER_MODE;
   }
   
@@ -868,6 +886,10 @@ export class GameStateManager {
   
   getAllLevelStates(): Map<string, LevelState> {
     return this.levelStates;
+  }
+
+  isLevelMarkedComplete(levelId: string): boolean {
+    return this.completedLevelIds.has(levelId);
   }
   
   getGridState(): GridState {
@@ -885,8 +907,17 @@ export class GameStateManager {
   serialize(): SavedGameState {
     const serializedLevels: Record<string, SavedLevelState> = {};
     for (const [levelId, state] of this.levelStates.entries()) {
-      if (state.solved.size > 0 || state.bonus.size > 0 || state.hints.hintCount > 0) {
-        serializedLevels[levelId] = serializeLevelState(state);
+      const level = this.findLoadedLevelById(levelId);
+      const completed = level ? isLevelComplete(level, state.solved) : this.completedLevelIds.has(levelId);
+
+      if (completed) {
+        this.completedLevelIds.add(levelId);
+      } else {
+        this.completedLevelIds.delete(levelId);
+      }
+
+      if (state.solved.size > 0 || state.bonus.size > 0 || state.hints.hintCount > 0 || completed) {
+        serializedLevels[levelId] = serializeLevelState(state, completed);
       }
     }
     
@@ -905,16 +936,31 @@ export class GameStateManager {
     saved: SavedGameState
   ): GameStateManager {
     const levelStates = new Map<string, LevelState>();
+    const completedLevelIds = new Set<string>();
     for (const [key, value] of Object.entries(saved.levels)) {
       levelStates.set(key, hydrateLevelState(value));
+      if (value.completed === true) {
+        completedLevelIds.add(key);
+      }
     }
     
     return new GameStateManager(groupDefinitions, initialGroupId, initialLevels, {
       currentGroupId: saved.currentGroupId,
       currentIndexInGroup: saved.currentIndexInGroup,
       levelStates,
+      completedLevelIds,
       tokenOrderMode: DEFAULT_TOKEN_ORDER_MODE,
     });
+  }
+
+  private findLoadedLevelById(levelId: string): Level | null {
+    for (const levels of this.groupLevels.values()) {
+      const level = levels.find((entry) => entry.id === levelId);
+      if (level) {
+        return level;
+      }
+    }
+    return null;
   }
 }
 

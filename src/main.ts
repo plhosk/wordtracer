@@ -503,8 +503,41 @@ function currentGroupStatus(): { group: RuntimeLevelGroup; groupIndex: number } 
 
 function groupSolvedLevels(group: RuntimeLevelGroup): number {
   const groupLevels = dataLoader.getCachedGroupLevels(group.id);
-  if (!groupLevels) return 0;
-  return countSolvedInGroup(groupLevels, gameManager.getAllLevelStates());
+  if (groupLevels) {
+    return Math.min(group.levelCount, countSolvedInGroup(groupLevels, gameManager.getAllLevelStates()));
+  }
+  return Math.min(group.levelCount, countSavedCompletedInGroup(group));
+}
+
+function countSavedCompletedInGroup(group: RuntimeLevelGroup): number {
+  const sortedGroupIds = levelGroups
+    .map(levelGroup => levelGroup.id)
+    .sort((a, b) => b.length - a.length);
+
+  let solved = 0;
+  for (const levelId of gameManager.getAllLevelStates().keys()) {
+    if (!gameManager.isLevelMarkedComplete(levelId)) {
+      continue;
+    }
+    if (inferGroupIdFromLevelId(levelId, sortedGroupIds) !== group.id) {
+      continue;
+    }
+    solved += 1;
+  }
+  return solved;
+}
+
+function inferGroupIdFromLevelId(levelId: string, sortedGroupIds: string[]): string | null {
+  for (const groupId of sortedGroupIds) {
+    if (!levelId.startsWith(groupId)) {
+      continue;
+    }
+    const suffix = levelId.slice(groupId.length);
+    if (/^\d+$/.test(suffix)) {
+      return groupId;
+    }
+  }
+  return null;
 }
 
 function firstUnfinishedGroupLevelIndex(group: RuntimeLevelGroup): number {
