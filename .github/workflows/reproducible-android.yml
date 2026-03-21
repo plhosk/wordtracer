@@ -50,15 +50,18 @@ jobs:
       - name: Build unsigned release APK
         run: npm run android:build:release:unsigned
 
+      - name: Prepare artifact files
+        run: cp "android/app/build/outputs/apk/release/app-release-unsigned.apk" "unsigned-apk-a.apk"
+
       - name: Save SHA256
-        run: sha256sum "android/app/build/outputs/apk/release/app-release-unsigned.apk" > "unsigned-apk-a.sha256"
+        run: sha256sum "unsigned-apk-a.apk" > "unsigned-apk-a.sha256"
 
       - name: Upload unsigned APK
         uses: actions/upload-artifact@v4
         with:
           name: unsigned-apk-a
           path: |
-            android/app/build/outputs/apk/release/app-release-unsigned.apk
+            unsigned-apk-a.apk
             unsigned-apk-a.sha256
 
   build_b:
@@ -93,15 +96,18 @@ jobs:
       - name: Build unsigned release APK
         run: npm run android:build:release:unsigned
 
+      - name: Prepare artifact files
+        run: cp "android/app/build/outputs/apk/release/app-release-unsigned.apk" "unsigned-apk-b.apk"
+
       - name: Save SHA256
-        run: sha256sum "android/app/build/outputs/apk/release/app-release-unsigned.apk" > "unsigned-apk-b.sha256"
+        run: sha256sum "unsigned-apk-b.apk" > "unsigned-apk-b.sha256"
 
       - name: Upload unsigned APK
         uses: actions/upload-artifact@v4
         with:
           name: unsigned-apk-b
           path: |
-            android/app/build/outputs/apk/release/app-release-unsigned.apk
+            unsigned-apk-b.apk
             unsigned-apk-b.sha256
 
   compare:
@@ -125,11 +131,16 @@ jobs:
       - name: Compare unsigned APK hashes
         run: |
           set -euo pipefail
-          APK_A="artifacts/a/app-release-unsigned.apk"
-          APK_B="artifacts/b/app-release-unsigned.apk"
+          mkdir -p diagnostics
+          APK_A="artifacts/a/unsigned-apk-a.apk"
+          APK_B="artifacts/b/unsigned-apk-b.apk"
+          if [ ! -f "${APK_A}" ] || [ ! -f "${APK_B}" ]; then
+            echo "expected artifacts missing" > diagnostics/error.txt
+            ls -R artifacts > diagnostics/artifacts-tree.txt
+            exit 1
+          fi
           SHA_A=$(sha256sum "${APK_A}" | cut -d ' ' -f1)
           SHA_B=$(sha256sum "${APK_B}" | cut -d ' ' -f1)
-          mkdir -p diagnostics
           {
             echo "sha_a=${SHA_A}"
             echo "sha_b=${SHA_B}"

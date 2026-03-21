@@ -196,7 +196,7 @@ def main() -> None:
         warnings.append(
             "metadata missing Binaries/build binary URL for reproducible upstream verification"
         )
-    if not has_match(r"^\s*AllowedAPKSigningKeys:\s*$", source_text):
+    if not has_match(r"^\s*AllowedAPKSigningKeys:\s*(?:\S.*)?$", source_text):
         warnings.append("metadata missing AllowedAPKSigningKeys")
     if warnings:
         print("Warnings:")
