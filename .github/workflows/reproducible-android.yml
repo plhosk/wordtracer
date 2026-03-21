@@ -1,0 +1,160 @@
+name: Reproducible Android Build
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to build (vX.Y.Z)"
+        required: true
+        type: string
+
+env:
+  NODE_VERSION: 24.11.0
+  JAVA_VERSION: "21"
+  ANDROID_PLATFORM: "android-36"
+  ANDROID_BUILD_TOOLS: "36.0.0"
+
+jobs:
+  build_a:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag || github.ref }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: sdkmanager --install "platform-tools" "platforms;${ANDROID_PLATFORM}" "build-tools;${ANDROID_BUILD_TOOLS}" "build-tools;34.0.0"
+
+      - name: Release preflight
+        run: npm run android:release:preflight
+
+      - name: Build unsigned release APK
+        run: npm run android:build:release:unsigned
+
+      - name: Save SHA256
+        run: sha256sum "android/app/build/outputs/apk/release/app-release-unsigned.apk" > "unsigned-apk-a.sha256"
+
+      - name: Upload unsigned APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-apk-a
+          path: |
+            android/app/build/outputs/apk/release/app-release-unsigned.apk
+            unsigned-apk-a.sha256
+
+  build_b:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag || github.ref }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: sdkmanager --install "platform-tools" "platforms;${ANDROID_PLATFORM}" "build-tools;${ANDROID_BUILD_TOOLS}" "build-tools;34.0.0"
+
+      - name: Release preflight
+        run: npm run android:release:preflight
+
+      - name: Build unsigned release APK
+        run: npm run android:build:release:unsigned
+
+      - name: Save SHA256
+        run: sha256sum "android/app/build/outputs/apk/release/app-release-unsigned.apk" > "unsigned-apk-b.sha256"
+
+      - name: Upload unsigned APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-apk-b
+          path: |
+            android/app/build/outputs/apk/release/app-release-unsigned.apk
+            unsigned-apk-b.sha256
+
+  compare:
+    runs-on: ubuntu-24.04
+    needs:
+      - build_a
+      - build_b
+    steps:
+      - name: Download build A artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: unsigned-apk-a
+          path: artifacts/a
+
+      - name: Download build B artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: unsigned-apk-b
+          path: artifacts/b
+
+      - name: Compare unsigned APK hashes
+        run: |
+          set -euo pipefail
+          APK_A="artifacts/a/app-release-unsigned.apk"
+          APK_B="artifacts/b/app-release-unsigned.apk"
+          SHA_A=$(sha256sum "${APK_A}" | cut -d ' ' -f1)
+          SHA_B=$(sha256sum "${APK_B}" | cut -d ' ' -f1)
+          mkdir -p diagnostics
+          {
+            echo "sha_a=${SHA_A}"
+            echo "sha_b=${SHA_B}"
+          } > diagnostics/hashes.txt
+          if [ "${SHA_A}" = "${SHA_B}" ]; then
+            echo "Unsigned APKs are reproducible"
+            exit 0
+          fi
+          echo "Unsigned APKs differ, collecting diagnostics"
+          sudo apt-get update && sudo apt-get install -y diffoscope unzip || true
+          if command -v diffoscope >/dev/null 2>&1; then
+            diffoscope "${APK_A}" "${APK_B}" > diagnostics/diffoscope.txt || true
+          else
+            echo "diffoscope unavailable" > diagnostics/diffoscope.txt
+          fi
+          if command -v zipinfo >/dev/null 2>&1; then
+            zipinfo -v "${APK_A}" > diagnostics/zipinfo-a.txt
+            zipinfo -v "${APK_B}" > diagnostics/zipinfo-b.txt
+          fi
+          cmp -l "${APK_A}" "${APK_B}" > diagnostics/byte-diff.txt || true
+          exit 1
+
+      - name: Upload diagnostics on mismatch
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reproducibility-diagnostics
+          path: diagnostics

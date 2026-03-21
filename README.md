@@ -83,9 +83,15 @@ npm run cap:sync      # build web assets and sync them into Capacitor
 npm run android:build # build a debug APK
 npm run android:open  # open the Android project in Android Studio
 npm run android:run   # sync and run the app on Android
+npm run android:release:preflight -- x.x.x  # require clean tree, matching versions, and exact release tag
+npm run android:build:release:unsigned  # reproducible unsigned release APK build (npm ci + cap sync + gradle release)
+npm run android:sign:release  # sign unsigned release APK with pinned apksigner (requires env vars)
+npm run android:release:repro  # run preflight + unsigned build + signing
 npm run release:set-version -- x.x.x  # bump app + F-Droid release versions
 npm run fdroid:prepare-release -- x.x.x --fdroiddata ~/fdroiddata --fdroidserver ~/fdroidserver  # copy metadata and print next commands
 ```
+
+Reproducible Android release runbook: `docs/reproducible-builds.md`
 
 ## Licensing
 

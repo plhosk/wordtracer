@@ -9,11 +9,12 @@ AutoName: Word Tracer
 
 RepoType: git
 Repo: https://github.com/plhosk/wordtracer
+Binaries: https://github.com/plhosk/wordtracer/releases/download/v%v/wordtracer-v%v.apk
 
 Builds:
-  - versionName: 1.0.5
-    versionCode: 5
-    commit: v1.0.5
+  - versionName: 1.0.6
+    versionCode: 6
+    commit: v1.0.6
     subdir: android/app
     sudo:
       - echo "deb https://deb.debian.org/debian forky main" > /etc/apt/sources.list.d/forky.list
@@ -29,5 +30,5 @@ Builds:
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags ^v(\d+\.)?(\d+\.)?(\*|\d+)$
-CurrentVersion: 1.0.5
-CurrentVersionCode: 5
+CurrentVersion: 1.0.6
+CurrentVersionCode: 6

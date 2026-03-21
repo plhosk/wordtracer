@@ -306,6 +306,15 @@ function bindStaticEvents(): void {
     swapTokenOrder();
   });
 
+  gridEl.addEventListener('pointerdown', () => {
+    if (recentSolvedCells.size > 0) {
+      gridEl.querySelectorAll('.cell-recent-solved').forEach((el) => {
+        el.classList.remove('cell-recent-solved');
+      });
+      clearRecentSolvedCells();
+    }
+  });
+
   nextLevelInlineButton.addEventListener('click', async () => {
     const advanced = await advanceToNextLevelEnsuringLoaded();
     if (!advanced) return;

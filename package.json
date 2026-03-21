@@ -1,6 +1,6 @@
 {
   "name": "wordtracer",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "",
   "type": "module",
   "scripts": {
@@ -18,6 +18,10 @@
     "android:icons": "node scripts/android_icons.mjs && npx @capacitor/assets generate --android && npm run cap:sync",
     "android:build": "node scripts/android_build_debug.mjs",
     "android:build-signed": "npm run cap:sync && npx cap build android",
+    "android:release:preflight": "node scripts/android_release_preflight.mjs",
+    "android:build:release:unsigned": "node scripts/android_build_release_unsigned.mjs",
+    "android:sign:release": "node scripts/android_sign_release.mjs",
+    "android:release:repro": "npm run android:release:preflight && npm run android:build:release:unsigned && npm run android:sign:release",
     "release:set-version": "uv run python scripts/set_release_version.py",
     "fdroid:prepare-release": "uv run python scripts/fdroid_prepare_release.py",
     "icons:web": "magick images/icon1680cropped.png -define icon:auto-resize=16,32,48 public/favicon.ico && magick images/icon1680cropped.png -resize 32x32 public/favicon.png",

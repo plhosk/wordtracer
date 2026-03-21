@@ -46,6 +46,10 @@ def must_match(pattern: str, content: str, label: str) -> str:
     return match.group(1)
 
 
+def has_match(pattern: str, content: str) -> bool:
+    return re.search(pattern, content, flags=re.MULTILINE) is not None
+
+
 def read_versions() -> tuple[str, str, int, str, int, str, int]:
     package_path = project_path("package.json")
     gradle_path = project_path("android", "app", "build.gradle")
@@ -184,6 +188,20 @@ def main() -> None:
     print(f"Target metadata: {target_metadata}")
     print(f"fdroidserver: {fdroidserver_root}")
     print(f"Metadata changed: {'yes' if changed else 'no'}")
+
+    warnings: list[str] = []
+    has_binaries = has_match(r"^\s*Binaries:\s*\S+\s*$", source_text)
+    has_build_binary = has_match(r"^\s*binary:\s*\S+\s*$", source_text)
+    if not has_binaries and not has_build_binary:
+        warnings.append(
+            "metadata missing Binaries/build binary URL for reproducible upstream verification"
+        )
+    if not has_match(r"^\s*AllowedAPKSigningKeys:\s*$", source_text):
+        warnings.append("metadata missing AllowedAPKSigningKeys")
+    if warnings:
+        print("Warnings:")
+        for warning in warnings:
+            print(f"  - {warning}")
 
     if not args.dry_run and changed:
         target_metadata.write_text(source_text, encoding="utf-8")
