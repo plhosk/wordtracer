@@ -214,6 +214,20 @@ async function init(): Promise<void> {
 
 function bindStaticEvents(): void {
   document.addEventListener('selectstart', (event) => {
+    const target = event.target;
+    let element: Element | null = null;
+    if (target instanceof Element) {
+      element = target;
+    } else if (target instanceof Node) {
+      element = target.parentElement;
+    }
+    if (
+      element?.closest('#hint-text-stack')
+      || element?.closest('#dictionary-word')
+      || element?.closest('#dictionary-definitions')
+    ) {
+      return;
+    }
     event.preventDefault();
   });
 
