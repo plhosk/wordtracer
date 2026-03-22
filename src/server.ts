@@ -18,6 +18,7 @@ import {
   createEmptyLevelState,
   isLevelComplete,
   serializeLevelState,
+  MAX_HINT_REFRESHES_PER_LEVEL,
   GameStateManager,
 } from './game-engine.js';
 import {
@@ -288,7 +289,9 @@ async function getSession(sessionId: string): Promise<CachedSession | null> {
       levelState.hints.hintedCanonicals = new Set((state.hints?.hintedCanonicals ?? []).map(normalizeWord));
       levelState.hints.excludedHintCanonicals = new Set((state.hints?.excludedHintCanonicals ?? []).map(normalizeWord));
       levelState.hints.hintCount = state.hints?.hintCount ?? 0;
-      levelState.hints.hintRefreshUsed = state.hints?.hintRefreshUsed ?? false;
+      levelState.hints.hintRefreshCount =
+        state.hints?.hintRefreshCount
+        ?? (state.hints?.hintRefreshUsed ? 1 : 0);
       levelState.hints.currentHintCanonical = state.hints?.currentHintCanonical ?? null;
       levelStates.set(levelId, levelState);
     }
@@ -962,7 +965,7 @@ async function handleGetHint(
 
   await persistSession(sessionId, cached);
 
-  const canRefresh = !state.hints.hintRefreshUsed;
+  const canRefresh = state.hints.hintRefreshCount < MAX_HINT_REFRESHES_PER_LEVEL;
 
   sendJson(res, 200, {
     version: cached.version,
@@ -988,7 +991,7 @@ async function handleRefreshHint(
 
   const state = cached.gameManager.getCurrentLevelState();
 
-  if (state.hints.hintRefreshUsed) {
+  if (state.hints.hintRefreshCount >= MAX_HINT_REFRESHES_PER_LEVEL) {
     sendError(res, 400, 'BAD_REQUEST', 'Hint refresh already used for this level');
     return;
   }
@@ -999,7 +1002,7 @@ async function handleRefreshHint(
   }
 
   state.hints.excludedHintCanonicals.add(state.hints.currentHintCanonical);
-  state.hints.hintRefreshUsed = true;
+  state.hints.hintRefreshCount += 1;
 
   if (state.hints.hintedCanonicals.has(state.hints.currentHintCanonical)) {
     state.hints.hintedCanonicals.delete(state.hints.currentHintCanonical);
@@ -1043,7 +1046,7 @@ async function handleRefreshHint(
     truncatedStart: newHint.excerpt.truncatedStart,
     truncatedEnd: newHint.excerpt.truncatedEnd,
     hintCount: state.hints.hintCount,
-    canRefresh: false,
+    canRefresh: state.hints.hintRefreshCount < MAX_HINT_REFRESHES_PER_LEVEL,
   });
 }
 

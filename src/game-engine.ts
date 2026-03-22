@@ -9,12 +9,18 @@ export type WordResult =
   | 'not-spellable'
   | 'not-accepted';
 
+export interface SavedModalHintEntry {
+  canonical: string;
+  text: string;
+}
+
 export interface HintState {
   hintedCanonicals: Set<string>;
   excludedHintCanonicals: Set<string>;
   hintCount: number;
-  hintRefreshUsed: boolean;
+  hintRefreshCount: number;
   currentHintCanonical: string | null;
+  modalHintStack: SavedModalHintEntry[];
 }
 
 export interface LevelState {
@@ -27,8 +33,10 @@ export interface SavedHintState {
   hintedCanonicals?: string[];
   excludedHintCanonicals?: string[];
   hintCount?: number;
+  hintRefreshCount?: number;
   hintRefreshUsed?: boolean;
   currentHintCanonical?: string | null;
+  modalHintStack?: SavedModalHintEntry[];
 }
 
 export interface SavedLevelState {
@@ -47,6 +55,7 @@ export interface SavedSettings {
 }
 
 export interface SavedGameState {
+  schemaVersion: number;
   currentGroupId: string;
   currentIndexInGroup: number;
   settings?: Partial<SavedSettings>;
@@ -99,6 +108,8 @@ export interface GridState {
 
 export const DEFAULT_MIN_SWIPE_LENGTH = 3;
 export const REQUIRED_SCHEMA_VERSION = 5;
+export const GAME_STATE_SCHEMA_VERSION = 2;
+export const MAX_HINT_REFRESHES_PER_LEVEL = 2;
 export const DEFAULT_TOKEN_ORDER_MODE: TokenOrderMode = 'forward';
 export const DEFAULT_SETTINGS: SavedSettings = {
   autoAdvance: false,
@@ -177,10 +188,41 @@ export function createEmptyLevelState(): LevelState {
       hintedCanonicals: new Set(),
       excludedHintCanonicals: new Set(),
       hintCount: 0,
-      hintRefreshUsed: false,
+      hintRefreshCount: 0,
       currentHintCanonical: null,
+      modalHintStack: [],
     },
   };
+}
+
+function sanitizeHintRefreshCount(savedHints: SavedHintState | undefined): number {
+  const rawCount = savedHints?.hintRefreshCount;
+  if (typeof rawCount === 'number' && Number.isFinite(rawCount)) {
+    return Math.max(0, Math.floor(rawCount));
+  }
+  return savedHints?.hintRefreshUsed ? 1 : 0;
+}
+
+function sanitizeModalHintStack(entries: SavedHintState['modalHintStack']): SavedModalHintEntry[] {
+  if (!entries || entries.length === 0) {
+    return [];
+  }
+
+  const seenCanonicals = new Set<string>();
+  const sanitized: SavedModalHintEntry[] = [];
+  for (const entry of entries) {
+    if (!entry) {
+      continue;
+    }
+    const canonical = normalizeWord(entry.canonical ?? '');
+    const text = typeof entry.text === 'string' ? entry.text.trim() : '';
+    if (!canonical || !text || seenCanonicals.has(canonical)) {
+      continue;
+    }
+    seenCanonicals.add(canonical);
+    sanitized.push({ canonical, text });
+  }
+  return sanitized;
 }
 
 export function hydrateLevelState(saved: SavedLevelState): LevelState {
@@ -191,8 +233,9 @@ export function hydrateLevelState(saved: SavedLevelState): LevelState {
       hintedCanonicals: new Set(saved.hints?.hintedCanonicals?.map(normalizeWord) ?? []),
       excludedHintCanonicals: new Set(saved.hints?.excludedHintCanonicals?.map(normalizeWord) ?? []),
       hintCount: saved.hints?.hintCount ?? 0,
-      hintRefreshUsed: saved.hints?.hintRefreshUsed ?? false,
+      hintRefreshCount: sanitizeHintRefreshCount(saved.hints),
       currentHintCanonical: saved.hints?.currentHintCanonical ?? null,
+      modalHintStack: sanitizeModalHintStack(saved.hints?.modalHintStack),
     },
   };
 }
@@ -200,8 +243,10 @@ export function hydrateLevelState(saved: SavedLevelState): LevelState {
 export function serializeLevelState(state: LevelState, completed?: boolean): SavedLevelState {
   const hasHintData = 
     state.hints.hintCount > 0 || 
+    state.hints.hintRefreshCount > 0 ||
     state.hints.excludedHintCanonicals.size > 0 || 
-    state.hints.currentHintCanonical !== null;
+    state.hints.currentHintCanonical !== null ||
+    state.hints.modalHintStack.length > 0;
 
   const serialized: SavedLevelState = {
     solved: [...state.solved],
@@ -210,8 +255,12 @@ export function serializeLevelState(state: LevelState, completed?: boolean): Sav
       hintedCanonicals: [...state.hints.hintedCanonicals],
       excludedHintCanonicals: [...state.hints.excludedHintCanonicals],
       hintCount: state.hints.hintCount,
-      hintRefreshUsed: state.hints.hintRefreshUsed,
+      hintRefreshCount: state.hints.hintRefreshCount,
       currentHintCanonical: state.hints.currentHintCanonical,
+      modalHintStack: state.hints.modalHintStack.map((entry) => ({
+        canonical: normalizeWord(entry.canonical),
+        text: entry.text,
+      })),
     } : undefined,
   };
 
@@ -918,12 +967,22 @@ export class GameStateManager {
         this.completedLevelIds.delete(levelId);
       }
 
-      if (state.solved.size > 0 || state.bonus.size > 0 || state.hints.hintCount > 0 || completed) {
+      if (
+        state.solved.size > 0
+        || state.bonus.size > 0
+        || state.hints.hintCount > 0
+        || state.hints.hintRefreshCount > 0
+        || state.hints.excludedHintCanonicals.size > 0
+        || state.hints.currentHintCanonical !== null
+        || state.hints.modalHintStack.length > 0
+        || completed
+      ) {
         serializedLevels[levelId] = serializeLevelState(state, completed);
       }
     }
     
     return {
+      schemaVersion: GAME_STATE_SCHEMA_VERSION,
       currentGroupId: this.currentGroupId,
       currentIndexInGroup: this.currentIndexInGroup,
       settings: undefined,
@@ -980,8 +1039,9 @@ export class GameSession {
         hintedCanonicals: initialState?.hints?.hintedCanonicals ?? new Set(),
         excludedHintCanonicals: initialState?.hints?.excludedHintCanonicals ?? new Set(),
         hintCount: initialState?.hints?.hintCount ?? 0,
-        hintRefreshUsed: initialState?.hints?.hintRefreshUsed ?? false,
+        hintRefreshCount: initialState?.hints?.hintRefreshCount ?? 0,
         currentHintCanonical: initialState?.hints?.currentHintCanonical ?? null,
+        modalHintStack: initialState?.hints?.modalHintStack ?? [],
       },
     };
     this.tokenOrderMode = DEFAULT_TOKEN_ORDER_MODE;

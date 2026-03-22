@@ -1099,6 +1099,10 @@ button:disabled {
   line-height: 1.35;
 }
 
+.hint-text-stack {
+  display: grid;
+}
+
 .modal-refresh-hint-btn {
   margin-top: 12px;
   margin-left: auto;

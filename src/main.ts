@@ -25,6 +25,8 @@ import {
   buildLevelName,
   serializeLevelState,
   GameStateManager,
+  GAME_STATE_SCHEMA_VERSION,
+  MAX_HINT_REFRESHES_PER_LEVEL,
 } from './game-engine';
 import {
   hasDictionaryEntry as sharedHasDictionaryEntry,
@@ -33,10 +35,12 @@ import {
 } from './dictionary';
 import {
   getUnguessedWordHint as sharedGetUnguessedWordHint,
+  canonicalHasUnsolvedWords,
   type HintResult,
 } from './hint-service';
 
 type ActiveLevelState = LevelState;
+type ModalHintEntry = ActiveLevelState['hints']['modalHintStack'][number];
 
 type FeedbackTone = 'good' | 'bad' | 'bonus' | 'muted';
 type GridWallKind = 'soft' | 'strong';
@@ -57,6 +61,8 @@ const IS_ANDROID = Capacitor.getPlatform() === 'android';
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const BASE_WHEEL_SIZE = 216;
 const DEFAULT_TOKEN_SWAP_ANIMATION_MS = 100;
+const NO_HINTS_AVAILABLE_TEXT = 'No more hints available.';
+const MAX_MODAL_HINT_STACK_SIZE = MAX_HINT_REFRESHES_PER_LEVEL + 1;
 
 const MOVE_DEADZONE_BY_POINTER: Record<string, number> = {
   mouse: 7,
@@ -106,9 +112,10 @@ const dictionaryDefinitions = required('#dictionary-definitions');
 const hintButton = required('#hint-button') as HTMLButtonElement;
 const hintModal = required('#hint-modal');
 const closeHintModalButton = required('#close-hint-modal') as HTMLButtonElement;
-const hintText = required('#hint-text');
+const hintTextStack = required('#hint-text-stack') as HTMLDivElement;
 const modalRefreshHintButton = required('#modal-refresh-hint-button') as HTMLButtonElement;
 const refreshHintModal = required('#refresh-hint-modal');
+const refreshHintSubtitle = required('#refresh-hint-subtitle');
 const refreshHintActions = required('#refresh-hint-actions');
 const cancelRefreshHintButton = required('#cancel-refresh-hint') as HTMLButtonElement;
 const confirmRefreshHintButton = required('#confirm-refresh-hint') as HTMLButtonElement;
@@ -1435,7 +1442,7 @@ async function completeCurrentLevel(): Promise<void> {
 function saveState(): void {
   const payload = gameManager.serialize();
   payload.settings = settings;
-  void persistState(payload as SavedGameState);
+  void persistState(payload);
 }
 
 async function persistState(payload: SavedGameState): Promise<void> {
@@ -1451,6 +1458,131 @@ async function persistState(payload: SavedGameState): Promise<void> {
   }
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function sanitizeStoredModalHintStack(raw: unknown): ModalHintEntry[] {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+
+  const seenCanonicals = new Set<string>();
+  const sanitized: ModalHintEntry[] = [];
+  for (const rawEntry of raw) {
+    if (!isRecord(rawEntry)) {
+      continue;
+    }
+
+    const canonicalRaw = rawEntry.canonical;
+    const textRaw = rawEntry.text;
+    if (typeof canonicalRaw !== 'string' || typeof textRaw !== 'string') {
+      continue;
+    }
+
+    const canonical = normalizeWord(canonicalRaw);
+    const text = textRaw.trim();
+    if (!canonical || !text || seenCanonicals.has(canonical)) {
+      continue;
+    }
+
+    seenCanonicals.add(canonical);
+    sanitized.push({ canonical, text });
+    if (sanitized.length >= MAX_MODAL_HINT_STACK_SIZE) {
+      break;
+    }
+  }
+
+  return sanitized;
+}
+
+function sanitizeStoredHintRefreshCount(rawHints: Record<string, unknown>): number {
+  const rawCount = rawHints.hintRefreshCount;
+  if (typeof rawCount === 'number' && Number.isFinite(rawCount)) {
+    const rounded = Math.floor(rawCount);
+    return clamp(rounded, 0, MAX_HINT_REFRESHES_PER_LEVEL);
+  }
+
+  if (rawHints.hintRefreshUsed === true) {
+    return 1;
+  }
+
+  return 0;
+}
+
+function isStoredModalHintStackSanitized(raw: unknown, sanitized: ModalHintEntry[]): boolean {
+  if (!Array.isArray(raw) || raw.length !== sanitized.length) {
+    return false;
+  }
+
+  for (let index = 0; index < sanitized.length; index += 1) {
+    const rawEntry = raw[index];
+    if (!isRecord(rawEntry)) {
+      return false;
+    }
+    if (rawEntry.canonical !== sanitized[index].canonical || rawEntry.text !== sanitized[index].text) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function migrateLoadedState(raw: unknown): { state: SavedGameState | null; didMigrate: boolean } {
+  if (!isRecord(raw)) {
+    return { state: null, didMigrate: false };
+  }
+
+  const currentGroupId = raw.currentGroupId;
+  const currentIndexInGroup = raw.currentIndexInGroup;
+  const levels = raw.levels;
+  if (typeof currentGroupId !== 'string' || typeof currentIndexInGroup !== 'number' || !isRecord(levels)) {
+    return { state: null, didMigrate: false };
+  }
+
+  let didMigrate = raw.schemaVersion !== GAME_STATE_SCHEMA_VERSION;
+  const migratedLevels: SavedGameState['levels'] = {};
+  for (const [levelId, rawLevelState] of Object.entries(levels)) {
+    if (!isRecord(rawLevelState)) {
+      didMigrate = true;
+      continue;
+    }
+
+    const levelState = rawLevelState as Record<string, unknown>;
+    const hints = isRecord(levelState.hints) ? levelState.hints : null;
+    if (hints) {
+      const sanitizedRefreshCount = sanitizeStoredHintRefreshCount(hints);
+      if (hints.hintRefreshCount !== sanitizedRefreshCount) {
+        didMigrate = true;
+      }
+      hints.hintRefreshCount = sanitizedRefreshCount;
+      if ('hintRefreshUsed' in hints) {
+        delete hints.hintRefreshUsed;
+        didMigrate = true;
+      }
+
+      const originalStack = hints.modalHintStack;
+      const sanitizedStack = sanitizeStoredModalHintStack(originalStack);
+      if (!isStoredModalHintStackSanitized(originalStack, sanitizedStack)) {
+        didMigrate = true;
+      }
+      hints.modalHintStack = sanitizedStack;
+    }
+
+    migratedLevels[levelId] = levelState as unknown as SavedGameState['levels'][string];
+  }
+
+  const migratedState: SavedGameState = {
+    schemaVersion: GAME_STATE_SCHEMA_VERSION,
+    currentGroupId,
+    currentIndexInGroup,
+    settings: isRecord(raw.settings) ? (raw.settings as Partial<SavedSettings>) : undefined,
+    levels: migratedLevels,
+  };
+
+  return { state: migratedState, didMigrate };
+}
+
 async function loadState(): Promise<SavedGameState | null> {
   try {
     const raw = IS_ANDROID
@@ -1459,11 +1591,15 @@ async function loadState(): Promise<SavedGameState | null> {
     if (!raw) {
       return null;
     }
-    const parsed = JSON.parse(raw) as SavedGameState;
-    if (!parsed || typeof parsed !== 'object') {
+    const parsed = JSON.parse(raw);
+    const { state, didMigrate } = migrateLoadedState(parsed);
+    if (!state) {
       return null;
     }
-    return parsed;
+    if (didMigrate) {
+      await persistState(state);
+    }
+    return state;
   } catch {
     return null;
   }
@@ -1622,6 +1758,89 @@ async function getUnguessedWordHint(): Promise<HintResult | null> {
   );
 }
 
+function formatHintExcerptForDisplay(hint: HintResult): string {
+  const e = hint.excerpt;
+  return (e.truncatedStart ? '...' : '') + e.text + (e.truncatedEnd ? '...' : '');
+}
+
+function trackHintUsage(state: ActiveLevelState, canonical: string): void {
+  state.hints.currentHintCanonical = canonical;
+
+  if (!state.hints.hintedCanonicals.has(canonical)) {
+    state.hints.hintedCanonicals.add(canonical);
+    state.hints.hintCount += 1;
+  }
+}
+
+function canRefreshHint(state: ActiveLevelState): boolean {
+  return state.hints.hintRefreshCount < MAX_HINT_REFRESHES_PER_LEVEL;
+}
+
+function remainingHintRefreshes(state: ActiveLevelState): number {
+  return clamp(MAX_HINT_REFRESHES_PER_LEVEL - state.hints.hintRefreshCount, 0, MAX_HINT_REFRESHES_PER_LEVEL);
+}
+
+function updateRefreshHintSubtitle(state: ActiveLevelState): void {
+  refreshHintSubtitle.textContent = `Refreshes available this level: ${remainingHintRefreshes(state)}`;
+}
+
+function getCurrentLevelModalHintEntries(state: ActiveLevelState): ModalHintEntry[] {
+  const level = gameManager.getCurrentLevel();
+  const lookup = dataLoader.getDictionaryLookup();
+  const existing = state.hints.modalHintStack;
+  const activeEntries = existing.filter((entry) =>
+    canonicalHasUnsolvedWords(level, state.solved, lookup, entry.canonical)
+  );
+
+  if (activeEntries.length === 0) {
+    state.hints.modalHintStack = [];
+    return [];
+  }
+
+  if (activeEntries.length !== existing.length) {
+    state.hints.modalHintStack = activeEntries;
+  }
+
+  return activeEntries;
+}
+
+function setCurrentLevelModalHintEntries(state: ActiveLevelState, entries: ModalHintEntry[]): ModalHintEntry[] {
+  if (entries.length === 0) {
+    state.hints.modalHintStack = [];
+    return [];
+  }
+
+  const limitedEntries = entries.slice(0, MAX_MODAL_HINT_STACK_SIZE);
+  state.hints.modalHintStack = limitedEntries;
+  return limitedEntries;
+}
+
+function prependCurrentLevelModalHintEntry(state: ActiveLevelState, entry: ModalHintEntry): ModalHintEntry[] {
+  const existingEntries = getCurrentLevelModalHintEntries(state).filter(
+    (existing) => existing.canonical !== entry.canonical
+  );
+  return setCurrentLevelModalHintEntries(state, [entry, ...existingEntries]);
+}
+
+function renderHintModalEntries(primaryHintText: string, olderEntries: ModalHintEntry[] = []): void {
+  const visibleOlderEntries = olderEntries.slice(0, Math.max(0, MAX_MODAL_HINT_STACK_SIZE - 1));
+  const textEntries = [primaryHintText, ...visibleOlderEntries.map((entry) => entry.text)];
+
+  hintTextStack.replaceChildren();
+  for (let index = 0; index < textEntries.length; index += 1) {
+    if (index > 0) {
+      const separator = document.createElement('hr');
+      separator.className = 'settings-separator';
+      hintTextStack.append(separator);
+    }
+
+    const hintTextEl = document.createElement('p');
+    hintTextEl.className = 'hint-text';
+    hintTextEl.textContent = textEntries[index];
+    hintTextStack.append(hintTextEl);
+  }
+}
+
 async function updatePersistentHint(): Promise<void> {
   if (!settings.alwaysShowHint) {
     persistentHintEl.hidden = true;
@@ -1635,15 +1854,8 @@ async function updatePersistentHint(): Promise<void> {
   }
 
   const state = gameManager.getCurrentLevelState();
-  state.hints.currentHintCanonical = hint.canonical;
-
-  if (!state.hints.hintedCanonicals.has(hint.canonical)) {
-    state.hints.hintedCanonicals.add(hint.canonical);
-    state.hints.hintCount += 1;
-  }
-
-  const e = hint.excerpt;
-  persistentHintEl.textContent = (e.truncatedStart ? '...' : '') + e.text + (e.truncatedEnd ? '...' : '');
+  trackHintUsage(state, hint.canonical);
+  persistentHintEl.textContent = formatHintExcerptForDisplay(hint);
   persistentHintEl.hidden = false;
   saveState();
 }
@@ -1655,9 +1867,10 @@ async function openHintModal(): Promise<void> {
   closeLevelPackModal(false);
 
   const state = gameManager.getCurrentLevelState();
+  const existingModalHints = getCurrentLevelModalHintEntries(state);
   const hint = await getUnguessedWordHint();
   if (!hint) {
-    hintText.textContent = 'No hints available.';
+    renderHintModalEntries(NO_HINTS_AVAILABLE_TEXT, existingModalHints);
     modalRefreshHintButton.disabled = true;
     hintModal.hidden = false;
     hintButton.setAttribute('aria-expanded', 'true');
@@ -1665,18 +1878,14 @@ async function openHintModal(): Promise<void> {
     return;
   }
 
-  state.hints.currentHintCanonical = hint.canonical;
+  trackHintUsage(state, hint.canonical);
+  const stackedHints = prependCurrentLevelModalHintEntry(state, {
+    canonical: hint.canonical,
+    text: formatHintExcerptForDisplay(hint),
+  });
+  renderHintModalEntries(stackedHints[0].text, stackedHints.slice(1));
 
-  if (!state.hints.hintedCanonicals.has(hint.canonical)) {
-    state.hints.hintedCanonicals.add(hint.canonical);
-    state.hints.hintCount += 1;
-  }
-
-  const e = hint.excerpt;
-  const displayExcerpt = (e.truncatedStart ? '...' : '') + e.text + (e.truncatedEnd ? '...' : '');
-  hintText.textContent = displayExcerpt;
-
-  modalRefreshHintButton.disabled = state.hints.hintRefreshUsed;
+  modalRefreshHintButton.disabled = !canRefreshHint(state);
 
   hintModal.hidden = false;
   hintButton.setAttribute('aria-expanded', 'true');
@@ -1697,6 +1906,7 @@ function closeHintModal(restoreFocus: boolean): void {
 }
 
 function openRefreshHintModal(): void {
+  updateRefreshHintSubtitle(gameManager.getCurrentLevelState());
   closeHintModal(false);
   refreshHintActions.hidden = false;
   refreshHintModal.hidden = false;
@@ -1721,17 +1931,18 @@ function closeRefreshHintModal(returnToHint: boolean): void {
 async function refreshHint(): Promise<void> {
   const state = gameManager.getCurrentLevelState();
 
-  if (state.hints.hintRefreshUsed || !state.hints.currentHintCanonical) {
+  if (!canRefreshHint(state) || !state.hints.currentHintCanonical) {
     return;
   }
 
   state.hints.excludedHintCanonicals.add(state.hints.currentHintCanonical);
-  state.hints.hintRefreshUsed = true;
+  state.hints.hintRefreshCount += 1;
   state.hints.currentHintCanonical = null;
 
+  const existingModalHints = getCurrentLevelModalHintEntries(state);
   const newHint = await getUnguessedWordHint();
   if (!newHint) {
-    hintText.textContent = 'No hints available.';
+    renderHintModalEntries(NO_HINTS_AVAILABLE_TEXT, existingModalHints);
     persistentHintEl.hidden = true;
     modalRefreshHintButton.disabled = true;
     hintModal.hidden = false;
@@ -1741,21 +1952,17 @@ async function refreshHint(): Promise<void> {
     return;
   }
 
-  state.hints.currentHintCanonical = newHint.canonical;
-
-  if (!state.hints.hintedCanonicals.has(newHint.canonical)) {
-    state.hints.hintedCanonicals.add(newHint.canonical);
-    state.hints.hintCount += 1;
-  }
-
-  const e = newHint.excerpt;
-  const displayExcerpt = (e.truncatedStart ? '...' : '') + e.text + (e.truncatedEnd ? '...' : '');
-  hintText.textContent = displayExcerpt;
+  trackHintUsage(state, newHint.canonical);
+  const stackedHints = prependCurrentLevelModalHintEntry(state, {
+    canonical: newHint.canonical,
+    text: formatHintExcerptForDisplay(newHint),
+  });
+  renderHintModalEntries(stackedHints[0].text, stackedHints.slice(1));
   if (settings.alwaysShowHint) {
-    persistentHintEl.textContent = displayExcerpt;
+    persistentHintEl.textContent = stackedHints[0].text;
   }
 
-  modalRefreshHintButton.disabled = true;
+  modalRefreshHintButton.disabled = !canRefreshHint(state);
   hintModal.hidden = false;
   hintButton.setAttribute('aria-expanded', 'true');
   closeHintModalButton.focus();
