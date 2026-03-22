@@ -67,6 +67,7 @@ const DEFAULT_SETTINGS: SavedSettings = {
   autoAdvance: false,
   theme: 'dark',
   alwaysShowHint: false,
+  preferModernHints: false,
   disableSwapAnimation: false,
 };
 
@@ -114,6 +115,7 @@ const confirmRefreshHintButton = required('#confirm-refresh-hint') as HTMLButton
 const autoAdvanceInput = required('#auto-advance') as HTMLInputElement;
 const lightThemeInput = required('#light-theme') as HTMLInputElement;
 const alwaysShowHintInput = required('#always-show-hint') as HTMLInputElement;
+const preferModernHintsInput = required('#prefer-modern-hints') as HTMLInputElement;
 const disableSwapAnimationInput = required('#disable-swap-animation') as HTMLInputElement;
 const persistentHintEl = required('#persistent-hint') as HTMLParagraphElement;
 const resetLevelButton = required('#reset-level') as HTMLButtonElement;
@@ -156,6 +158,7 @@ let previewingSelection = false;
 let wheelSize = BASE_WHEEL_SIZE;
 let tokenSwapAnimationTimer: ReturnType<typeof window.setTimeout> | null = null;
 let tokenSwapAnimationSequence = 0;
+let suppressSwapButtonClickUntil = 0;
 
 void init();
 
@@ -307,7 +310,19 @@ function bindStaticEvents(): void {
     }
   });
 
+  swapTokensButton.addEventListener('pointerdown', (event) => {
+    if (event.pointerType === 'mouse') {
+      return;
+    }
+    event.preventDefault();
+    suppressSwapButtonClickUntil = performance.now() + 500;
+    swapTokenOrder();
+  });
+
   swapTokensButton.addEventListener('click', () => {
+    if (performance.now() < suppressSwapButtonClickUntil) {
+      return;
+    }
     swapTokenOrder();
   });
 
@@ -404,6 +419,14 @@ function bindStaticEvents(): void {
     saveState();
   });
 
+  preferModernHintsInput.addEventListener('change', () => {
+    settings.preferModernHints = preferModernHintsInput.checked;
+    if (settings.alwaysShowHint) {
+      updatePersistentHint();
+    }
+    saveState();
+  });
+
   disableSwapAnimationInput.addEventListener('change', () => {
     settings.disableSwapAnimation = disableSwapAnimationInput.checked;
     saveState();
@@ -493,6 +516,7 @@ function renderSettings(): void {
   autoAdvanceInput.checked = settings.autoAdvance;
   lightThemeInput.checked = settings.theme === 'light';
   alwaysShowHintInput.checked = settings.alwaysShowHint;
+  preferModernHintsInput.checked = settings.preferModernHints;
   disableSwapAnimationInput.checked = settings.disableSwapAnimation;
   applyTheme();
 }
@@ -950,6 +974,23 @@ async function getDictionaryEntry(word: string): Promise<DictionaryEntry | null>
   return sharedGetDictionaryEntry(lookup, (letter) => dataLoader.loadDictionaryLetter(letter), word);
 }
 
+function splitDefinitionChunks(definition: string): string[] {
+  const chunks = definition
+    .split(/\n{2,}/)
+    .map((chunk) => chunk.trim())
+    .filter((chunk) => chunk.length > 0);
+  return chunks.length > 0 ? chunks : [definition.trim()];
+}
+
+function appendDefinitionSection(container: HTMLElement, definition: string): void {
+  for (const item of splitDefinitionChunks(definition)) {
+    const paragraph = document.createElement('p');
+    paragraph.className = 'dictionary-definition';
+    paragraph.textContent = item;
+    container.appendChild(paragraph);
+  }
+}
+
 function refreshDictionaryButton(): void {
   const word = currentDictionaryWord();
   dictionaryButton.disabled = !hasDictionaryEntry(word);
@@ -971,16 +1012,28 @@ async function renderDictionaryModal(lookupWord: string): Promise<void> {
   dictionaryWord.textContent = shownCanonical;
   dictionaryDefinitions.innerHTML = '';
 
-  const chunks = definition
-    .split(/\n{2,}/)
-    .map((chunk) => chunk.trim())
-    .filter((chunk) => chunk.length > 0);
-  const items = chunks.length > 0 ? chunks : [definition.trim()];
-  for (const item of items) {
-    const paragraph = document.createElement('p');
-    paragraph.className = 'dictionary-definition';
-    paragraph.textContent = item;
-    dictionaryDefinitions.appendChild(paragraph);
+  const orderedDefinitions: string[] = [];
+  if (entry.definitions.wordnet) {
+    orderedDefinitions.push(entry.definitions.wordnet);
+  }
+  if (entry.definitions.webster) {
+    orderedDefinitions.push(entry.definitions.webster);
+  }
+  if (orderedDefinitions.length === 0 && definition.trim().length > 0) {
+    orderedDefinitions.push(definition);
+  }
+
+  for (let index = 0; index < orderedDefinitions.length; index += 1) {
+    const sourceDefinition = orderedDefinitions[index];
+    if (!sourceDefinition) {
+      continue;
+    }
+    appendDefinitionSection(dictionaryDefinitions, sourceDefinition);
+    if (index < orderedDefinitions.length - 1) {
+      const separator = document.createElement('hr');
+      separator.className = 'settings-separator';
+      dictionaryDefinitions.appendChild(separator);
+    }
   }
 }
 
@@ -1422,6 +1475,10 @@ function loadSettings(raw: SavedGameState['settings']): SavedSettings {
     autoAdvance: typeof raw?.autoAdvance === 'boolean' ? raw.autoAdvance : DEFAULT_SETTINGS.autoAdvance,
     theme,
     alwaysShowHint: typeof raw?.alwaysShowHint === 'boolean' ? raw.alwaysShowHint : DEFAULT_SETTINGS.alwaysShowHint,
+    preferModernHints:
+      typeof raw?.preferModernHints === 'boolean'
+        ? raw.preferModernHints
+        : DEFAULT_SETTINGS.preferModernHints,
     disableSwapAnimation:
       typeof raw?.disableSwapAnimation === 'boolean'
         ? raw.disableSwapAnimation
@@ -1560,7 +1617,8 @@ async function getUnguessedWordHint(): Promise<HintResult | null> {
     lookup,
     dataLoader.getDictionaryHintRelatedForms(),
     getDictionaryEntry,
-    (letter) => dataLoader.loadDictionaryLetter(letter)
+    (letter) => dataLoader.loadDictionaryLetter(letter),
+    settings.preferModernHints
   );
 }
 

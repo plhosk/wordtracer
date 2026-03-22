@@ -90,7 +90,16 @@ export interface DictionaryMeta {
   hintRelatedForms?: Record<string, string[]>;
 }
 
+export type DictionaryDefinitionSource = 'webster' | 'wordnet';
+
+export interface DictionarySourceDefinitions {
+  selectedSource?: DictionaryDefinitionSource;
+  webster?: string;
+  wordnet?: string;
+}
+
 export interface DictionaryLetterFile {
   letter: string;
   definitions: Record<string, string>;
+  sourceDefinitions?: Record<string, DictionarySourceDefinitions>;
 }

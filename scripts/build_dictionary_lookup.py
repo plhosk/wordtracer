@@ -41,6 +41,10 @@ def infer_dictionary_license_id(path: Path) -> str | None:
     return None
 
 
+def infer_definition_source_key(raw: str) -> str | None:
+    return infer_dictionary_license_id(Path(raw))
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
@@ -665,6 +669,7 @@ def build_lookup_data(
 ) -> tuple[
     dict[str, str | None],
     dict[str, str],
+    dict[str, dict[str, str]],
     dict[str, list[str]],
     list[str],
     int,
@@ -698,6 +703,7 @@ def build_lookup_data(
 
     lookup: dict[str, str | None] = {}
     definitions: dict[str, str] = {}
+    source_definitions: dict[str, dict[str, str]] = {}
     canonical_to_words: dict[str, set[str]] = {}
     canonical_definition_by_source: dict[str, dict[str, str]] = {}
     canonical_primary_source: dict[str, str] = {}
@@ -775,6 +781,8 @@ def build_lookup_data(
     low_quality_replacement_count = 0
     bad_start_replacement_count = 0
     score_upgrade_replacement_count = 0
+    webster_definition_available_count = 0
+    wordnet_definition_available_count = 0
 
     for canonical in sorted(canonical_to_words):
         source_map = canonical_definition_by_source.get(canonical, {})
@@ -821,6 +829,24 @@ def build_lookup_data(
                 score_upgrade_replacement_count += 1
 
         definitions[canonical] = source_map[selected_source]
+
+        source_payload: dict[str, str] = {}
+        for source_name, source_text in source_map.items():
+            source_key = infer_definition_source_key(source_name)
+            if source_key in {"webster", "wordnet"}:
+                source_payload[source_key] = source_text
+
+        selected_source_key = infer_definition_source_key(selected_source)
+        if selected_source_key in {"webster", "wordnet"}:
+            source_payload["selectedSource"] = selected_source_key
+
+        if source_payload:
+            source_definitions[canonical] = source_payload
+            if "webster" in source_payload:
+                webster_definition_available_count += 1
+            if "wordnet" in source_payload:
+                wordnet_definition_available_count += 1
+
         if selected_source == primary_source:
             primary_definition_count += 1
         else:
@@ -833,12 +859,15 @@ def build_lookup_data(
             "lowQualityReplacementCount": low_quality_replacement_count,
             "badStartReplacementCount": bad_start_replacement_count,
             "scoreUpgradeReplacementCount": score_upgrade_replacement_count,
+            "websterDefinitionAvailableCount": webster_definition_available_count,
+            "wordnetDefinitionAvailableCount": wordnet_definition_available_count,
         }
     )
 
     return (
         lookup,
         definitions,
+        source_definitions,
         hint_related_forms,
         unresolved,
         direct_match_count,
@@ -854,6 +883,7 @@ def write_split_files(
     dictionary_paths: list[Path],
     lookup: dict[str, str | None],
     definitions: dict[str, str],
+    source_definitions: dict[str, dict[str, str]],
     hint_related_forms: dict[str, list[str]],
     unresolved: list[str],
     direct_match_count: int,
@@ -864,12 +894,19 @@ def write_split_files(
     split_dir.mkdir(parents=True, exist_ok=True)
 
     definitions_by_letter: dict[str, dict[str, str]] = {}
+    source_definitions_by_letter: dict[str, dict[str, dict[str, str]]] = {}
 
     for canonical, definition in definitions.items():
         letter = canonical[0].upper()
         if letter not in definitions_by_letter:
             definitions_by_letter[letter] = {}
         definitions_by_letter[letter][canonical] = definition
+
+    for canonical, source_definition in source_definitions.items():
+        letter = canonical[0].upper()
+        if letter not in source_definitions_by_letter:
+            source_definitions_by_letter[letter] = {}
+        source_definitions_by_letter[letter][canonical] = source_definition
 
     all_letters = sorted(definitions_by_letter.keys())
 
@@ -879,6 +916,7 @@ def write_split_files(
         letter_payload = {
             "letter": letter,
             "definitions": letter_definitions,
+            "sourceDefinitions": source_definitions_by_letter.get(letter, {}),
         }
         letter_file = split_dir / f"dictionary.{letter}.json"
         save_json(letter_file, letter_payload)
@@ -905,6 +943,12 @@ def write_split_files(
             "primaryDefinitionCount": int(match_stats.get("primaryDefinitionCount", 0)),
             "fallbackDefinitionSelectedCount": int(
                 match_stats.get("fallbackDefinitionSelectedCount", 0)
+            ),
+            "websterDefinitionAvailableCount": int(
+                match_stats.get("websterDefinitionAvailableCount", 0)
+            ),
+            "wordnetDefinitionAvailableCount": int(
+                match_stats.get("wordnetDefinitionAvailableCount", 0)
             ),
             "lowQualityReplacementCount": int(
                 match_stats.get("lowQualityReplacementCount", 0)
@@ -954,6 +998,7 @@ def main() -> None:
     (
         lookup,
         definitions,
+        source_definitions,
         hint_related_forms,
         unresolved,
         direct_match_count,
@@ -981,6 +1026,7 @@ def main() -> None:
             dictionary_paths,
             lookup,
             definitions,
+            source_definitions,
             hint_related_forms,
             unresolved,
             direct_match_count,

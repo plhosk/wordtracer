@@ -211,9 +211,18 @@ Lookup word definitions from the game's dictionary.
 GET /api/dictionary/:word
 ```
 
-Returns the canonical form and definition for a word, or `null` if not found. Note: some valid solution words are missing from the dictionary, so it can't be used to filter possible solutions.
+Returns the canonical form and definitions for a word, or `null` if not found. Note: some valid solution words are missing from the dictionary, so it can't be used to filter possible solutions.
 
-**Returns:** `{ canonical: string, definition: string }` | `null`
+**Returns:**
+`{
+  canonical: string,
+  definition: string,
+  selectedSource: 'webster' | 'wordnet' | null,
+  definitions: {
+    webster: string | null,
+    wordnet: string | null
+  }
+}` | `null`
 
 ### Check Word Exists
 

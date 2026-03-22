@@ -132,5 +132,613 @@
     "vow": "1. A solemn promise made to God, or to some deity; an act by which one consecrates or devotes himself, absolutely or conditionally, wholly or in part, for a longer or shorter time, to some act, service, or condition; a devotion of one's possessions; as, a baptismal vow; a vow of poverty. \"Nothing . . . that may . . . stain my vow of Nazarite.\" Milton. I pray thee, let me go and pay my vow. 2 Sam. xv. 7. I am combined by a sacred vow. Shak. 2. Specifically, a promise of fidelity; a pledge of love or affection; as, the marriage vow. Knights of love, who never broke their vow; Firm to their plighted faith. Dryden.\n\n1. To give, consecrate, or dedicate to God, or to some deity, by a solemn promise; to devote; to promise solemnly. \"When thou vowest a vow unto God, defer not to pay it.\" Eccl. v. 4. [Men] that vow a long and weary pilgrimage. Shak. 2. To assert solemnly; to asseverate.\n\nTo make a vow, or solemn promise. Better is it that thou shouldest not vow, than that thou shouldest vow and not pay. Eccl. v. 5.",
     "vowel": "A vocal, or sometimes a whispered, sound modified by resonance in the oral passage, the peculiar resonance in each case giving to each several vowel its distinctive character or quality as a sound of speech; -- distinguished from a consonant in that the latter, whether made with or without vocality, derives its character in every case from some kind of obstructive action by the mouth organs. Also, a letter or character which represents such a sound. See Guide to Pronunciation, \u00a7\u00a7 5, 146-149. Note: In the English language, the written vowels are a, e, i, o, u, and sometimes w and y. The spoken vowels are much more numerous. Close vowel. See under Close, a.  -- Vowel point. See under Point, n.\n\nOf or pertaining to a vowel; vocal.",
     "vying": "a. & n. from Vie.  -- Vy\"ing*ly, adv."
+  },
+  "sourceDefinitions": {
+    "vac": {
+      "wordnet": "informal term for vacation",
+      "selectedSource": "wordnet"
+    },
+    "vagal": {
+      "webster": "Of or pertaining to the vagus, or pneumogastric nerves; pneumogastric.",
+      "wordnet": "of or relating to the vagus nerve",
+      "selectedSource": "webster"
+    },
+    "vagus": {
+      "webster": "Wandering; -- applied especially to the pneumogastric nerve.  -- n.  The vagus, ore pneumogastric, nerve.",
+      "wordnet": "a mixed nerve that supplies the pharynx and larynx and lungs and heart and esophagus and stomach and most of the abdominal viscera",
+      "selectedSource": "webster"
+    },
+    "vail": {
+      "webster": "Same as Veil.\n\n1. Avails; profit; return; proceeds. [Obs.] My house is as were the cave where the young outlaw hoards the stolen vails of his occupation. Chapman. 2. An unexpected gain or acquisition; a casual advantage or benefit; a windfall. [Obs.] 3. Money given to servants by visitors; a gratuity; -- usually in the plural. [Written also vale.] Dryden.\n\n1. To let fail; to allow or cause to sink. [Obs.] Vail your regard Upon a wronged, I would fain have said, a maid! Shak. 2. To lower, or take off, in token of inferiority, reverence, submission, or the like. France must vail her lofty-plumed crest! Shak. Without vailing his bonnet or testifying any reverence for the alleged sanctity of the relic. Sir. W. Scott.\n\nTo yield or recede; to give place; to show respect by yielding, uncovering, or the like. [Written also vale, and veil.] [Obs.] Thy convenience must vail to thy neighbor's necessity. South.\n\nSubmission; decline; descent. [Obs.]",
+      "selectedSource": "webster"
+    },
+    "vain": {
+      "webster": "1. Having no real substance, value, or importance; empty; void; worthless; unsatisfying. \"Thy vain excuse.\" Shak. Every man walketh in a vain show. Ps. xxxix. 6. Let no man deceive you with vain words. Eph. v. 6. Vain pomp, and glory of this world, I hate ye! Shak. Vain visdom all, and false philosophy. Milton. 2. Destitute of forge or efficacy; effecting no purpose; fruitless; ineffectual; as, vain toil; a vain attempt. Bring no more vain oblations. Isa. i. 13. Vain is the force of man To crush the pillars which the pile sustain. Dryden. 3. Proud of petty things, or of trifling attainments; having a high opinion of one's own accomplishments with slight reason; conceited; puffed up; inflated. But wilt thou know, O vain man, that faith apart from works is barren James ii. 20 (Rev. Ver.). The minstrels played on every side, Vain of their art. Dryden. 4. Showy; ostentatious. Load some vain church with old theatric state. Pope. Syn.  -- Empty; worthless; fruitless; ineffectual; idle; unreal; shadowy; showy; ostentatious; light; inconstant; deceitful; delusive; unimportant; trifling.\n\nVanity; emptiness; -- now used only in the phrase in vain. For vain. See In vain. [Obs.] Shak.  -- In vain, to no purpose; without effect; ineffectually. \" In vain doth valor bleed.\" Milton. \" In vain they do worship me.\" Matt. xv. 9.  -- To take the name of God in vain, to use the name of God with levity or profaneness.",
+      "wordnet": "characteristic of false pride; having an exaggerated sense of self-importance; \"a conceited fool\"; \"an attitude of self-conceited arrogance\"; \"an egotistical disregard of others\"; \"so swollen by victory that he was unfit for normal duty\"; \"growing ever more swollen-headed and arbitrary\"; \"vain about her clothes\"",
+      "selectedSource": "webster"
+    },
+    "vair": {
+      "webster": "The skin of the squirrel, much used in the fourteenth century as fur for garments, and frequently mentioned by writers of that period in describing the costly dresses of kings, nobles, and prelates. It is represented in heraldry by a series of small shields placed close together, and alternately white and blue. Fairholt. No vair or ermine decked his garment. Sir W. Scott. Counter vair (Her.), a fur resembling vair, except in the arrangement of the patches or figures.",
+      "selectedSource": "webster"
+    },
+    "vale": {
+      "webster": "A tract of low ground, or of land between hills; a valley. \" Make me a cottage in the vale.\" Tennyson. Beyond this vale of tears there is a life above. Montgomery. In those fair vales, by nature formed to please. Harte. Note: Vale is more commonly used in poetry, and valley in prose and common discourse. Syn.  -- Valley; dingle; dell; dale.\n\nSee 2d Vail, 3.",
+      "wordnet": "a long depression in the surface of the land that usually contains a river",
+      "selectedSource": "webster"
+    },
+    "valet": {
+      "webster": "1. A male waiting servant; a servant who attends on gentleman's person; a body servant. 2. (Man.)  A kind of goad or stick with a point of iron. Valet de chambre ( Etym: [F.], a body servant, or personal attendant.",
+      "wordnet": "a manservant who acts as a personal attendant to his employer; \"Jeeves was Bertie Wooster's man\"",
+      "selectedSource": "webster"
+    },
+    "valid": {
+      "webster": "1. Strong; powerful; efficient. [Obs.] \"Perhaps more valid arms . . . may serve to better us.\" Milton. 2. Having sufficient strength or force; founded in truth; capable of being justified, defended, or supported; not weak or defective; sound; good; efficacious; as, a valid argument; a valid objection. An answer that is open to no valid exception. I. Taylor. 3. (Law)  Having legal strength or force; executed with the proper formalities; incapable of being rightfully overthrown or set aside; as, a valid deed; a valid covenant; a valid instrument of any kind; a valid claim or title; a valid marriage. Syn.  -- Prevalent; available; efficacious; just; good; weighty; sufficient; sound; well-grounded.",
+      "wordnet": "well grounded in logic or truth or having legal force; \"a valid inference\"; \"a valid argument\"; \"a valid contract\"",
+      "selectedSource": "webster"
+    },
+    "valise": {
+      "webster": "A small sack or case, usually of leather, but sometimes of other material, for containing the clothes, toilet articles, etc., of a traveler; a traveling bag; a portmanteau.",
+      "wordnet": "a small overnight bag for short trips",
+      "selectedSource": "webster"
+    },
+    "valor": {
+      "webster": "1. Value; worth. [Obs.] \"The valor of a penny.\" Sir T. More. 2. Strength of mind in regard to danger; that quality which enables a man to encounter danger with firmness; personal bravery; courage; prowess; intrepidity. For contemplation he and valor formed. Milton. When valor preys on reason, It eats the sword it fights with. Shak. Fear to do base, unworthy things is valor. B. Jonson. 3. A brave man; a man of valor. [R.] Ld. Lytton. Syn.  -- Courage; heroism; bravery; gallantry; boldness; fearlessness. See Courage, and Heroism.",
+      "wordnet": "the qualities of a hero or heroine; exceptional or heroic courage when facing danger (especially in battle); \"he showed great heroism in battle\"; \"he received a medal for valor\"",
+      "selectedSource": "webster"
+    },
+    "valse": {
+      "wordnet": "a ballroom dance in triple time with a strong accent on the first beat",
+      "selectedSource": "wordnet"
+    },
+    "value": {
+      "webster": "1. The property or aggregate properties of a thing by which it is rendered useful or desirable, or the degree of such property or sum of properties; worth; excellence; utility; importance. Ye are all physicians of no value. Job xiii. 4. Ye are of more value than many sparrows. Matt. x. 31. C\u00e6sar is well acquainted with your virtue, And therefore sets this value on your life. Addison. Before events shall have decided on the value of the measures. Marshall. 2. (Trade & Polit. Econ.)  Worth estimated by any standard of purchasing power, especially by the market price, or the amount of money agreed upon as an equivalent to the utility and cost of anything. An article may be possessed of the highest degree of utility, or power to minister to our wants and enjoyments, and may be universally made use of, without possessing exchangeable value. M'Culloch. Value is the power to command commodities generally. A. L. Chapin (Johnson's Cys.). Value is the generic term which expresses power in exchange. F. A. Walker. His design was not to pay him the value of his pictures, because they were above any price. Dryden. Note: In political economy, value is often distinguished as intrinsic and exchangeable. Intrinsic value is the same as utility or adaptation to satisfy the desires or wants of men. Exchangeable value is that in an article or product which disposes individuals to give for it some quantity of labor, or some other article or product obtainable by labor; as, pure air has an intrinsic value, but generally not an exchangeable value. 3. Precise signification; import; as, the value of a word; the value of a legal instrument Mitford. 4. Esteem; regard. Dryden. My relation to the person was so near, and my value for him so great Bp. Burnet. 5. (Mus.)  The relative length or duration of a tone or note, answering to quantity in prosody; thus, a quarter note [value of two eighth notes [ 6. In an artistical composition, the character of any one part in its relation to other parts and to the whole; -- often used in the plural; as, the values are well given, or well maintained. 7. Valor. [Written also valew.] [Obs.] Spenser. Value received, a phrase usually employed in a bill of exchange or a promissory note, to denote that a consideration has been given for it. Bouvier.\n\n1. To estimate the value, or worth, of; to rate at a certain price; to appraise; to reckon with respect to number, power, importance, etc. The mind doth value every moment. Bacon. The queen is valued thirty thousand strong. Shak. The king must take it ill, That he's so slightly valued in his messenger. Shak. Neither of them valued their promises according to rules of honor or integrity. Clarendon. 2. To rate highly; to have in high esteem; to hold in respect and estimation; to appreciate; to prize; as, to value one for his works or his virtues. Which of the dukes he values most. Shak. 3. To raise to estimation; to cause to have value, either real or apparent; to enhance in value. [Obs.] Some value themselves to their country by jealousies of the crown. Sir W. Temple. 4. To be worth; to be equal to in value. [Obs.] The peace between the French and us not values The cost that did conclude it. Shak. Syn.  -- To compute; rate; appraise; esteem; respect; regard; estimate; prize; appreciate.",
+      "wordnet": "a numerical quantity measured or assigned or computed; \"the value assigned was 16 milliseconds\"",
+      "selectedSource": "webster"
+    },
+    "valued": {
+      "webster": "Highly regarded; esteemed; prized; as, a valued contributor; a valued friend. Valued policy. See under Policy.",
+      "wordnet": "(usually used in combination) having value of a specified kind; \"triple-valued\"",
+      "selectedSource": "webster"
+    },
+    "valuer": {
+      "webster": "One who values; an appraiser.",
+      "wordnet": "someone who assesses the monetary worth of possessions",
+      "selectedSource": "webster"
+    },
+    "valve": {
+      "webster": "1. A door; especially, one of a pair of folding doors, or one of the leaves of such a door. Swift through the valves the visionary fair Repassed. Pope. Heavily closed, . . . the valves of the barn doors. Longfellow. 2. A lid, plug, or cover, applied to an aperture so that by its movement, as by swinging, lifting and falling, sliding, turning, or the like, it will open or close the aperture to permit or prevent passage, as of a fluid. Note: A valve may act automatically so as to be opened by the effort of a fluid to pass in one direction, and closed by the effort to pass in the other direction, as a clack valve; or it may be opened or closed by hand or by mechanism, as a screw valve, or a slide valve. 3. (Anat.)  One or more membranous partitions, flaps, or folds, which permit the passage of the contents of a vessel or cavity in one direction, but stop or retard the flow in the opposite direction; as, the ileocolic, mitral, and semilunar valves. 4. (Bot.) (a) One of the pieces into which a capsule naturally separates when it bursts. (b) One of the two similar portions of the shell of a diatom. (c) A small portion of certain anthers, which opens like a trapdoor to allow the pollen to escape, as in the barberry. 5. (Zo\u00f6l.)  One of the pieces or divisions of bivalve or multivalve shells. Air valve, Ball valve, Check valve, etc. See under Air. Ball, Check, etc.  -- Double-beat valve, a kind of balance valve usually consisting of a movable, open-ended, turban-shaped shell provided with two faces of nearly equal diameters, one above another, which rest upon two corresponding seats when the valve is closed.  -- Equilibrium valve. (a) A balance valve. See under Balance. (b) A valve for permitting air, steam, water, etc., to pass into or out of a chamber so as to establish or maintain equal pressure within and without.  -- Valve chest (Mach.), a chamber in which a valve works; especially (Steam Engine), the steam chest; -- called in England valve box, and valve casing. See Steam chest, under Steam.  -- Valve face (Mach.), that part of the surface of a valve which comes in contact with the valve seat.  -- Valve gear, or Valve motion (Steam Engine), the system of parts by which motion is given to the valve or valves for the distribution of steam in the cylinder. For an illustration of one form of valve gear, see Link motion.  -- Valve seat. (Mach.) (a) The fixed surface on which a valve rests or against which it presses. (b) A part or piece on which such a surface is formed.  -- Valve stem (Mach.), a rod attached to a valve, for moving it.  -- Valve yoke (Mach.), a strap embracing a slide valve and connecting it to the valve stem.",
+      "wordnet": "a structure in a hollow organ (like the heart) with a flap to insure one-way flow of fluid through it",
+      "selectedSource": "webster"
+    },
+    "vamp": {
+      "webster": "To advance; to travel. [Obs.]\n\n1. The part of a boot or shoe above the sole and welt, and in front of the ankle seam; an upper. 2. Any piece added to an old thing to give it a new appearance. See Vamp, v. t.\n\nTo provide, as a shoe, with new upper leather; hence, to piece, as any old thing, with a new part; to repair; to patch; -- often followed by up. I had never much hopes of your vamped play. Swift.",
+      "selectedSource": "webster"
+    },
+    "van": {
+      "webster": "The front of an army; the first line or leading column; also, the front line or foremost division of a fleet, either in sailing or in battle. Standards and gonfalons, twixt van and rear, Stream in the air. Milton.\n\nA shovel used in cleansing ore.\n\nTo wash or cleanse, as a small portion of ore, on a shovel. Raymond.\n\n1. A light wagon, either covered or open, used by tradesmen and others fore the transportation of goods. [Eng.] 2. A large covered wagon for moving furniture, etc., also for conveying wild beasts, etc., for exhibition. 3. A close railway car for baggage. See the Note under Car, 2. [Eng.]\n\n1. A fan or other contrivance, as a sieve, for winnowing grain. 2. Etym: [OF. vanne, F. vanneau beam feather (cf. It. vanno a wing) fr. L. vannus. See Etymology above.]  A wing with which the air is beaten. [Archaic] \"[/Angels] on the air plumy vans received him. \" Milton. He wheeled in air, and stretched his vans in vain; His vans no longer could his flight sustain. Dryden.\n\nTo fan, or to cleanse by fanning; to winnow. [Obs.] Bacon.",
+      "selectedSource": "webster"
+    },
+    "vanda": {
+      "wordnet": "any of numerous showy orchids of the genus Vanda having many large flowers in loose racemes",
+      "selectedSource": "wordnet"
+    },
+    "vane": {
+      "webster": "1. A contrivance attached to some elevated object for the purpose of showing which way the wind blows; a weathercock. It is usually a plate or strip of metal, or slip of wood, often cut into some fanciful form, and placed upon a perpendicular axis around which it moves freely. Aye undiscreet, and changing as a vane. Chaucer. 2. Any flat, extended surface attached to an axis and moved by the wind; as, the vane of a windmill; hence, a similar fixture of any form moved in or by water, air, or other fluid; as, the vane of a screw propeller, a fan blower, an anemometer, etc. 3. (Zo\u00f6l.)  The rhachis and web of a feather taken together. 4. One of the sights of a compass, quadrant, etc. Vane of a leveling staff. (Surv.) Same as Target, 3.",
+      "selectedSource": "webster"
+    },
+    "vang": {
+      "webster": "A rope to steady the peak of a gaff.",
+      "selectedSource": "webster"
+    },
+    "vanish": {
+      "webster": "1. To pass from a visible to an invisible state; to go out of sight; to disappear; to fade; as, vapor vanishes from the sight by being dissipated; a ship vanishes from the sight of spectators on land. The horse vanished . . . out of sight. Chaucer. Go; vanish into air; away! Shak. The champions vanished from their posts with the speed of lightning. Sir W. Scott. Gliding from the twilight past to vanish among realities. Hawthorne. 2. To be annihilated or lost; to pass away. \"All these delights will vanish.\" Milton.\n\nThe brief terminal part of vowel or vocal element, differing more or less in quality from the main part; as, a as in ale ordinarily ends with a vanish of i as in ill, o as in old with a vanish of oo as in foot. Rush. Note: The vanish is included by Mr. Bell under the general term glide.",
+      "wordnet": "get lost, as without warning or explanation; \"He disappeared without a trace\"",
+      "selectedSource": "webster"
+    },
+    "vapid": {
+      "webster": "Having lost its life and spirit; dead; spiritless; insipid; flat; dull; unanimated; as, vapid beer; a vapid speech; a vapid state of the blood. A cheap, bloodless reformation, a guiltless liberty, appear flat and vapid to their taste. Burke. -- Vap\"id*ly, adv.  -- Vap\"id*ness, n.",
+      "selectedSource": "webster"
+    },
+    "vapor": {
+      "webster": "1. (Physics)  Any substance in the gaseous, or a\u00ebriform, state, the condition of which is ordinarily that of a liquid or solid. Note: The term vapor is sometimes used in a more extended sense, as identical with gas; and the difference between the two is not so much one of kind as of degree, the latter being applied to all permanently elastic fluids except atmospheric air, the former to those elastic fluids which lose that condition at ordinary temperatures. The atmosphere contains more or less vapor of water, a portion of which, on a reduction of temperature, becomes condensed into liquid water in the form of rain or dew. The vapor of water produced by boiling, especially in its economic relations, is called steam. Vapor is any substance in the gaseous condition at the maximum of density consistent with that condition. This is the strict and proper meaning of the word vapor. Nichol. 2. In a loose and popular sense, any visible diffused substance floating in the atmosphere and impairing its transparency, as smoke, fog, etc. The vapour which that fro the earth glood [glided]. Chaucer. Fire and hail; snow and vapors; stormy wind fulfilling his word. Ps. cxlviii. 8. 3. Wind; flatulence. [Obs.] Bacon. 4. Something unsubstantial, fleeting, or transitory; unreal fancy; vain imagination; idle talk; boasting. For what is your life It is even a vapor, that appeareth for a little time, and then vanisheth away. James iv. 14. 5. pl.  An old name for hypochondria, or melancholy; the blues. \"A fit of vapors.\" Pope. 6. (Pharm.)  A medicinal agent designed for administration in the form of inhaled vapor. Brit. Pharm. Vapor bath. (a) A bath in vapor; the application of vapor to the body, or part of it, in a close place; also, the place itself. (b) (Chem.) A small metallic drying oven, usually of copper, for drying and heating filter papers, precipitates, etc.; -- called also air bath. A modified form is provided with a jacket in the outside partition for holding water, or other volatile liquid, by which the temperature may be limited exactly to the required degree.  -- Vapor burner, a burner for burning a vaporized hydrocarbon.  -- Vapor density (Chem.), the relative weight of gases and vapors as compared with some specific standard, usually hydrogen, but sometimes air. The vapor density of gases and vaporizable substances as compared with hydrogen, when multiplied by two, or when compared with air and multiplied by 28.8, gives the molecular weight.  -- Vapor engine, an engine worked by the expansive force of a vapor, esp. a vapor other than steam.\n\n1. To pass off in fumes, or as a moist, floating substance, whether visible or invisible, to steam; to be exhaled; to evaporate. 2. To emit vapor or fumes. [R.] Running waters vapor not so much as standing waters. Bacon. 3. To talk idly; to boast or vaunt; to brag. Poets used to vapor much after this manner. Milton. We vapor and say, By this time Matthews has beaten them. Walpole.\n\nTo send off in vapor, or as if in vapor; as, to vapor away a heated fluid. [Written also vapour.] He'd laugh to see one throw his heart away, Another, sighing, vapor forth his soul. B. Jonson.",
+      "wordnet": "a visible suspension in the air of particles of some substance",
+      "selectedSource": "webster"
+    },
+    "var": {
+      "wordnet": "a unit of electrical power in an AC circuit equal to the power dissipated when 1 volt produces a current of 1 ampere",
+      "selectedSource": "wordnet"
+    },
+    "vara": {
+      "webster": "A Spanish measure of length equal to about one yard. The vara now in use equals 33.385 inches. Johnson's Cyc.",
+      "wordnet": "a Spanish unit of length (about a yard) having different values in different localities",
+      "selectedSource": "webster"
+    },
+    "varix": {
+      "webster": "1. (Med.)  A uneven, permanent dilatation of a vein. Note: Varices are owing to local retardation of the venous circulation, and in some cases to relaxation of the parietes of the veins. They are very common in the superficial veins of the lower limbs. Dunglison. 2. (Zo\u00f6l.)  One of the prominent ridges or ribs extending across each of the whorls of certain univalve shells. Note: The varices usually indicate stages of growth, each one showing a former position of the outer lip of the aperture.",
+      "wordnet": "abnormally enlarged or twisted blood vessel or lymphatic vessel",
+      "selectedSource": "webster"
+    },
+    "varus": {
+      "webster": "A deformity in which the foot is turned inward. See Talipes.",
+      "wordnet": "a deformity in which part of a limb is turned inward to an abnormal degree",
+      "selectedSource": "webster"
+    },
+    "vary": {
+      "webster": "1. To change the aspect of; to alter in form, appearance, substance, position, or the like; to make different by a partial change; to modify; as, to vary the properties, proportions, or nature of a thing; to vary a posture or an attitude; to vary one's dress or opinions. Shall we vary our device at will, Even as new occasion appears Spenser. 2. To change to something else; to transmute; to exchange; to alternate. Gods, that never change their state, Vary oft their love and hate. Waller. We are to vary the customs according to the time and country where the scene of action lies. Dryden. 3. To make of different kinds; to make different from one another; to diversity; to variegate. God hath varied their inclinations. Sir T. Browne. God hath here Varied his bounty so with new delights. Milton. 4. (Mus.)  To embellish; to change fancifully; to present under new aspects, as of form, key, measure, etc. See Variation, 4.\n\n1. To alter, or be altered, in any manner; to suffer a partial change; to become different; to be modified; as, colors vary in different lights. That each from other differs, first confess; Next, that he varies from himself no less. Pope. 2. To differ, or be different; to be unlike or diverse; as, the laws of France vary from those of England. 3. To alter or change in succession; to alternate; as, one mathematical quantity varies inversely as another. While fear and anger, with alternate grace, Pant in her breast, and vary in her face. Addison. 4. To deviate; to depart; to swerve; -- followed by from; as, to vary from the law, or from reason. Locke. 5. To disagree; to be at variance or in dissension; as, men vary in opinion. The rich jewel which we vary for. Webster (1623).\n\nAlteration; change. [Obs.] Shak.",
+      "wordnet": "become different in some particular way, without permanently losing one's or its former characteristics or essence; \"her mood changes in accordance with the weather\"; \"The supermarket's selection of vegetables varies according to the season\"",
+      "selectedSource": "webster"
+    },
+    "vas": {
+      "webster": "A vessel; a duct. Vas deferens; pl. Vasa deferentia. Etym: [L. vas vessel + deferens carrying down.] (Anat.) The excretory duct of a testicle; a spermatic duct.",
+      "wordnet": "a tube in which a body fluid circulates",
+      "selectedSource": "wordnet"
+    },
+    "vase": {
+      "webster": "1. A vessel adapted for various domestic purposes, and anciently for sacrificial used; especially, a vessel of antique or elegant pattern used for ornament; as, a porcelain vase; a gold vase; a Grecian vase. See Illust. of Portland vase, under Portland. No chargers then were wrought in burnished gold, Nor silver vases took the forming mold. Pope. 2. (Arch.) (a) A vessel similar to that described in the first definition above, or the representation of one in a solid block of stone, or the like, used for an ornament, as on a terrace or in a garden. See Illust. of Niche. (b) The body, or naked ground, of the Corinthian and Composite capital; -- called also tambour, and drum. Note: Until the time of Walker (1791), vase was made to rhyme with base,, case, etc., and it is still commonly so pronounced in the United States. Walker made it to rhyme with phrase, maze, etc. Of modern English practice, Mr. A. J. Ellis (1874) says: \"Vase has four pronunciations in English: vasz, which I most commonly say, is going out of use v\u00e4z I hear most frequently, vaz very rarely, and vas I only know from Cull's marking. On the analogy of case, however, it should be the regular sound.\" 3. (Bot.)  The calyx of a plant.",
+      "wordnet": "an open jar of glass or porcelain used as an ornament or to hold flowers",
+      "selectedSource": "webster"
+    },
+    "vast": {
+      "webster": "1. Waste; desert; desolate; lonely. [Obs.] The empty, vast, and wandering air. Shak. 2. Of great extent; very spacious or large; also, huge in bulk; immense; enormous; as, the vast ocean; vast mountains; the vast empire of Russia. Through the vast and boundless deep. Milton. 3. Very great in numbers, quantity, or amount; as, a vast army; a vast sum of money. 4. Very great in importance; as, a subject of vast concern. Syn.  -- Enormous; huge; immense; mighty.\n\nA waste region; boundless space; immensity. \"The watery vast.\" Pope. Michael bid sound The archangel trumpet. Through the vast of heaven It sounded. Milton.",
+      "wordnet": "unusually great in size or amount or degree or especially extent or scope; \"huge government spending\"; \"huge country estates\"; \"huge popular demand for higher education\"; \"a huge wave\"; \"the Los Angeles aqueduct winds like an immense snake along the base of the mountains\"; \"immense numbers of birds\"; \"at vast (or immense) expense\"; \"the vast reaches of outer space\"; \"the vast accumulation of knowledge...which we call civilization\"- W.R.Inge",
+      "selectedSource": "webster"
+    },
+    "vat": {
+      "webster": "1. A large vessel, cistern, or tub, especially one used for holding in an immature state, chemical preparations for dyeing, or for tanning, or for tanning leather, or the like. Let him produce his vase and tubs, in opposition to heaps of arms and standards. Addison. 2. A measure for liquids, and also a dry measure; especially, a liquid measure in Belgium and Holland, corresponding to the hectoliter of the metric system, which contains 22.01 imperial gallons, or 26.4 standard gallons in the United States. Note: The old Dutch grain vat averaged 0.762 Winchester bushel. The old London coal vat contained 9 bushels. The solid-measurement vat of Amsterdam contains 40 cubic feet; the wine vat, 241.57 imperial gallons, and the vat for olive oil, 225.45 imperial gallons. 3. (Metal.) (a) A wooden tub for washing ores and mineral substances in. (b) A square, hollow place on the back of a calcining furnace, where tin ore is laid to dry. 4. (R. C. Ch.)  A vessel for holding holy water.\n\nTo put or transfer into a vat.",
+      "selectedSource": "webster"
+    },
+    "vault": {
+      "webster": "1. (Arch.)  An arched structure of masonry, forming a ceiling or canopy. The long-drawn aisle and fretted vault. Gray. 2. An arched apartment; especially, a subterranean room, use for storing articles, for a prison, for interment, or the like; a cell; a cellar. \"Charnel vaults.\" Milton. The silent vaults of death. Sandys. To banish rats that haunt our vault. Swift. 3. The canopy of heaven; the sky. That heaven's vault should crack. Shak. 4. Etym: [F. volte, It. volta, originally, a turn, and the same word as volta an arch. See the Etymology above.]  A leap or bound. Specifically: -- (a) (Man.) The bound or leap of a horse; a curvet. (b) A leap by aid of the hands, or of a pole, springboard, or the like. Note: The l in this word was formerly often suppressed in pronunciation. Barrel, Cradle, Cylindrical, or Wagon, vault (Arch.), a kind of vault having two parallel abutments, and the same section or profile at all points. It may be rampant, as over a staircase (see Rampant vault, under Rampant), or curved in plan, as around the apse of a church.  -- Coved vault. (Arch.) See under 1st Cove, v. t.  -- Groined vault (Arch.), a vault having groins, that is, one in which different cylindrical surfaces intersect one another, as distinguished from a barrel, or wagon, vault.  -- Rampant vault. (Arch.) See under Rampant.  -- Ribbed vault (Arch.), a vault differing from others in having solid ribs which bear the weight of the vaulted surface. True Gothic vaults are of this character.  -- Vault light, a partly glazed plate inserted in a pavement or ceiling to admit light to a vault below.\n\n1. To form with a vault, or to cover with a vault; to give the shape of an arch to; to arch; as, vault a roof; to vault a passage to a court. The shady arch that vaulted the broad green alley. Sir W. Scott. 2. Etym: [See Vault, v. i.]  To leap over; esp., to leap over by aid of the hands or a pole; as, to vault a fence. I will vault credit, and affect high pleasures. Webster (1623).\n\n1. To leap; to bound; to jump; to spring. Vaulting ambition, which o'erleaps itself. Shak. Leaning on his lance, he vaulted on a tree. Dryden. Lucan vaulted upon Pegasus with all the heat and intrepidity of youth. Addison. 2. To exhibit feats of tumbling or leaping; to tumble.",
+      "wordnet": "a burial chamber (usually underground)",
+      "selectedSource": "webster"
+    },
+    "veal": {
+      "webster": "The flesh of a calf when killed and used for food.",
+      "wordnet": "meat from a calf",
+      "selectedSource": "webster"
+    },
+    "veer": {
+      "webster": "To change direction; to turn; to shift; as, wind veers to the west or north. \"His veering gait.\" Wordsworth. And as he leads, the following navy veers. Dryden. an ordinary community which is hostile or friendly as passion or as interest may veer about. Burke. To veer and haul (Naut.), to vary the course or direction; -- said of the wind, which veers aft and hauls forward. The wind is also said to veer when it shifts with the sun.\n\nTo direct to a different course; to turn; to wear; as, to veer, or wear, a vessel. To veer and haul (Naut.), to pull tight and slacken alternately. Totten.  -- To veer away or out (Naut.), to let out; to slacken and let run; to pay out; as, to veer away the cable; to veer out a rope.",
+      "wordnet": "turn sharply; change direction abruptly; \"The car cut to the left at the intersection\"; \"The motorbike veered to the right\"",
+      "selectedSource": "webster"
+    },
+    "veg": {
+      "wordnet": "edible seeds or roots or stems or leaves or bulbs or tubers or nonsweet fruits of any of numerous herbaceous plant",
+      "selectedSource": "wordnet"
+    },
+    "vegan": {
+      "wordnet": "a strict vegetarian; someone who eats no animal or dairy products at all",
+      "selectedSource": "wordnet"
+    },
+    "veil": {
+      "webster": "1. Something hung up, or spread out, to intercept the view, and hide an object; a cover; a curtain; esp., a screen, usually of gauze, crape, or similar diaphnous material, to hide or protect the face. The veil of the temple was rent in twain. Matt. xxvii. 51. She, as a veil down to the slender waist, Her unadorn\u00e9d golden tresses wore. Milton. 2. A cover; disguise; a mask; a pretense. [I will] pluck the borrowed veil of modesty from the so seeming Mistress Page. Shak. 3. (Bot.) (a) The calyptra of mosses. (b) A membrane connecting the margin of the pileus of a mushroom with the stalk; -- called also velum. 4. (Eccl.)  A covering for a person or thing; as, a nun's veil; a paten veil; an altar veil. 5. (Zo\u00f6l.)  Same as Velum, 3. To take the veil (Eccl.), to receive or be covered with, a veil, as a nun, in token of retirement from the world; to become a nun.\n\n1. To throw a veil over; to cover with a veil. Her face was veiled; yet to my fancied sight, Love, sweetness, goodness, in her person shined. Milton. 2. Fig.: To invest; to cover; to hide; to conceal. To keep your great pretenses veiled. Shak.",
+      "wordnet": "a garment that covers the head and face",
+      "selectedSource": "webster"
+    },
+    "vein": {
+      "webster": "1. (Anat.)  One of the vessels which carry blood, either venous or arterial, to the heart. See Artery, 2. 2. (Bot.)  One of the similar branches of the framework of a leaf. 3. (Zo\u00f6l.)  One of the ribs or nervures of the wings of insects. See Venation. 4. (Geol. or Mining)  A narrow mass of rock intersecting other rocks, and filling inclined or vertical fissures not corresponding with the stratification; a lode; a dike; -- often limited, in the language of miners, to a mineral vein or lode, that is, to a vein which contains useful minerals or ores. 5. A fissure, cleft, or cavity, as in the earth or other substance. \"Down to the veins of earth.\" Milton. Let the glass of the prisms be free from veins. Sir I. Newton. 6. A streak or wave of different color, appearing in wood, and in marble and other stones; variegation. 7. A train of association, thoughts, emotions, or the like; a current; a course. He can open a vein of true and noble thinking. Swift. 8. Peculiar temper or temperament; tendency or turn of mind; a particular disposition or cast of genius; humor; strain; quality; also, manner of speech or action; as, a rich vein of humor; a satirical vein. Shak. Certain discoursing wits which are of the same veins. Bacon. Invoke the Muses, and improve my vein. Waller.\n\nTo form or mark with veins; to fill or cover with veins. Tennyson.",
+      "wordnet": "a blood vessel that carries blood from the capillaries toward the heart; \"all veins except the pulmonary vein carry unaerated blood\"",
+      "selectedSource": "webster"
+    },
+    "veiny": {
+      "webster": "Full of veins; veinous; veined; as, veiny marble.",
+      "selectedSource": "webster"
+    },
+    "vela": {
+      "wordnet": "a constellation in the southern hemisphere between Carina and Pyxis; \"because of its configuration Vela is sometimes called `the Sails'\"",
+      "selectedSource": "wordnet"
+    },
+    "velar": {
+      "webster": "1. Of or pertaining to a velum; esp. (Anat.) of or pertaining to the soft palate. 2. (Phon.)  Having the place of articulation on the soft palate; guttural; as, the velar consonants, such as k and hard q.",
+      "wordnet": "a consonant produced with the back of the tongue touching or near the soft palate",
+      "selectedSource": "webster"
+    },
+    "veld": {
+      "wordnet": "elevated open grassland in southern Africa",
+      "selectedSource": "wordnet"
+    },
+    "veldt": {
+      "webster": "A region or tract of land; esp., the open field; grass country. [South Africa]",
+      "wordnet": "elevated open grassland in southern Africa",
+      "selectedSource": "webster"
+    },
+    "vena": {
+      "webster": "A vein. Vena cava; pl. Ven\u00e6 cav\u00e6. Etym: [L., literally, hollow vein.] (Anat.) Any one of the great systemic veins connected directly with the heart.-- Vena contracta. Etym: [L., literally, contracted vein.] (Hydraulics) The contracted portion of a liquid jet at and near the orifice from which it issues.  -- Vena port\u00e6; pl. Ven\u00c6 port\u00e6. Etym: [L., literally, vein of the entrance.] (Anat.) The portal vein of the liver. See under Portal.",
+      "wordnet": "a blood vessel that carries blood from the capillaries toward the heart; \"all veins except the pulmonary vein carry unaerated blood\"",
+      "selectedSource": "wordnet"
+    },
+    "venal": {
+      "webster": "Of or pertaining to veins; venous; as, venal blood. [R.]\n\nCapable of being bought or obtained for money or other valuable consideration; made matter of trade or barter; held for sale; salable; mercenary; purchasable; hireling; as, venal services. \" Paid court to venal beauties.\" Macaulay. The venal cry and prepared vote of a passive senate. Burke. Syn.  -- Mercenary; hireling; vendible.  -- Venal, Mercenary. One is mercenary who is either actually a hireling (as, mercenary soldiers, a mercenary judge, etc.), or is governed by a sordid love of gain; hence, we speak of mercenary motives, a mercenary marriage, etc. Venal goes further, and supposes either an actual purchase, or a readiness to be purchased, which places a person or thing wholly in the power of the purchaser; as, a venal press. Brissot played ingeniously on the latter word in his celebrated saying, \" My pen is venal that it may not be mercenary,\" meaning that he wrote books, and sold them to the publishers, in order to avoid the necessity of being the hireling of any political party. Thus needy wits a vile revenue made, And verse became a mercenary trade. Dryden. This verse be thine, my friend, nor thou refuse This, from no venal or ungrateful muse. Pope.",
+      "wordnet": "capable of being corrupted; \"corruptible judges\"; \"dishonest politicians\"; \"a purchasable senator\"; \"a venal police officer\"",
+      "selectedSource": "webster"
+    },
+    "venge": {
+      "webster": "To avenge; to punish; to revenge. [Obs.] See Avenge, and Revenge. Chaucer. \"To venge me, as I may.\" Shak.",
+      "selectedSource": "webster"
+    },
+    "venom": {
+      "webster": "1. Matter fatal or injurious to life; poison; particularly, the poisonous, the poisonous matter which certain animals, such as serpents, scorpions, bees, etc., secrete in a state of health, and communicate by thing or stinging. Or hurtful worm with cankered venom bites. Milton. 2. Spite; malice; malignity; evil quality. Chaucer. \"The venom of such looks.\" Shak. Syn.  -- Venom; virus; bane. See Poison.\n\nTo infect with venom; to envenom; to poison. [R.] \"Venomed vengeance.\" Shak.",
+      "selectedSource": "webster"
+    },
+    "vent": {
+      "webster": "Sale; opportunity to sell; market. [Obs.] Shelton. There is no vent for any commodity but of wool. Sir W. Temple.\n\nTo sell; to vend. [Obs.] Therefore did those nations vent such spice. Sir W. Raleigh.\n\nA baiting place; an inn. [Obs.]\n\nTo snuff; to breathe or puff out; to snort. [Obs.] Spenser.\n\n1. A small aperture; a hole or passage for air or any fluid to escape; as, the vent of a cask; the vent of a mold; a volcanic vent. Look, how thy wounds do bleed at many vents. Shak. Long't was doubtful, both so closely pent, Which first should issue from the narrow vent. Pope. 2. Specifically: --(a) (Zo\u00f6l.)  The anal opening of certain invertebrates and fishes; also, the external cloacal opening of reptiles, birds, amphibians, and many fishes. (b) (Gun.) The opening at the breech of a firearm, through which fire is communicated to the powder of the charge; touchhole. (c) (Steam Boilers) Sectional area of the passage for gases divided by the length of the same passage in feet. 3. Fig.: Opportunity of escape or passage from confinement or privacy; outlet. 4. Emission; escape; passage to notice or expression; publication; utterance. Without the vent of words. Milton. Thou didst make tolerable vent of thy travel. Shak. To give vent to, to suffer to escape; to let out; to pour forth; as, to give vent to anger.  -- To take vent, to escape; to be made public. [R.] -- Vent feather (Zo\u00f6l.), one of the anal, or crissal, feathers of a bird.  -- Vent field (Gun.), a flat raised surface around a vent.  -- Vent piece. (Gun.) (a) A bush. See 4th Bush, n, 2. (b) A breech block.\n\n1. To let out at a vent, or small aperture; to give passage or outlet to. 2. To suffer to escape from confinement; to let out; to utter; to pour forth; as, to vent passion or complaint. The queen of heaven did thus her fury vent. Dryden. 3. To utter; to report; to publish. [Obs.] By mixing somewhat true to vent more lies. Milton. Thou hast framed and vented very curious orations. Barrow. 4. To scent, as a hound. [Obs.] Turbervile. 5. To furnish with a vent; to make a vent in; as, to vent. a mold.",
+      "wordnet": "a hole for the escape of gas or air",
+      "selectedSource": "webster"
+    },
+    "venter": {
+      "webster": "One who vents; one who utters, reports, or publishes. [R.] Barrow.\n\n1. (Anat.) (a) The belly; the abdomen; -- sometimes applied to any large cavity containing viscera. (b) The uterus, or womb. (c) A belly, or protuberant part; a broad surface; as, the venter of a muscle; the venter, or anterior surface, of the scapula. 2. (Zo\u00f6l.)  The lower part of the abdomen in insects. 3. (Rom. & O. E. Law)  A pregnant woman; a mother; as, A has a son B by one venter, and a daughter C by another venter; children by different venters.",
+      "selectedSource": "webster"
+    },
+    "venture": {
+      "webster": "1. An undertaking of chance or danger; the risking of something upon an event which can not be foreseen with certainty; a hazard; a risk; a speculation. I, in this venture, double gains pursue. Dryden. 2. An event that is not, or can not be, foreseen; an accident; chance; hap; contingency; luck. Bacon. 3. The thing put to hazard; a stake; a risk; especially, something sent to sea in trade. My ventures are not in one bottom trusted. Shak. At a venture, at hazard; without seeing the end or mark; without foreseeing the issue; at random. A certain man drew a bow at a venture. 1 Kings xxii. 34. A bargain at a venture made. Hudibras. Note: The phrase at a venture was originally at aventure, that is, at adventure.\n\n1. To hazard one's self; to have the courage or presumption to do, undertake, or say something; to dare. Bunyan. 2. To make a venture; to run a hazard or risk; to take the chances. Who freights a ship to venture on the seas. J. Dryden, Jr. To venture at, or To venture on or upon, to dare to engage in; to attempt without any certainty of success; as, it is rash to venture upon such a project. \"When I venture at the comic style.\" Waller.\n\n1. To expose to hazard; to risk; to hazard; as, to venture one's person in a balloon. I am afraid; and yet I'll venture it. Shak. 2. To put or send on a venture or chance; as, to venture a horse to the West Indies. 3. To confide in; to rely on; to trust. [R.] A man would be well enough pleased to buy silks of one whom he would not venture to feel his pulse. Addison.",
+      "wordnet": "any venturesome undertaking especially one with an uncertain outcome",
+      "selectedSource": "webster"
+    },
+    "venue": {
+      "webster": "1. (Law)  A neighborhood or near place; the place or county in which anything is alleged to have happened; also, the place where an action is laid. The twelve men who are to try the cause must be of the same venue where the demand is made. Blackstone. Note: In certain cases, the court has power to change the venue, which is to direct the trial to be had in a different county from that where the venue is laid. 2. A bout; a hit; a turn. See Venew. [R.] To lay a venue (Law), to allege a place.",
+      "selectedSource": "webster"
+    },
+    "verb": {
+      "webster": "1. A word; a vocable. [Obs.] South. 2. (Gram.)  A word which affirms or predicates something of some person or thing; a part of speech expressing being, action, or the suffering of action. Note: A verb is a word whereby the chief action of the mind [the assertion or the denial of a proposition] finds expression. Earle. Active verb, Auxiliary verb, Neuter verb, etc. See Active, Auxiliary, Neuter, etc.",
+      "wordnet": "the word class that serves as the predicate of a sentence",
+      "selectedSource": "webster"
+    },
+    "verge": {
+      "webster": "1. A rod or staff, carried as an emblem of authority; as, the verge, carried before a dean. 2. The stick or wand with which persons were formerly admitted tenants, they holding it in the hand, and swearing fealty to the lord. Such tenants were called tenants by the verge. [Eng.] 3. (Eng. Law)  The compass of the court of Marshalsea and the Palace court, within which the lord steward and the marshal of the king's household had special jurisdiction; -- so called from the verge, or staff, which the marshal bore. 4. A virgate; a yardland. [Obs.] 5. A border, limit, or boundary of a space; an edge, margin, or brink of something definite in extent. Even though we go to the extreme verge of possibility to invent a supposition favorable to it, the theory . . . implies an absurdity. J. S. Mill. But on the horizon's verge descried, Hangs, touched with light, one snowy sail. M. Arnold. 6. A circumference; a circle; a ring. The inclusive verge Of golden metal that must round my brow. Shak. 7. (Arch.) (a) The shaft of a column, or a small ornamental shaft. Oxf. Gloss. (b) The edge of the tiling projecting over the gable of a roof. Encyc. Brit. 8. (Horol.)  The spindle of a watch balance, especially one with pallets, as in the old vertical escapement. See under Escapement. 9. (Hort.) (a) The edge or outside of a bed or border. (b) A slip of grass adjoining gravel walks, and dividing them from the borders in a parterre. 10. The penis. 11. (Zo\u00f6l.)  The external male organ of certain mollusks, worms, etc. See Illustration in Appendix. Syn.  -- Border; edge; rim; brim; margin; brink.\n\n1. To border upon; to tend; to incline; to come near; to approach. 2. To tend downward; to bend; to slope; as, a hill verges to the north. Our soul, from original instinct, vergeth towards him as its center. Barrow. I find myself verging to that period of life which is to be labor and sorrow. Swift.",
+      "wordnet": "a region marking a boundary",
+      "selectedSource": "webster"
+    },
+    "veritas": {
+      "webster": "The Bureau Veritas. See under Bureau.",
+      "selectedSource": "webster"
+    },
+    "verse": {
+      "webster": "1. A line consisting of a certain number of metrical feet (see Foot, n., 9) disposed according to metrical rules. Note: Verses are of various kinds, as hexameter, pentameter, tetrameter, etc., according to the number of feet in each. A verse of twelve syllables is called an Alexandrine. Two or more verses form a stanza or strophe. 2. Metrical arrangement and language; that which is composed in metrical form; versification; poetry. Such prompt eloquence Flowed from their lips in prose or numerous verse. Milton. Virtue was taught in verse. Prior. Verse embalms virtue. Donne. 3. A short division of any composition. Specifically: -- (a) A stanza; a stave; as, a hymn of four verses. Note: Although this use of verse is common, it is objectionable, because not always distinguishable from the stricter use in the sense of a line. (b) (Script.) One of the short divisions of the chapters in the Old and New Testaments. Note: The author of the division of the Old Testament into verses is not ascertained. The New Testament was divided into verses by Robert Stephens [or Estienne], a French printer. This arrangement appeared for the first time in an edition printed at Geneva, in 1551. (c) (Mus.) A portion of an anthem to be performed by a single voice to each part. 4. A piece of poetry. \"This verse be thine.\" Pope. Blank verse, poetry in which the lines do not end in rhymes.  -- Heroic verse. See under Heroic.\n\nTo tell in verse, or poetry. [Obs.] Playing on pipes of corn and versing love. Shak.\n\nTo make verses; to versify. [Obs.] It is not rhyming and versing that maketh a poet. Sir P. Sidney.",
+      "wordnet": "literature in metrical form",
+      "selectedSource": "webster"
+    },
+    "versed": {
+      "webster": "Acquainted or familiar, as the result of experience, study, practice, etc.; skilled; practiced. Deep versed in books and shallow in himself. Milton. Opinions . . . derived from studying the Scriptures, wherein he was versed beyond any person of his age. Southey. These men were versed in the details of business. Macaulay.\n\nTurned. Versed sine. See under Sine, and Illust. of Functions.",
+      "wordnet": "an injectable form of benzodiazepine (trade name Versed) useful for sedation and for reducing pain during uncomfortable medical procedures",
+      "selectedSource": "webster"
+    },
+    "verso": {
+      "webster": "The reverse, or left-hand, page of a book or a folded sheet of paper; -- opposed to recto.",
+      "selectedSource": "webster"
+    },
+    "versus": {
+      "webster": "Against; as, John Doe versus Richard Roe; -- chiefly used in legal language, and abbreviated to v. or vs.",
+      "selectedSource": "webster"
+    },
+    "vert": {
+      "webster": "1. (Eng. Forest Law) (a) Everything that grows, and bears a green leaf, within the forest; as, to preserve vert and venison is the duty of the verderer. (b) The right or privilege of cutting growing wood. 2. (Her.)  The color green, represented in a drawing or engraving by parallel lines sloping downward toward the right.",
+      "selectedSource": "webster"
+    },
+    "vertex": {
+      "webster": "A turning point; the principal or highest point; top; summit; crown; apex. Specifically: --(a) (Anat.)  The top, or crown, of the head. (b) (Anat.) The zenith, or the point of the heavens directly overhead. (c) (Math.) The point in any figure opposite to, and farthest from, the base; the terminating point of some particular line or lines in a figure or a curve; the top, or the point opposite the base. Note: The principal vertex of a conic section is, in the parabola, the vertex of the axis of the curve: in the ellipse, either extremity of either axis, but usually the left-hand vertex of the transverse axis; in the hyperbola, either vertex, but usually the right-hand vertex of the transverse axis. Vertex of a curve (Math.), the point in which the axis of the curve intersects it.  -- Vertex of an angle (Math.), the point in which the sides of the angle meet.  -- Vertex of a solid, or of a surface of revolution (Math.), the point in which the axis pierces the surface.",
+      "wordnet": "the point of intersection of lines or the point opposite the base of a figure",
+      "selectedSource": "webster"
+    },
+    "vertu": {
+      "webster": "1. Virtue; power. See Virtue. [Obs.] Chaucer. 2. See Virtu.",
+      "selectedSource": "webster"
+    },
+    "vervain": {
+      "webster": "Any plant of the genus Verbena. Vervain mallow (Bot.), a species of mallow (Malva Alcea) with rose-colored flowers.",
+      "wordnet": "any of numerous tropical or subtropical American plants of the genus Verbena grown for their showy spikes of variously colored flowers",
+      "selectedSource": "webster"
+    },
+    "verve": {
+      "webster": "Excitement of imagination such as animates a poet, artist, or musician, in composing or performing; rapture; enthusiasm; spirit; energy.",
+      "wordnet": "an energetic style",
+      "selectedSource": "webster"
+    },
+    "very": {
+      "webster": "True; real; actual; veritable. Whether thou be my very son Esau or not. Gen. xxvii. 21. He that covereth a transgression seeketh love; but he that repeateth a matter separateth very friends. Prov. xvii. 9. The very essence of truth is plainness and brightness. Milton. I looked on the consideration of public service or public ornament to be real and very justice. Burke. Note: Very is sometimes used to make the word with which it is connected emphatic, and may then be paraphrased by same, self-same, itself, and the like. \"The very hand, the very words.\" Shak. \"The very rats instinctively have quit it.\" Shak. \"Yea, there where very desolation dwells.\" Milton. Very is used occasionally in the comparative degree, and more frequently in the superlative. \"Was not my lord the verier wag of the two\" Shak. \"The veriest hermit in the nation.\" Pope. \"He had spoken the very truth, and transformed it into the veriest falsehood.\" Hawthorne. Very Reverend. See the Note under Reverend.\n\nIn a high degree; to no small extent; exceedingly; excessively; extremely; as, a very great mountain; a very bright sum; a very cold day; the river flows very rapidly; he was very much hurt. VERY'S NIGHT SIGNALS; VERY NIGHT SIGNALS; VERY'S LIGHT SIGNALS; VERY",
+      "wordnet": "precisely as stated; \"the very center of town\"",
+      "selectedSource": "webster"
+    },
+    "vesica": {
+      "webster": "A bladder. Vesica piscis. Etym: [L., dish bladder.] (Eccl. Art) A glory, or aureole, of oval shape, or composed of two arcs of circles usually represented as surrounding a divine personage. More rarely, an oval composed of two arcs not representing a glory; a solid oval, etc.",
+      "wordnet": "a distensible membranous sac (usually containing liquid or gas)",
+      "selectedSource": "wordnet"
+    },
+    "vest": {
+      "webster": "1. An article of clothing covering the person; an outer garment; a vestment; a dress; a vesture; a robe. In state attended by her maiden train, Who bore the vests that holy rites require. Dryden. 2. Any outer covering; array; garb. Not seldom clothed in radiant vest Deceitfully goes forth the morn. Wordsworth. 3. Specifically, a waistcoat, or sleeveless body garment, for men, worn under the coat. Syn.  -- Garment; vesture; dress; robe; vestment; waistcoat.  -- Vest, Waistcoat. In England, the original word waistcoat is generally used for the body garment worn over the shirt and immediately under the coat. In the United States this garment is commonly called a vest, and the waistcoat is often improperly given to an under-garment.\n\n1. To clothe with, or as with, a vestment, or garment; to dress; to robe; to cover, surround, or encompass closely. Came vested all in white, pure as her mind. Milton. With ether vested, and a purple sky. Dryden. 2. To clothe with authority, power, or the like; to put in possession; to invest; to furnish; to endow; -- followed by with before the thing conferred; as, to vest a court with power to try cases of life and death. Had I been vested with the monarch's power. Prior. 3. To place or give into the possession or discretion of some person or authority; to commit to another; -- with in before the possessor; as, the power of life and death is vested in the king, or in the courts. Empire and dominion was [were] vested in him. Locke. 4. To invest; to put; as, to vest money in goods, land, or houses. [R.] 5. (Law)  To clothe with possession; as, to vest a person with an estate; also, to give a person an immediate fixed right of present or future enjoyment of; as, an estate is vested in possession. Bouvier.\n\nTo come or descend; to be fixed; to take effect, as a title or right; -- followed by in; as, upon the death of the ancestor, the estate, or the right to the estate, vests in the heir at law.",
+      "wordnet": "a man's sleeveless garment worn underneath a coat",
+      "selectedSource": "webster"
+    },
+    "vesta": {
+      "webster": "1. (Rom. Myth.)  One of the great divinities of the ancient Romans, identical with the Greek Hestia. She was a virgin, and the goddess of the hearth; hence, also, of the fire on it, and the family round it. 2. (Astron.)  An asteroid, or minor planet, discovered by Olbers in 1807. 3. A wax friction match. Simmonds.",
+      "selectedSource": "webster"
+    },
+    "vestal": {
+      "webster": "Of or pertaining to Vesta, the virgin goddess of the hearth; hence, pure; chaste.\n\n1. (Rom. Antiq.)  A virgin consecrated to Vesta, and to the service of watching the sacred fire, which was to be perpetually kept burning upon her altar. Note: The Vestals were originally four, but afterward six, in number. Their term of service lasted thirty years, the period of admission being from the sixth to the tenth year of the candidate's age. 2. A virgin; a woman pure and chaste; also, a nun. How happy is the blameless vestal's lot! Pope.",
+      "wordnet": "a chaste woman",
+      "selectedSource": "webster"
+    },
+    "vested": {
+      "webster": "1. Clothed; robed; wearing vestments. \"The vested priest.\" Milton. 2. (Law)  Not in a state of contingency or suspension; fixed; as, vested rights; vested interests. Vested legacy (Law), a legacy the right to which commences in pr\u00e6senti, and does not depend on a contingency; as, a legacy to one to be paid when he attains to twenty-one years of age is a vested legacy, and if the legatee dies before the testator, his representative shall receive it. Blackstone.  -- Vested remainder (Law), an estate settled, to remain to a determined person, after the particular estate is spent. Blackstone. Kent.",
+      "wordnet": "fixed and absolute and without contingency; \"a vested right\"",
+      "selectedSource": "webster"
+    },
+    "vet": {
+      "wordnet": "a doctor who practices veterinary medicine",
+      "selectedSource": "wordnet"
+    },
+    "vetch": {
+      "webster": "Any leguminous plant of the genus Vicia, some species of which are valuable for fodder. The common species is V. sativa. Note: The name is also applied to many other leguminous plants of different genera; as the chichling vetch, of the genus Lathyrus; the horse vetch, of the genus Hippocrepis; the kidney vetch (Anthyllis vulneraria); the milk vetch, of the genus Astragalus; the licorice vetch, or wild licorice (Abrus precatorius).",
+      "wordnet": "any of various climbing plants of the genus Vicia having pinnately compound leaves that terminate in tendrils and small variously colored flowers; includes valuable forage and soil-building plants",
+      "selectedSource": "webster"
+    },
+    "veto": {
+      "webster": "1. An authoritative prohibition or negative; a forbidding; an interdiction. This contemptuous veto of her husband's on any intimacy with her family. G. Eliot. 2. Specifically: -- (a) A power or right possessed by one department of government to forbid or prohibit the carrying out of projects attempted by another department; especially, in a constitutional government, a power vested in the chief executive to prevent the enactment of measures passed by the legislature. Such a power may be absolute, as in the case of the Tribunes of the People in ancient Rome, or limited, as in the case of the President of the United States. Called also the veto power. (b) The exercise of such authority; an act of prohibition or prevention; as, a veto is probable if the bill passes. (c) A document or message communicating the reasons of the executive for not officially approving a proposed law; -- called also veto message. [U.S.] Note: Veto is not a term employed in the Federal Constitution, but seems to be of popular use only. Abbott.\n\nTo prohibit; to negative; also, to refuse assent to, as a legislative bill, and thus prevent its enactment; as, to veto an appropriation bill.",
+      "wordnet": "a vote that blocks a decision",
+      "selectedSource": "webster"
+    },
+    "vex": {
+      "webster": "1. To to White curl the waves, and the vexed ocean roars. Pope. 2. To make angry or annoyed by little provocations; to irritate; to plague; to torment; to harass; to afflict; to trouble; to tease. \"I will not vex your souls.\" Shak. Then thousand torments vex my heart. Prior. 3. To twist; to weave. [R.] Some English wool, vexed in a Belgian loom. Dryden. Syn.  -- See Tease.\n\nTo be irritated; to fret. [R.] Chapman.",
+      "wordnet": "cause annoyance in; disturb, especially by minor irritations; \"Mosquitoes buzzing in my ear really bothers me\"; \"It irritates me that she never closes the door after she leaves\"",
+      "selectedSource": "webster"
+    },
+    "via": {
+      "webster": "A road way. Via Lactea Etym: [L.] (Anat.), the Milky Way, or Galaxy. See Galaxy, 1.  -- Via media Etym: [L.] (Theol.), the middle way; -- a name applied to their own position by the Anglican high-churchmen, as being between the Roman Catholic Church and what they term extreme Protestantism.\n\nBy the way of; as, to send a letter via Queenstown to London.",
+      "selectedSource": "webster"
+    },
+    "vial": {
+      "webster": "A small bottle, usually of glass; a little glass vessel with a narrow aperture intended to be closed with a stopper; as, a vial of medicine. [Written also phial.] Take thou this vial, being then in bed, And this distilled liquor thou off. Shak.\n\nTo put in a vial or vials. \"Precious vialed liquors.\" Milton.",
+      "wordnet": "a small bottle that contains a drug (especially a sealed sterile container for injection by needle)",
+      "selectedSource": "webster"
+    },
+    "vibe": {
+      "wordnet": "a distinctive emotional aura experienced instinctively; \"that place gave me bad vibrations\"; \"it gave me a nostalgic vibe\"",
+      "selectedSource": "wordnet"
+    },
+    "vibes": {
+      "wordnet": "a percussion instrument similar to a xylophone but having metal bars and rotating disks in the resonators that produce a vibrato sound",
+      "selectedSource": "wordnet"
+    },
+    "vicar": {
+      "webster": "1. One deputed or authorized to perform the functions of another; a substitute in office; a deputy. [R.] 2. (Eng. Eccl. Law)  The incumbent of an appropriated benefice. Note: The distinction between a parson [or rector] and vicar is this: The parson has, for the most part, the whole right to the ecclesiastical dues in his parish; but a vicar has generally an appropriator over him, entitled to the best part of the profits, to whom he is in fact perpetual curate with a standing salary. Burrill. Apostolic vicar, or Vicar apostolic. (R. C. Ch.) (a) A bishop to whom the Roman pontiff delegates a portion of his jurisdiction. (b) Any ecclesiastic acting under a papal brief, commissioned to exercise episcopal authority. (c) A titular bishop in a country where there is no episcopal see, or where the succession has been interrupted.  -- Vicar forane. Etym: [Cf. LL. foraneus situated outside of the episcopal city, rural. See Vicar, and Foreign.] (R. C. Ch.) A dignitary or parish priest appointed by a bishop to exercise a limited jurisdiction in a particular town or district of a diocese. Addis & Arnold.  -- Vicar-general. (a) (Ch. of Eng.) The deputy of the Archbishop of Canterbury or York, in whose court the bishops of the province are confirmed. Encyc. Brit. (b) (R. C. Ch.) An assistant to a bishop in the discharge of his official functions.  -- Vicar of Jesus Christ (R. C. Ch.), the pope as representing Christ on earth.",
+      "wordnet": "a Roman Catholic priest who acts for another higher-ranking clergyman",
+      "selectedSource": "webster"
+    },
+    "vice": {
+      "webster": "1. A defect; a fault; an error; a blemish; an imperfection; as, the vices of a political constitution; the vices of a horse. Withouten vice of syllable or letter. Chaucer. Mark the vice of the procedure. Sir W. Hamilton. 2. A moral fault or failing; especially, immoral conduct or habit, as in the indulgence of degrading appetites; customary deviation in a single respect, or in general, from a right standard, implying a defect of natural character, or the result of training and habits; a harmful custom; immorality; depravity; wickedness; as, a life of vice; the vice of intemperance. I do confess the vices of my blood. Shak. Ungoverned appetite . . . a brutish vice. Milton. When vice prevails, and impious men bear sway, The post of honor is a private station. Addison. 3. The buffoon of the old English moralities, or moral dramas, having the name sometimes of one vice, sometimes of another, or of Vice itself; -- called also Iniquity. Note: This character was grotesquely dressed in a cap with ass's ears, and was armed with a dagger of lath: one of his chief employments was to make sport with the Devil, leaping on his back, and belaboring him with the dagger of lath till he made him roar. The Devil, however, always carried him off in the end. Nares. How like you the Vice in the play . . . I would not give a rush for a Vice that has not a wooden dagger to snap at everybody. B. Jonson. Syn.  -- Crime; sin; iniquity; fault. See Crime.\n\n1. (Mech.)  A kind of instrument for holding work, as in filing. Same as Vise. 2. A tool for drawing lead into cames, or flat grooved rods, for casements. [Written also vise.] 3. A gripe or grasp. [Obs.] Shak.\n\nTo hold or squeeze with a vice, or as if with a vice. Shak. The coachman's hand was viced between his upper and lower thigh. De Quincey.\n\nIn the place of; in the stead; as, A. B. was appointed postmaster vice C. D. resigned.\n\nDenoting one who in certain cases may assume the office or duties of a superior; designating an officer or an office that is second in rank or authority; as, vice president; vice agent; vice consul, etc. Vice admiral. Etym: [Cf. F. vice-amiral.] (a) An officer holding rank next below an admiral. By the existing laws, the rank of admiral and vice admiral in the United States Navy will cease at the death of the present incumbents. (b) A civil officer, in Great Britain, appointed by the lords commissioners of the admiralty for exercising admiralty jurisdiction within their respective districts.  -- Vice admiralty, the office of a vice admiral.  -- Vice-admiralty court, a court with admiralty jurisdiction, established by authority of Parliament in British possessions beyond the seas. Abbott.  -- Vice chamberlain, an officer in court next in rank to the lord chamberlain. [Eng.] -- Vice chancellor. (a) (Law) An officer next in rank to a chancellor. (b) An officer in a university, chosen to perform certain duties, as the conferring of degrees, in the absence of the chancellor. (c) (R. C. Ch.) The cardinal at the head of the Roman Chancery.  -- Vice consul Etym: [cf. F. vice-consul], a subordinate officer, authorized to exercise consular functions in some particular part of a district controlled by a consul.  -- Vice king, one who acts in the place of a king; a viceroy.  -- Vice legate Etym: [cf. F. vice-l\u00e9gat], a legate second in rank to, or acting in place of, another legate.  -- Vice presidency, the office of vice president.  -- Vice president Etym: [cf. F. vice-pr\u00e9sident], an officer next in rank below a president.",
+      "wordnet": "moral weakness",
+      "selectedSource": "webster"
+    },
+    "vichy": {
+      "wordnet": "a town in central France (south of Paris) noted for hot mineral springs; was capital of the unoccupied part of France during World War II",
+      "selectedSource": "wordnet"
+    },
+    "vide": {
+      "webster": "imperative sing. of L. videre, to see; -- used to direct attention to something; as, vide supra, see above.",
+      "selectedSource": "webster"
+    },
+    "video": {
+      "wordnet": "the visible part of a television transmission; \"they could still receive the sound but the picture was gone\"",
+      "selectedSource": "wordnet"
+    },
+    "vie": {
+      "webster": "1. To stake a sum upon a hand of cards, as in the old game of gleek. See Revie. [Obs.] 2. To strive for superiority; to contend; to use emulous effort, as in a race, contest, or competition. In a trading nation, the younger sons may be placed in such a way of life as . . . to vie with the best of their family. Addison. While Waterloo with Cann\u00e6's carnage vies. Byron.\n\n1. To stake; to wager. [Obs.] B. Jonson. 2. To do or produce in emulation, competition, or rivalry; to put in competition; to bandy. [Obs.] She hung about my neck; and kiss on kiss She vied so fast. Shak. Nor was he set over us to vie wisdom with his Parliament, but to be guided by them. Milton. And vying malice with my gentleness, Pick quarrels with their only happiness. Herbert.\n\nA contest for superiority; competition; rivalry; strife; also, a challenge; a wager. [Obs.] We 'll all to church together instantly, And then a vie for boys. J. Fletcher.",
+      "wordnet": "compete for something; engage in a contest; measure oneself against others",
+      "selectedSource": "webster"
+    },
+    "view": {
+      "webster": "1. The act of seeing or beholding; sight; look; survey; examination by the eye; inspection. Thenceforth I thought thee worth my nearer view. Milton. Objects near our view are thought greater than those of a larger size are more remote. Locke. Surveying nature with too nice a view. Dryden. 2. Mental survey; intellectual perception or examination; as, a just view of the arguments or facts in a case. I have with exact view perused thee, Hector. Shak. 3. Power of seeing, either physically or mentally; reach or range of sight; extent of prospect. The walls of Pluto's palace are in view. Dryden. 4. That which is seen or beheld; sight presented to the natural or intellectual eye; scene; prospect; as, the view from a window. 'T is distance lends enchantment to the view. Campbell. 5. The pictorial representation of a scene; a sketch, as, a fine view of Lake George. 6. Mode of looking at anything; manner of apprehension; conception; opinion; judgment; as, to state one's views of the policy which ought to be pursued. To give a right view of this mistaken part of liberty. Locke. 7. That which is looked towards, or kept in sight, as object, aim, intention, purpose, design; as, he did it with a view of escaping. No man sets himself about anything but upon some view or other which serves him for a reason. Locke. 8. Appearance; show; aspect. [Obs.] [Graces] which, by the splendor of her view Dazzled, before we never knew. Waller. Field of view. See under Field.  -- Point of view. See under Point.  -- To have in view, to have in mind as an incident, object, or aim; as, to have one's resignation in view.  -- View halloo, the shout uttered by a hunter upon seeing the fox break cover.  -- View of frankpledge (Law), a court of record, held in a hundred, lordship, or manor, before the steward of the leet. Blackstone.  -- View of premises (Law), the inspection by the jury of the place where a litigated transaction is said to have occurred.\n\n1. To see; to behold; especially, to look at with attention, or for the purpose of examining; to examine with the eye; to inspect; to explore. O, let me view his visage, being dead. Shak. Nearer to view his prey, and, unespied, To mark what of their state he more might learn. Milton. 2. To survey or examine mentally; to consider; as, to view the subject in all its aspects. The happiest youth, viewing his progress through. Shak.",
+      "wordnet": "a way of regarding situations or topics etc.; \"consider what follows from the positivist view\"",
+      "selectedSource": "webster"
+    },
+    "vile": {
+      "webster": "1. Low; base; worthless; mean; despicable. A poor man in vile raiment. James ii. 2. The craft either of fishing, which was Peter's, or of making tents, which was Paul's, were [was] more vile than the science of physic. Ridley. The inhabitants account gold but as a vile thing. Abp. Abbot. 2. Morally base or impure; depraved by sin; hateful; in the sight of God and men; sinful; wicked; bad. \"Such vile base practices.\" Shak. Behold, I am vile; what shall I answer thee Job xl. 4. Syn.  -- See Base.  -- Vile\"ly, adv.  -- Vile\"ness, n.",
+      "wordnet": "morally reprehensible; \"would do something as despicable as murder\"; \"ugly crimes\"; \"the vile development of slavery appalled them\"; \"a slimy little liar\"",
+      "selectedSource": "webster"
+    },
+    "vill": {
+      "webster": "A small collection of houses; a village. \"Every manor, town, or vill.\" Sir M. Hale. Not should e'er the crested fowl From thorp or vill his matins sound for me. Wordsworth. Note: A word of various significations in English, law; as, a manor; a tithing; a town; a township; a parish; a part of a parish; a village. The original meaning of vill, in England, seems to have been derived from the Roman sense of the term villa, a single country residence or farm; a manor. Later, the term was applied only to a collection of houses more than two, and hence came to comprehend towns. Burrill. The statute of Exeter, 14 Edward I., mentions entire- vills, demivills, and hamlets.",
+      "selectedSource": "webster"
+    },
+    "villi": {
+      "webster": ", pl. of Villus.",
+      "selectedSource": "webster"
+    },
+    "vine": {
+      "webster": "(a) Any woody climbing plant which bears grapes. (b) Hence, a climbing or trailing plant; the long, slender stem of any plant that trails on the ground, or climbs by winding round a fixed object, or by seizing anything with its tendrils, or claspers; a creeper; as, the hop vine; the bean vine; the vines of melons, squashes, pumpkins, and other cucurbitaceous plants. There shall be no grapes on the vine. Jer. viii. 13. And one went out into the field to gather herbs, and found a wild vine, and gathered thereof wild gourds. 2 Kings iv. 89. Vine apple (Bot.), a small kind of squash. Roger Williams.  -- Vine beetle (Zo\u00f6l.), any one of several species of beetles which are injurious to the leaves or branches of the grapevine. Among the more important species are the grapevine fidia (see Fidia), the spotted Pelidnota (see Rutilian), the vine fleabeetle (Graptodera chalybea), the rose beetle (see under Rose), the vine weevil, and several species of Colaspis and Anomala.  -- Vine borer. (Zo\u00f6l.) (a) Any one of several species of beetles whose larv\u00e6 bore in the wood or pith of the grapevine, especially Sinoxylon basilare, a small species the larva of which bores in the stems, and Ampeloglypter sesostris, a small reddish brown weevil (called also vine weevil), which produces knotlike galls on the branches. (b) A clearwing moth (\u00c6geria polistiformis), whose larva bores in the roots of the grapevine and is often destructive.  -- Vine dragon, an old and fruitless branch of a vine. [Obs.] Holland.  -- Vine forester (Zo\u00f6l.), any one of several species of moths belonging to Alypia and allied genera, whose larv\u00e6 feed on the leaves of the grapevine.  -- Vine fretter (Zo\u00f6l.), a plant louse, esp. the phylloxera that injuries the grapevine.  -- Vine grub (Zo\u00f6l.), any one of numerous species of insect larv\u00e6 that are injurious to the grapevine.  -- Vine hopper (Zo\u00f6l.), any one of several species of leaf hoppers which suck the sap of the grapevine, especially Erythroneura vitis. See Illust. of Grape hopper, under Grape.  -- Vine inchworm (Zo\u00f6l.), the larva of any species of geometrid moths which feed on the leaves of the grapevine, especially Cidaria diversilineata.  -- Vine-leaf rooer (Zo\u00f6l.), a small moth (Desmia maculalis) whose larva makes a nest by rolling up the leaves of the grapevine. The moth is brownish black, spotted with white.  -- Vine louse (Zo\u00f6l.), the phylloxera.  -- Vine mildew (Bot.), a fungous growth which forms a white, delicate, cottony layer upon the leaves, young shoots, and fruit of the vine, causing brown spots upon the green parts, and finally a hardening and destruction of the vitality of the surface. The plant has been called Oidium Tuckeri, but is now thought to be the conidia- producing stage of an Erysiphe.  -- Vine of Sodom (Bot.), a plant named in the Bible (Deut. xxxii. 32), now thought to be identical with the apple of Sodom. See Apple of Sodom, under Apple.  -- Vine sawfly (Zo\u00f6l.), a small black sawfiy (Selandria vitis) whose larva feeds upon the leaves of the grapevine. The larv\u00e6 stand side by side in clusters while feeding.  -- Vine slug (Zo\u00f6l.), the larva of the vine sawfly.  -- Vine sorrel (Bot.), a climbing plant (Cissus acida) related to the grapevine, and having acid leaves. It is found in Florida and the West Indies.  -- Vine sphinx (Zo\u00f6l.), any one of several species of hawk moths. The larv\u00e6 feed on grapevine leaves.  -- Vine weevil. (Zo\u00f6l.) See Vine borer (a) above, and Wound gall, under Wound.",
+      "wordnet": "a plant with a weak stem that derives support from climbing, twining, or creeping along a surface",
+      "selectedSource": "webster"
+    },
+    "vinery": {
+      "webster": "1. A vineyard. [Obs.] \"The vinery of Ramer.\" Fabyan. 2. A structure, usually inclosed with glass, for rearing and protecting vines; a grapery.",
+      "wordnet": "a farm of grapevines where wine grapes are produced",
+      "selectedSource": "webster"
+    },
+    "vino": {
+      "wordnet": "fermented juice (of grapes especially)",
+      "selectedSource": "wordnet"
+    },
+    "vinous": {
+      "webster": "Of or pertaining to wine; having the qualities of wine; as, a vinous taste.",
+      "wordnet": "of or relating to wine",
+      "selectedSource": "webster"
+    },
+    "vinyl": {
+      "webster": "The hypothetical radical C2H3, regarded as the characteristic residue of ethylene and that related series of unsaturated hydrocarbons with which the allyl compounds are homologous.",
+      "wordnet": "a univalent chemical radical derived from ethylene",
+      "selectedSource": "webster"
+    },
+    "viol": {
+      "webster": "1. (Mus.)  A stringed musical instrument formerly in use, of the same form as the violin, but larger, and having six strings, to be struck with a bow, and the neck furnished with frets for stopping the strings. Me softer airs befit, and softer strings Of lute, or viol still, more apt for mournful things. Milton. Note: The name is now applied as a general term to designate instruments of the violin kind, as tenor viol, bass viol, etc. 2. (Naut.)  A large rope sometimes used in weighing anchor. [Written also voyal, and voyal.] Totten.",
+      "wordnet": "any of a family of bowed stringed instruments that preceded the violin family",
+      "selectedSource": "webster"
+    },
+    "viola": {
+      "webster": "A genus of polypetalous herbaceous plants, including all kinds of violets.\n\nAn instrument in form and use resembling the violin, but larger, and a fifth lower in compass. Viola da braccio Etym: [It., viol for the arm], the tenor viol, or viola, a fifth lower than the violin. Its part is written in the alto clef, hence it is sometimes called the alto.  -- Viola da gamba Etym: [It., viol for the leg], an instrument resembling the viola, but larger, and held between the knees. It is now rarely used.  -- Viola da spalla Etym: [It., viol for the shoulder], an instrument formerly used, resembling the viola, and intermediate in size between the viola and the viola da gamba.  -- Viola di amore Etym: [It., viol of love: cf. F. viole d'amour], a viol, larger than the viola, having catgut strings upon, and brass or steel wires under, the keyboard. These, sounding sympathetically with the strings, yield a peculiarly soft and silvery sound. It is now seldom used.",
+      "selectedSource": "webster"
+    },
+    "violent": {
+      "webster": "1. Moving or acting with physical strength; urged or impelled with force; excited by strong feeling or passion; forcible; vehement; impetuous; fierce; furious; severe; as, a violent blow; the violent attack of a disease. Float upon a wild and violent sea. Shak. A violent cross wind from either coast. Milton. 2. Acting, characterized, or produced by unjust or improper force; outrageous; unauthorized; as, a violent attack on the right of free speech. To bring forth more violent deeds. Milton. Some violent hands were laid on Humphrey's life. Shak. 3. Produced or effected by force; not spontaneous; unnatural; abnormal. These violent delights have violent ends. Shak. No violent state can be perpetual. T. Burnet. Ease would recant Vows made in pain, as violent and void. Milton. Violent presumption (Law), presumption of a fact that arises from proof of circumstances which necessarily attend such facts.  -- Violent profits (Scots Law), rents or profits of an estate obtained by a tenant wrongfully holding over after warning. They are recoverable in a process of removing. Syn.  -- Fierce; vehement; outrageous; boisterous; turbulent; impetuous; passionate; severe; extreme.\n\nAn assailant. [Obs.] Dr. H. More.\n\nTo urge with violence. [Obs.] Fuller.\n\nTo be violent; to act violently. [Obs.] The grief is fine, full, perfect, that I taste, An violenteth in a sense as strong As that which causeth it. Shak.",
+      "wordnet": "acting with or marked by or resulting from great force or energy or emotional intensity; \"a violent attack\"; \"a violent person\"; \"violent feelings\"; \"a violent rage\"; \"felt a violent dislike\"",
+      "selectedSource": "webster"
+    },
+    "violin": {
+      "webster": "A small instrument with four strings, played with a bow; a fiddle. Note: The violin is distinguished for the brilliancy and gayety, as well as the power and variety, of its tones, and in the orchestra it is the leading and most important instrument.",
+      "wordnet": "bowed stringed instrument that is the highest member of the violin family; this instrument has four strings and a hollow body and an unfretted fingerboard and is played with a bow",
+      "selectedSource": "webster"
+    },
+    "viper": {
+      "webster": "1. (Zo\u00f6l.)  Any one of numerous species of Old World venomous makes belonging to Vipera, Clotho, Daboia, and other genera of the family Viperid\u00e6. There came a viper out of the heat, and fastened on his hand. Acts xxviii. 3. Note: Among the best-known species are the European adder (Pelias berus), the European asp (Vipera aspis), the African horned viper (V. cerastes), and the Indian viper (Daboia Russellii). 2. A dangerous, treacherous, or malignant person. Who committed To such a viper his most sacred trust Of secrecy. Milton. Horned viper. (Zo\u00f6l.) See Cerastes.  -- Red viper (Zo\u00f6l.), the copperhead.  -- Viper fish (Zo\u00f6l.), a small, slender, phosphorescent deep-sea fish (Chauliodus Sloanii). It has long ventral and dorsal fins, a large mouth, and very long, sharp teeth.  -- Viper's bugloss (Bot.), a rough-leaved biennial herb (Echium vulgare) having showy purplish blue flowers. It is sometimes cultivated, but has become a pestilent weed in fields from New York to Virginia. Also called blue weed.  -- Viper's grass (Bot.), a perennial composite herb (Scorzonera Hispanica) with narrow, entire leaves, and solitary heads of yellow flowers. The long, white, carrot-shaped roots are used for food in Spain and some other countries. Called also viper grass.",
+      "wordnet": "venomous Old World snakes characterized by hollow venom-conducting fangs in the upper jaw",
+      "selectedSource": "webster"
+    },
+    "viral": {
+      "wordnet": "relating to or caused by a virus; \"viral infection\"",
+      "selectedSource": "wordnet"
+    },
+    "vire": {
+      "webster": "An arrow, having a rotary motion, formerly used with the crossbow. Cf. Vireton. Gower.",
+      "selectedSource": "webster"
+    },
+    "virtu": {
+      "webster": "A love of the fine arts; a taste for curiosities. J. Spence. An article, or piece, of virtu, an object of art or antiquity; a curiosity, such as those found in museums or private collections. I had thoughts, in my chambers to place it in view, To be shown to my friends as a piece of virt\u00f9. Goldsmith.",
+      "selectedSource": "webster"
+    },
+    "virus": {
+      "webster": "1. (Med.) (a) Contagious or poisonous matter, as of specific ulcers, the bite of snakes, etc.; -- applied to organic poisons. (b) The special contagion, inappreciable to the senses and acting in exceedingly minute quantities, by which a disease is introduced into the organism and maintained there. Note: The specific virus of diseases is now regarded as a microscopic living vegetable organism which multiplies within the body, and, either by its own action or by the associated development of a chemical poison, causes the phenomena of the special disease. 2. Fig.: Any morbid corrupting quality in intellectual or moral conditions; something that poisons the mind or the soul; as, the virus of obscene books.",
+      "wordnet": "(virology) ultramicroscopic infectious agent that replicates itself only within cells of living hosts; many are pathogenic; a piece of nucleic acid (DNA or RNA) wrapped in a thin coat of protein",
+      "selectedSource": "webster"
+    },
+    "vis": {
+      "webster": "1. Force; power. 2. (Law) (a) Physical force. (b) Moral power. Principle of vis viva (Mech.), the principle that the difference between the aggregate work of the accelerating forces of a system and that of the retarding forces is equal to one half the vis viva accumulated or lost in the system while the work is being done.  -- Vis impressa Etym: [L.] (Mech.), force exerted, as in moving a body, or changing the direction of its motion; impressed force.  -- Vis inerti\u00e6. Etym: [L.] (a) The resistance of matter, as when a body at rest is set in motion, or a body in motion is brought to rest, or has its motion changed, either in direction or in velocity. (b) Inertness; inactivity. Vis interti\u00e6 and inertia are not strictly synonymous. The former implies the resistance itself which is given, while the latter implies merely the property by which it is given.  -- Vis mortua Etym: [L.] (Mech.), dead force; force doing no active work, but only producing pressure.  -- Vis vit\u00e6, or Vis vitalis Etym: [L.] (Physiol.), vital force.  -- Vis viva Etym: [L.] (Mech.), living force; the force of a body moving against resistance, or doing work, in distinction from vis mortua, or dead force; the kinetic energy of a moving body; the capacity of a moving body to do work by reason of its being in motion. See Kinetic energy, in the Note under Energy. The term vis viva is not usually understood to include that part of the kinetic energy of the body which is due to the vibrations of its molecules.",
+      "selectedSource": "webster"
+    },
+    "visa": {
+      "webster": "See Vis.\n\nTo indorse, after examination, with the word vis\u00e9, as a passport; to vis\u00e9.",
+      "wordnet": "an endorsement made in a passport that allows the bearer to enter the country issuing it",
+      "selectedSource": "wordnet"
+    },
+    "vise": {
+      "webster": "An instrument consisting of two jaws, closing by a screw, lever, cam, or the like, for holding work, as in filing. [Written also vice.]\n\nAn indorsement made on a passport by the proper authorities of certain countries on the continent of Europe, denoting that it has been examined, and that the person who bears it is permitted to proceed on his journey; a visa.\n\nTo examine and indorse, as a passport; to visa.",
+      "wordnet": "a holding device attached to a workbench; has two jaws to hold workpiece firmly in place",
+      "selectedSource": "webster"
+    },
+    "visit": {
+      "webster": "1. To go or come to see, as for the purpose of friendship, business, curiosity, etc.; to attend; to call upon; as, the physician visits his patient. 2. Specifically: To go or come to see for inspection, examination, correction of abuses, etc.; to examine, to inspect; as, a bishop visits his diocese; a superintendent visits persons or works under his charge. 3. (Script.)  To come to for the purpose of chastising, rewarding, comforting; to come upon with reward or retribution; to appear before or judge; as, to visit in mercy; to visit one in wrath. [God] hath visited and redeemed his people. Like i. 68.\n\nTo make a visit or visits; to maintain visiting relations; to practice calling on others.\n\n1. The act of visiting, or going to see a person or thing; a brief stay of business, friendship, ceremony, curiosity, or the like, usually longer than a call; as, a visit of civility or respect; a visit to Saratoga; the visit of a physician. 2. The act of going to view or inspect; an official or formal inspection; examination; visitation; as, the visit of a trustee or inspector. Right of visit (Internat. Law), the right of visitation. See Visitation, 4.",
+      "wordnet": "the act of going to see some person or place or thing for a short time; \"he dropped by for a visit\"",
+      "selectedSource": "webster"
+    },
+    "vista": {
+      "webster": "A view; especially, a view through or between intervening objects, as trees; a view or prospect through an avenue, or the like; hence, the trees or other objects that form the avenue. The finished garden to the view Its vistas opens, and its alleys green. Thomson. In the groves of their academy, at the end of every vista, you see nothing but the gallows. Burke. The shattered tower which now forms a vista from his window. Sir W. Scott.",
+      "wordnet": "the visual percept of a region; \"the most desirable feature of the park are the beautiful views\"",
+      "selectedSource": "webster"
+    },
+    "vital": {
+      "webster": "1. Belonging or relating to life, either animal or vegetable; as, vital energies; vital functions; vital actions. 2. Contributing to life; necessary to, or supporting, life; as, vital blood. Do the heavens afford him vital food Spenser. And vital virtue infused, and vital warmth. Milton. 3. Containing life; living. \"Spirits that live throughout, vital in every part.\" Milton. 4. Being the seat of life; being that on which life depends; mortal. The dart flew on, and pierced a vital part. Pope. 5. Very necessary; highly important; essential. A competence is vital to content. Young. 6. Capable of living; in a state to live; viable. [R.] Pythagoras and Hippocrates . . . affirm the birth of the seventh month to be vital. Sir T. Browne. Vital air, oxygen gas; -- so called because essential to animal life. [Obs.] -- Vital capacity (Physiol.), the breathing capacity of the lungs; -- expressed by the number of cubic inches of air which can be forcibly exhaled after a full inspiration.  -- Vital force. (Biol.) See under Force. The vital forces, according to Cope, are nerve force (neurism), growth force (bathmism), and thought force (phrenism), all under the direction and control of the vital principle. Apart from the phenomena of consciousness, vital actions no longer need to be considered as of a mysterious and unfathomable character, nor vital force as anything other than a form of physical energy derived from, and convertible into, other well- known forces of nature.  -- Vital functions (Physiol.), those functions or actions of the body on which life is directly dependent, as the circulation of the blood, digestion, etc.  -- Vital principle, an immaterial force, to which the functions peculiar to living beings are ascribed.  -- Vital statistics, statistics respecting the duration of life, and the circumstances affecting its duration.  -- Vital tripod. (Physiol.) See under Tripod.  -- Vital vessels (Bot.), a name for latex tubes, now disused. See Latex.\n\nA vital part; one of the vitals. [R.]",
+      "wordnet": "urgently needed; absolutely necessary; \"a critical element of the plan\"; \"critical medical supplies\"; \"vital for a healthy society\"; \"of vital interest\"",
+      "selectedSource": "webster"
+    },
+    "viva": {
+      "wordnet": "an examination conducted by spoken communication",
+      "selectedSource": "wordnet"
+    },
+    "vive": {
+      "webster": "Long live, that is, success to; as, vive le roi, long live the king; vive la bagatelle, success to trifles or sport.\n\nLively; animated; forcible. [Obs.] Bacon.",
+      "selectedSource": "webster"
+    },
+    "vixen": {
+      "webster": "1. A female fox. [Obs. or Prov. Eng.] 2. A cross, ill-tempered person; -- formerly used of either sex, now only of a woman. Barrow. She was a vixen when she went to school. Shak.",
+      "selectedSource": "webster"
+    },
+    "vocal": {
+      "webster": "1. Of or pertaining to the voice or speech; having voice; endowed with utterance; full of voice, or voices. To hill or valley, fountain, or fresh shade, Made vocal by my song. Milton. 2. Uttered or modulated by the voice; oral; as, vocal melody; vocal prayer. \"Vocal worship.\" Milton. 3. Of or pertaining to a vowel or voice sound; also, 4. (Phon.) (a) Consisting of, or characterized by, voice, or tone produced in the larynx, which may be modified, either by resonance, as in the case of the vowels, or by obstructive action, as in certain consonants, such as v, l, etc., or by both, as in the nasals m, n, ng; sonant; intonated; voiced. See Voice, and Vowel, also Guide to Pronunciation, \u00a7\u00a7 199-202. (b) Of or pertaining to a vowel; having the character of a vowel; vowel. Vocal cords or chords. (Anat.) See Larynx, and the Note under Voice, n., 1.  -- Vocal fremitus Etym: [L. fremitus a dull roaring or murmuring] (Med.), the perceptible vibration of the chest wall, produced by the transmission of the sonorous vibrations during the act of using the voice.  -- Vocal music, music made by the voice, in distinction from instrumental music; hence, music or tunes set to words, to be performed by the human voice.  -- Vocal tube (Anat.), the part of the air passages above the inferior ligaments of the larynx, including the passages through the nose and mouth.\n\n1. (Phon.)  A vocal sound; specifically, a purely vocal element of speech, unmodified except by resonance; a vowel or a diphthong; a tonic element; a tonic; -- distinguished from a subvocal, and a nonvocal. 2. (R. C. Ch.)  A man who has a right to vote in certain elections.",
+      "wordnet": "relating to or designed for or using the singing voice; \"vocal technique\"; \"the vocal repertoire\"; \"organized a vocal group to sing his compositions\"",
+      "selectedSource": "webster"
+    },
+    "voice": {
+      "webster": "1. Sound uttered by the mouth, especially that uttered by human beings in speech or song; sound thus uttered considered as possessing some special quality or character; as, the human voice; a pleasant voice; a low voice. He with a manly voice saith his message. Chaucer. Her voice was ever soft, Gentle, and low; an excellent thing in woman. Shak. Thy voice is music. Shak. Join thy voice unto the angel choir. Milton. 2. (Phon.)  Sound of the kind or quality heard in speech or song in the consonants b, v, d, etc., and in the vowels; sonant, or intonated, utterance; tone; -- distinguished from mere breath sound as heard in f, s, sh, etc., and also whisper. Note: Voice, in this sense, is produced by vibration of the so-called vocal cords in the larynx (see Illust. of Larynx) which act upon the air, not in the manner of the strings of a stringed instrument, but as a pair of membranous tongues, or reeds, which, being continually forced apart by the outgoing current of breath, and continually brought together again by their own elasticity and muscular tension, break the breath current into a series of puffs, or pulses, sufficiently rapid to cause the sensation of tone. The power, or loudness, of such a tone depends on the force of the separate pulses, and this is determined by the pressure of the expired air, together with the resistance on the part of the vocal cords which is continually overcome. Its pitch depends on the number of a\u00ebrial pulses within a given time, that is, on the rapidity of their succession. See Guide to Pronunciation, \u00a7\u00a7 5, 146, 155. 3. The tone or sound emitted by anything. After the fire a still small voice. 1 Kings xix. 12. Canst thou thunder with a voice like him Job xl. 9. The floods have lifted up their voice. Ps. xciii. 3. O Marcus, I am warm'd; my heart Leaps at the trumpet's voice. Addison. 4. The faculty or power of utterance; as, to cultivate the voice. 5. Language; words; speech; expression; signification of feeling or opinion. I desire to be present with you now, and to change my voice; for I stand in doubt of you. Gal. iv. 20. My voice is in my sword. Shak. Let us call on God in the voice of his church. Bp. Fell. 6. Opinion or choice expressed; judgment; a vote. Sic. How now, my masters! have you chose this man 1 Cit. He has our voices, sir. Shak. Some laws ordain, and some attend the choice Of holy senates, and elect by voice. Dryden. 7. Command; precept; -- now chiefly used in scriptural language. So shall ye perish; because ye would not be obedient unto the voice of the Lord your God. Deut. viii. 20. 8. One who speaks; a speaker. \"A potent voice of Parliament.\" Tennyson. 9. (Gram.)  A particular mode of inflecting or conjugating verbs, or a particular form of a verb, by means of which is indicated the relation of the subject of the verb to the action which the verb expresses. Active voice (Gram.), that form of the verb by which its subject is represented as the agent or doer of the action expressed by it.  -- Chest voice (Phon.), a kind of voice of a medium or low pitch and of a sonorous quality ascribed to resonance in the chest, or thorax; voice of the thick register. It is produced by vibration of the vocal cords through their entire width and thickness, and with convex surfaces presented to each other.  -- Head voice (Phon.), a kind of voice of high pitch and of a thin quality ascribed to resonance in the head; voice of the thin register; falsetto. In producing it, the vibration of the cords is limited to their thin edges in the upper part, which are then presented to each other.  -- Middle voice (Gram.), that form of the verb by which its subject is represented as both the agent, or doer, and the object of the action, that is, as performing some act to or upon himself, or for his own advantage.  -- Passive voice. (Gram.) See under Passive, a.  -- Voice glide (Pron.), the brief and obscure neutral vowel sound that sometimes occurs between two consonants in an unaccented syllable (represented by the apostrophe), as in able (a\"b'l). See Glide, n., 2.  -- Voice stop. See Voiced stop, under Voiced, a.  -- With one voice, unanimously. \"All with one voice . . . cried out, Great is Diana of the Ephesians.\" Acts xix. 34.\n\n1. To give utterance or expression to; to utter; to publish; to announce; to divulge; as, to voice the sentiments of the nation. \"Rather assume thy right in silence and . . . then voice it with claims and challenges.\" Bacon. It was voiced that the king purposed to put to death Edward Plantagenet. Bacon. 2. (Phon.)  To utter with sonant or vocal tone; to pronounce with a narrowed glottis and rapid vibrations of the vocal cords; to speak above a whisper. 3. To fit for producing the proper sounds; to regulate the tone of; as, to voice the pipes of an organ. 4. To vote; to elect; to appoint. [Obs.] Shak.\n\nTo clamor; to cry out. [Obs.] South.",
+      "wordnet": "the distinctive quality or pitch or condition of a person's speech; \"A shrill voice sounded behind us\"",
+      "selectedSource": "webster"
+    },
+    "voiced": {
+      "webster": "1. Furnished with a voice; expressed by the voice. 2. (Phon.)  Uttered with voice; pronounced with vibrations of the vocal cords; sonant; -- said of a sound uttered with the glottis narrowed. Voiced stop, Voice stop (Phon.), a stopped consonant made with tone from the larynx while the mouth organs are closed at some point; a sonant mute, as b, d, g hard.",
+      "wordnet": "produced with vibration of the vocal cords; \"a frequently voiced opinion\"; \"voiced consonants such as `b' and `g' and `z'\"",
+      "selectedSource": "wordnet"
+    },
+    "void": {
+      "webster": "1. Containing nothing; empty; vacant; not occupied; not filled. The earth was without form, and void. Gen. i. 2. I 'll get me to a place more void. Shak. I 'll chain him in my study, that, at void hours, I may run over the story of his country. Massinger. 2. Having no incumbent; unoccupied; -- said of offices and the like. Divers great offices that had been long void. Camden. 3. Being without; destitute; free; wanting; devoid; as, void of learning, or of common use. Milton. A conscience void of offense toward God. Acts xxiv. 16. He that is void of wisdom despiseth his neighbor. Prov. xi. 12. 4. Not producing any effect; ineffectual; vain. [My word] shall not return to me void, but it shall accomplish that which I please. Isa. lv. 11. I will make void the counsel of Judah. Jer. xix. 7. 5. Containing no immaterial quality; destitute of mind or soul. \"Idol, void and vain.\" Pope. 6. (Law)  Of no legal force or effect, incapable of confirmation or ratification; null. Cf. Voidable, 2. Void space (Physics), a vacuum. Syn.  -- Empty; vacant; devoid; wanting; unfurnished; unsupplied; unoccupied.\n\nAn empty space; a vacuum. Pride, where wit fails, steps in to our defense, And fills up all the mighty void of sense. Pope.\n\n1. To remove the contents of; to make or leave vacant or empty; to quit; to leave; as, to void a table. Void anon her place. Chaucer. If they will fight with us, bid them come down, Or void the field. Shak. 2. To throw or send out; to evacuate; to emit; to discharge; as, to void excrements. A watchful application of mind in voiding prejudices. Barrow. With shovel, like a fury, voided out The earth and scattered bones. J. Webster. 3. To render void; to make to be of no validity or effect; to vacate; to annul; to nullify. After they had voided the obligation of the oath he had taken. Bp. Burnet. It was become a practice . . . to void the security that was at any time given for money so borrowed. Clarendon.\n\nTo be emitted or evacuated. Wiseman.",
+      "wordnet": "lacking any legal or binding force; \"null and void\"",
+      "selectedSource": "webster"
+    },
+    "voided": {
+      "webster": "1. Emptied; evacuated. 2. Annulled; invalidated. 3. (Her.)  Having the inner part cut away, or left vacant, a narrow border being left at the sides, the tincture of the field being seen in the vacant space; -- said of a charge.",
+      "selectedSource": "webster"
+    },
+    "voile": {
+      "wordnet": "a light semitransparent fabric",
+      "selectedSource": "wordnet"
+    },
+    "volar": {
+      "webster": "Of or pertaining to the palm of the hand or the sole of the foot.",
+      "wordnet": "relating to the palm of the hand or the sole of the foot; \"the volar surface\"; \"the palmar muscle\"",
+      "selectedSource": "webster"
+    },
+    "vole": {
+      "webster": "A deal at cards that draws all the tricks. Swift.\n\nTo win all the tricks by a vole. Pope.\n\nAny one of numerous species of micelike rodents belonging to Arvicola and allied genera of the subfamily Arvicolin\u00e6. They have a thick head, short ears, and a short hairy tail. Note: The water vole, or water rat, of Europe (Arvicola amphibius) is a common large aquatic species. The short-tailed field vole (A. agrestis) of Northern and Central Europe, and Asia, the Southern field vole (A. arvalis), and the Siberian root vole (A. oeconomus), are important European species. The common species of the Eastern United States (A. riparius) (called also meadow mouse) and the prairie mouse (A. austerus) are abundant, and often injurious to vegetation. Other species are found in Canada.",
+      "wordnet": "any of various small mouselike rodents of the family Cricetidae (especially of genus Microtus) having a stout short-tailed body and inconspicuous ears and inhabiting fields or meadows",
+      "selectedSource": "webster"
+    },
+    "volt": {
+      "webster": "1. (Man.)  A circular tread; a gait by which a horse going sideways round a center makes two concentric tracks. 2. (Fencing)  A sudden movement to avoid a thrust.\n\nThe unit of electro-motive force; -- defined by the International Electrical Congress in 1893 and by United States Statute as, that electro-motive force which steadily applied to a conductor whose resistance is one ohm will produce a current of one amp\u00e8re. It is practically equivalent to",
+      "wordnet": "a unit of potential equal to the potential difference between two points on a conductor carrying a current of 1 ampere when the power dissipated between the two points is 1 watt; equivalent to the potential difference across a resistance of 1 ohm when 1 ampere of current flows through it",
+      "selectedSource": "webster"
+    },
+    "volta": {
+      "webster": "A turning; a time; -- chiefly used in phrases signifying that the part is to be repeated one, two, or more times; as, una volta, once. Seconda volta, second time, points to certain modifications in the close of a repeated strain.",
+      "selectedSource": "webster"
+    },
+    "volute": {
+      "webster": "1. (Arch.)  A spiral scroll which forms the chief feature of the Ionic capital, and which, on a much smaller scale, is a feature in the Corinthian and Composite capitals. See Illust. of Capital, also Helix, and Stale. 2. (Zo\u00f6l.)  A spiral turn, as in certain shells. 3. (Zo\u00f6l.)  Any voluta. Volute spiring, a spring formed of a spiral scroll of plate, rod, or wire, extended or extensible in the direction of the axis of the coil, in which direction its elastic force is exerted and employed.",
+      "wordnet": "in the shape of a coil",
+      "selectedSource": "webster"
+    },
+    "vomit": {
+      "webster": "To eject the contents of the stomach by the mouth; to puke; to spew.\n\n1. To throw up; to eject from the stomach through the mouth; to disgorge; to puke; to spew out; -- often followed by up or out. The fish . . . vomited out Jonah upon the dry land. Jonah ii. 10. 2. Hence, to eject from any hollow place; to belch forth; to emit; to throw forth; as, volcanoes vomit flame, stones, etc. Like the sons of Vulcan, vomit smoke. Milton.\n\n1. Matter that is vomited; esp., matter ejected from the stomach through the mouth. Like vomit from his yawning entrails poured. Sandys. 2. (Med.)  That which excites vomiting; an emetic. He gives your Hollander a vomit. Shak. Black vomit. (Med.) See in the Vocabulary.  -- Vomit nut, nux vomica.",
+      "wordnet": "eject the contents of the stomach through the mouth; \"After drinking too much, the students vomited\"; \"He purged continuously\"; \"The patient regurgitated the food we gave him last night\"",
+      "selectedSource": "webster"
+    },
+    "vote": {
+      "webster": "1. An ardent wish or desire; a vow; a prayer. [Obs.] Massinger. 2. A wish, choice, or opinion, of a person or a body of persons, expressed in some received and authorized way; the expression of a wish, desire, will, preference, or choice, in regard to any measure proposed, in which the person voting has an interest in common with others, either in electing a person to office, or in passing laws, rules, regulations, etc.; suffrage. 3. That by means of which will or preference is expressed in elections, or in deciding propositions; voice; a ballot; a ticket; as, a written vote. The freeman casting with unpurchased hand The vote that shakes the turrets of the land. Holmes. 4. Expression of judgment or will by a majority; legal decision by some expression of the minds of a number; as, the vote was unanimous; a vote of confidence. 5. Votes, collectively; as, the Tory vote; the labor vote. Casting vote, Cumulative vote, etc. See under Casting, Cumulative, etc.\n\nTo express or signify the mind, will, or preference, either viva voce, or by ballot, or by other authorized means, as in electing persons to office, in passing laws, regulations, etc., or in deciding on any proposition in which one has an interest with others. The vote for a duelist is to assist in the prostration of justice, and, indirectly, to encourage the crime. L. Beecher. To vote on large principles, to vote honestly, requires a great amount of information. F. W. Robertson.\n\n1. To choose by suffrage; to elecas, to vote a candidate into office. 2. To enact, establish, grant, determine, etc., by a formal vote; as, the legislature voted the resolution. Parliament voted them one hundred thousand pounds. Swift. 3. To declare by general opinion or common consent, as if by a vote; as, he was voted a bore. [Colloq.] 4. To condemn; to devote; to doom. [Obs.] Glanvill.",
+      "wordnet": "a choice that is made by counting the number of people in favor of each alternative; \"there were only 17 votes in favor of the motion\"; \"they allowed just one vote per person\"",
+      "selectedSource": "webster"
+    },
+    "voter": {
+      "webster": "One who votes; one who has a legal right to vote, or give his suffrage; an elector; a suffragist; as, as, an independent voter.",
+      "wordnet": "a citizen who has a legal right to vote",
+      "selectedSource": "webster"
+    },
+    "voting": {
+      "webster": "a. & n. from Vote, v. Voting paper, a form of ballot containing the names of more candidates than there are offices to be filled, the voter making a mark against the preferred names. [Eng.]",
+      "wordnet": "a choice that is made by counting the number of people in favor of each alternative; \"there were only 17 votes in favor of the motion\"; \"they allowed just one vote per person\"",
+      "selectedSource": "wordnet"
+    },
+    "vouch": {
+      "webster": "1. To call; to summon. [Obs.] [They] vouch (as I might say) to their aid the authority of the writers. Sir T. Elyot. 2. To call upon to witness; to obtest. Vouch the silent stars and conscious moon. Dryden. 3. To warrant; to maintain by affirmations; to attest; to affirm; to avouch. They made him ashamed to vouch the truth of the relation, and afterwards to credit it. Atterbury. 4. To back; to support; to confirm; to establish. Me damp horror chilled At such bold words vouched with a deed so bold. Milton. 5. (Law)  To call into court to warrant and defend, or to make good a warranty of title. He vouches the tenant in tail, who vouches over the common vouchee. Blackstone. Syn.  -- To obtest; declare; affirm; attest; warrant; confirm; asseverate; aver; protest; assure.\n\n1. To bear witness; to give testimony or full attestation. He will not believe her until the elector of Hanover shall vouch for the truth of what she has . . . affirmed. Swift. 2. To assert; to aver; to declare. Shak.\n\nWarrant; attestation. [Obs.] The vouch of very malice itself. Shak.",
+      "wordnet": "give personal assurance; guarantee; \"Will he vouch for me?\"",
+      "selectedSource": "webster"
+    },
+    "vow": {
+      "webster": "1. A solemn promise made to God, or to some deity; an act by which one consecrates or devotes himself, absolutely or conditionally, wholly or in part, for a longer or shorter time, to some act, service, or condition; a devotion of one's possessions; as, a baptismal vow; a vow of poverty. \"Nothing . . . that may . . . stain my vow of Nazarite.\" Milton. I pray thee, let me go and pay my vow. 2 Sam. xv. 7. I am combined by a sacred vow. Shak. 2. Specifically, a promise of fidelity; a pledge of love or affection; as, the marriage vow. Knights of love, who never broke their vow; Firm to their plighted faith. Dryden.\n\n1. To give, consecrate, or dedicate to God, or to some deity, by a solemn promise; to devote; to promise solemnly. \"When thou vowest a vow unto God, defer not to pay it.\" Eccl. v. 4. [Men] that vow a long and weary pilgrimage. Shak. 2. To assert solemnly; to asseverate.\n\nTo make a vow, or solemn promise. Better is it that thou shouldest not vow, than that thou shouldest vow and not pay. Eccl. v. 5.",
+      "wordnet": "a solemn pledge (to oneself or to another or to a deity) to do something or to behave in a certain manner; \"they took vows of poverty\"",
+      "selectedSource": "webster"
+    },
+    "vowel": {
+      "webster": "A vocal, or sometimes a whispered, sound modified by resonance in the oral passage, the peculiar resonance in each case giving to each several vowel its distinctive character or quality as a sound of speech; -- distinguished from a consonant in that the latter, whether made with or without vocality, derives its character in every case from some kind of obstructive action by the mouth organs. Also, a letter or character which represents such a sound. See Guide to Pronunciation, \u00a7\u00a7 5, 146-149. Note: In the English language, the written vowels are a, e, i, o, u, and sometimes w and y. The spoken vowels are much more numerous. Close vowel. See under Close, a.  -- Vowel point. See under Point, n.\n\nOf or pertaining to a vowel; vocal.",
+      "wordnet": "a speech sound made with the vocal tract open",
+      "selectedSource": "webster"
+    },
+    "vying": {
+      "webster": "a. & n. from Vie.  -- Vy\"ing*ly, adv.",
+      "selectedSource": "webster"
+    }
   }
 }

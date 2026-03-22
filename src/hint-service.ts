@@ -3,6 +3,7 @@ import {
   type DictionaryEntry,
   type DictionaryLookup,
   type DictionaryHintRelatedForms,
+  getDictionaryEntryByCanonical,
 } from './dictionary.js';
 
 const HINT_TARGET_LENGTH = 60;
@@ -254,6 +255,37 @@ function scoreHintExcerpt(excerpt: HintExcerpt): number {
   return score;
 }
 
+function passesModernHintQualityCheck(excerpt: HintExcerpt): boolean {
+  if (isRejectedHint(excerpt)) {
+    return false;
+  }
+  if (excerpt.truncatedStart) {
+    return false;
+  }
+  return scoreHintExcerpt(excerpt) >= -8;
+}
+
+function chooseHintExcerpt(
+  entry: DictionaryEntry,
+  wordsToAvoid: string[],
+  preferModernHints: boolean
+): HintExcerpt | null {
+  const selectedExcerpt = sanitizeHintExcerpt(entry.definition, wordsToAvoid);
+  if (!preferModernHints) {
+    return isRejectedHint(selectedExcerpt) ? null : selectedExcerpt;
+  }
+
+  const wordnetDefinition = entry.definitions.wordnet;
+  if (wordnetDefinition) {
+    const modernExcerpt = sanitizeHintExcerpt(wordnetDefinition, wordsToAvoid);
+    if (passesModernHintQualityCheck(modernExcerpt)) {
+      return modernExcerpt;
+    }
+  }
+
+  return isRejectedHint(selectedExcerpt) ? null : selectedExcerpt;
+}
+
 function sanitizeHintExcerptCore(
   definition: string,
   wordsToAvoid: string[]
@@ -470,12 +502,13 @@ export async function getUnguessedWordHint(
   lookup: DictionaryLookup,
   hintRelatedForms: DictionaryHintRelatedForms,
   loadEntry: (word: string) => Promise<DictionaryEntry | null>,
-  loadLetterFile: (letter: string) => Promise<DictionaryLetterFile>
+  loadLetterFile: (letter: string) => Promise<DictionaryLetterFile>,
+  preferModernHints = false
 ): Promise<HintResult | null> {
   if (currentHintCanonical && canonicalHasUnsolvedWords(level, solvedWords, lookup, currentHintCanonical)) {
     const letterData = await loadLetterFile(currentHintCanonical[0]);
-    const definition = letterData.definitions[currentHintCanonical];
-    if (definition) {
+    const entry = getDictionaryEntryByCanonical(letterData, currentHintCanonical);
+    if (entry) {
       const wordsToAvoid = getWordsToAvoidInHint(
         currentHintCanonical,
         lookup,
@@ -483,8 +516,8 @@ export async function getUnguessedWordHint(
         solvedWords,
         hintRelatedForms
       );
-      const excerpt = sanitizeHintExcerpt(definition, wordsToAvoid);
-      if (!isRejectedHint(excerpt)) {
+      const excerpt = chooseHintExcerpt(entry, wordsToAvoid, preferModernHints);
+      if (excerpt) {
         return { canonical: currentHintCanonical, excerpt };
       }
     }
@@ -511,8 +544,8 @@ export async function getUnguessedWordHint(
       solvedWords,
       hintRelatedForms
     );
-    const excerpt = sanitizeHintExcerpt(entry.definition, wordsToAvoid);
-    if (!isRejectedHint(excerpt)) {
+    const excerpt = chooseHintExcerpt(entry, wordsToAvoid, preferModernHints);
+    if (excerpt) {
       return { canonical: entry.canonical, excerpt };
     }
   }

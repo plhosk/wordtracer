@@ -15,6 +15,8 @@
     "fallbackMatchCount": 1240,
     "primaryDefinitionCount": 7569,
     "fallbackDefinitionSelectedCount": 321,
+    "websterDefinitionAvailableCount": 6821,
+    "wordnetDefinitionAvailableCount": 6071,
     "lowQualityReplacementCount": 223,
     "badStartReplacementCount": 82,
     "scoreUpgradeReplacementCount": 98,

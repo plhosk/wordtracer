@@ -1,8 +1,21 @@
-import { type DictionaryLetterFile } from './types.js';
+import {
+  type DictionaryLetterFile,
+  type DictionaryDefinitionSource,
+  type DictionarySourceDefinitions,
+} from './types.js';
+
+export type { DictionaryDefinitionSource } from './types.js';
+
+export interface DictionaryEntryDefinitions {
+  webster: string | null;
+  wordnet: string | null;
+}
 
 export interface DictionaryEntry {
   canonical: string;
   definition: string;
+  selectedSource: DictionaryDefinitionSource | null;
+  definitions: DictionaryEntryDefinitions;
 }
 
 export interface DictionaryLookup {
@@ -32,9 +45,45 @@ export async function getDictionaryEntry(
   if (!canonical) return null;
 
   const letterData = await loadLetterFile(canonical[0]);
-  const definition = letterData.definitions[canonical];
-  if (typeof definition !== 'string' || definition.trim().length === 0) {
+  return getDictionaryEntryByCanonical(letterData, canonical);
+}
+
+function cleanDefinition(definition: unknown): string | null {
+  if (typeof definition !== 'string') {
     return null;
   }
-  return { canonical, definition };
+  const trimmed = definition.trim();
+  return trimmed.length > 0 ? trimmed : null;
+}
+
+function normalizeSelectedSource(source: unknown): DictionaryDefinitionSource | null {
+  return source === 'webster' || source === 'wordnet' ? source : null;
+}
+
+function buildDefinitionsBySource(
+  sourceDefinitions: DictionarySourceDefinitions | undefined
+): DictionaryEntryDefinitions {
+  const webster = cleanDefinition(sourceDefinitions?.webster);
+  const wordnet = cleanDefinition(sourceDefinitions?.wordnet);
+  return { webster, wordnet };
+}
+
+export function getDictionaryEntryByCanonical(
+  letterData: DictionaryLetterFile,
+  canonical: string
+): DictionaryEntry | null {
+  const definition = letterData.definitions[canonical];
+  const selectedDefinition = cleanDefinition(definition);
+  if (!selectedDefinition) {
+    return null;
+  }
+
+  const sourceDefinitions = letterData.sourceDefinitions?.[canonical];
+  const selectedSource = normalizeSelectedSource(sourceDefinitions?.selectedSource);
+  return {
+    canonical,
+    definition: selectedDefinition,
+    selectedSource,
+    definitions: buildDefinitionsBySource(sourceDefinitions),
+  };
 }

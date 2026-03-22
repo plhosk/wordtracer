@@ -42,6 +42,7 @@ export interface SavedSettings {
   autoAdvance: boolean;
   theme: 'dark' | 'light';
   alwaysShowHint: boolean;
+  preferModernHints: boolean;
   disableSwapAnimation: boolean;
 }
 
@@ -103,6 +104,7 @@ export const DEFAULT_SETTINGS: SavedSettings = {
   autoAdvance: false,
   theme: 'dark',
   alwaysShowHint: false,
+  preferModernHints: false,
   disableSwapAnimation: false,
 };
 

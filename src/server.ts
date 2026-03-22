@@ -30,6 +30,7 @@ import {
 import {
   hasDictionaryEntry as sharedHasDictionaryEntry,
   getDictionaryEntry as sharedGetDictionaryEntry,
+  type DictionaryEntry,
   type DictionaryLookup,
   type DictionaryHintRelatedForms,
 } from './dictionary.js';
@@ -182,7 +183,7 @@ async function loadDictionaryLetter(letter: string): Promise<DictionaryLetterFil
   return data;
 }
 
-async function getDictionaryEntry(word: string): Promise<{ canonical: string; definition: string } | null> {
+async function getDictionaryEntry(word: string): Promise<DictionaryEntry | null> {
   return sharedGetDictionaryEntry(dictionaryLookup, loadDictionaryLetter, word);
 }
 
@@ -904,6 +905,8 @@ async function handleGetDictionaryEntry(
   sendJson(res, 200, {
     canonical: entry.canonical,
     definition: entry.definition,
+    selectedSource: entry.selectedSource,
+    definitions: entry.definitions,
   });
 }
 

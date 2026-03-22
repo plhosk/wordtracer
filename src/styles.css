@@ -39,7 +39,7 @@
   --dictionary-disabled-tone: #2a3d55;
   --wheel-size: clamp(130px, min(54vw, 54vh), 238px);
   --token-size: calc(var(--wheel-size) * 42 / 216);
-  --token-swap-ms: 80ms;
+  --token-swap-ms: 100ms;
   --feedback-font-size: calc(1.08rem * var(--compact-scale));
   --feedback-line-height: calc(1.08rem * var(--compact-scale) * 1.2);
   --feedback-min-height: calc(1.4rem * var(--compact-scale));
@@ -722,6 +722,7 @@ button:disabled {
   font-size: calc(0.96rem * var(--compact-scale));
   border: 2px solid var(--swap-btn-border);
   color: var(--swap-btn-border);
+  touch-action: manipulation;
   transition: none;
 }
 
