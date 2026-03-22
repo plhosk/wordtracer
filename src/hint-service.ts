@@ -183,7 +183,78 @@ function maskSpoilerWords(text: string, wordsToAvoid: string[]): string {
   return output;
 }
 
-export function sanitizeHintExcerpt(
+function getNumberedSectionStarts(text: string): number[] {
+  const starts: number[] = [];
+  const pattern = /(?:^|\n)(\d+\.\s)/g;
+  let match;
+
+  while ((match = pattern.exec(text)) !== null) {
+    const start = match.index + (match[0].length - match[1].length);
+    starts.push(start);
+    if (pattern.lastIndex <= match.index) {
+      pattern.lastIndex = match.index + 1;
+    }
+  }
+
+  return starts;
+}
+
+function normalizeHintText(text: string): string {
+  return text.replace(/^\d+\.\s*/, '').trim();
+}
+
+function isCrossReferenceHint(text: string): boolean {
+  const normalized = normalizeHintText(text).toLowerCase();
+  return /^(see|same as)\b/.test(normalized)
+    || /^(l\.\s*pl\.|imp\.|p\.\s*p\.|imp\.\s*&\s*p\.\s*p\.)\s*of\b/.test(normalized);
+}
+
+function isRejectedHint(excerpt: HintExcerpt): boolean {
+  const text = excerpt.text.trim();
+  if (!text) {
+    return true;
+  }
+
+  if (isCrossReferenceHint(text)) {
+    return true;
+  }
+
+  if (/\[redacted\]/i.test(text)) {
+    const remainingLetters = text
+      .replace(/\[redacted\]/gi, ' ')
+      .replace(/[^a-z]/gi, '');
+    if (remainingLetters.length < 4) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function scoreHintExcerpt(excerpt: HintExcerpt): number {
+  const text = excerpt.text.trim();
+  if (text.length === 0) {
+    return -1000;
+  }
+
+  let score = 0;
+  score += Math.min(text.length, 80) / 10;
+
+  if (excerpt.truncatedStart) score -= 8;
+  if (excerpt.truncatedEnd) score -= 1;
+  if (isCrossReferenceHint(text)) score -= 40;
+  if (/\[redacted\]/i.test(text)) score -= 25;
+  if (/\[(obs\.|r\.|scot\.|n\. of eng)/i.test(text)) score -= 20;
+
+  const normalized = normalizeHintText(text);
+  if (/^[a-z(]/.test(normalized) || /^or\b/i.test(normalized)) score -= 6;
+  if (/"\s*$/.test(text) || /\b(as|a|an|the|of|to|and|or)\s*$/i.test(text)) score -= 8;
+  if (/[.!?;)]$/.test(text)) score += 2;
+
+  return score;
+}
+
+function sanitizeHintExcerptCore(
   definition: string,
   wordsToAvoid: string[]
 ): HintExcerpt {
@@ -319,6 +390,43 @@ export function sanitizeHintExcerpt(
   return { text: excerpt, truncatedStart, truncatedEnd };
 }
 
+export function sanitizeHintExcerpt(
+  definition: string,
+  wordsToAvoid: string[]
+): HintExcerpt {
+  let def = definition;
+  const listSearchLimit = HINT_TARGET_LENGTH * 4;
+
+  const listMatch = def.slice(0, listSearchLimit).match(/(?:^|\n)(1\. )/);
+  if (listMatch) {
+    const listStart = listMatch.index! + (listMatch[0].length - listMatch[1].length);
+    def = def.slice(listStart);
+  }
+
+  const numberedStarts = getNumberedSectionStarts(def)
+    .filter((start) => start > 0)
+    .slice(0, 8);
+  const candidateStarts = [0, ...numberedStarts];
+
+  let bestExcerpt = sanitizeHintExcerptCore(def, wordsToAvoid);
+  let bestScore = scoreHintExcerpt(bestExcerpt);
+
+  for (const start of candidateStarts) {
+    if (start === 0) {
+      continue;
+    }
+
+    const excerpt = sanitizeHintExcerptCore(def.slice(start), wordsToAvoid);
+    const score = scoreHintExcerpt(excerpt);
+    if (score > bestScore) {
+      bestExcerpt = excerpt;
+      bestScore = score;
+    }
+  }
+
+  return bestExcerpt;
+}
+
 export function buildExcerpt(
   definition: string,
   startIndex: number,
@@ -376,7 +484,9 @@ export async function getUnguessedWordHint(
         hintRelatedForms
       );
       const excerpt = sanitizeHintExcerpt(definition, wordsToAvoid);
-      return { canonical: currentHintCanonical, excerpt };
+      if (!isRejectedHint(excerpt)) {
+        return { canonical: currentHintCanonical, excerpt };
+      }
     }
   }
 
@@ -402,7 +512,9 @@ export async function getUnguessedWordHint(
       hintRelatedForms
     );
     const excerpt = sanitizeHintExcerpt(entry.definition, wordsToAvoid);
-    return { canonical: entry.canonical, excerpt };
+    if (!isRejectedHint(excerpt)) {
+      return { canonical: entry.canonical, excerpt };
+    }
   }
 
   return null;

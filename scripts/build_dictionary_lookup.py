@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import argparse
+import re
+from dataclasses import dataclass
 from pathlib import Path
 
 from common import load_json, normalize_word, now_iso, project_path, save_json
@@ -238,6 +240,372 @@ COMMON_SUFFIXES = (
     "s",
 )
 
+HINT_TARGET_LENGTH = 60
+HINT_REASON_CROSSREF = "crossref"
+HINT_REASON_REDACTED_ONLY = "redacted_only"
+HINT_REASON_BAD_START = "bad_start"
+
+
+@dataclass(frozen=True)
+class HintPreview:
+    text: str
+    start_index: int
+    truncated_start: bool
+    truncated_end: bool
+    definition: str
+
+
+def unique_hint_words(words: list[str]) -> list[str]:
+    seen: set[str] = set()
+    ordered: list[str] = []
+    for raw in words:
+        normalized = normalize_word(raw)
+        if not normalized or len(normalized) < 2 or normalized in seen:
+            continue
+        seen.add(normalized)
+        ordered.append(normalized)
+    return ordered
+
+
+def find_spoiler_with_boundary(
+    text: str,
+    words_to_avoid: list[str],
+    start_pos: int,
+    end_pos: int,
+) -> tuple[int, int] | None:
+    earliest: tuple[int, int] | None = None
+    for word in unique_hint_words(words_to_avoid):
+        pattern = re.compile(
+            rf"(^|[^a-z])({re.escape(word)})(?=$|[^a-z])",
+            flags=re.IGNORECASE,
+        )
+        for match in pattern.finditer(text):
+            start = match.start(2)
+            if start < start_pos or start >= end_pos:
+                continue
+            length = len(match.group(2))
+            if earliest is None or start < earliest[0]:
+                earliest = (start, length)
+    return earliest
+
+
+def find_first_spoiler(text: str, words_to_avoid: list[str]) -> tuple[int, int] | None:
+    return find_spoiler_with_boundary(text, words_to_avoid, 0, len(text))
+
+
+def find_all_spoilers(text: str, words_to_avoid: list[str]) -> list[tuple[int, int]]:
+    ranges: list[tuple[int, int]] = []
+    for word in unique_hint_words(words_to_avoid):
+        pattern = re.compile(
+            rf"(^|[^a-z])({re.escape(word)})(?=$|[^a-z])",
+            flags=re.IGNORECASE,
+        )
+        for match in pattern.finditer(text):
+            start = match.start(2)
+            end = start + len(match.group(2))
+            ranges.append((start, end))
+    return ranges
+
+
+def mask_spoiler_words(text: str, words_to_avoid: list[str]) -> str:
+    output = text
+    replacement = "[redacted]"
+    for word in sorted(unique_hint_words(words_to_avoid), key=len, reverse=True):
+        pattern = re.compile(
+            rf"(^|[^a-z])({re.escape(word)})(?=$|[^a-z])",
+            flags=re.IGNORECASE,
+        )
+        output = pattern.sub(lambda match: f"{match.group(1)}{replacement}", output)
+    return output
+
+
+def find_definition_boundary(definition: str, start_pos: int, end_pos: int) -> int:
+    for match in re.finditer(r"\d+\.\s", definition[start_pos:end_pos]):
+        return start_pos + match.start()
+    return -1
+
+
+def find_double_line_break(
+    definition: str,
+    start_pos: int,
+    search_limit: int,
+    no_repeat_limit: int,
+) -> int:
+    search_end = min(start_pos + search_limit, len(definition))
+    double_break = definition.find("\n\n", start_pos)
+    if double_break == -1 or double_break >= search_end:
+        return -1
+    after_break = double_break + 2
+    repeat_end = min(after_break + no_repeat_limit, len(definition))
+    next_break = definition.find("\n\n", after_break)
+    if next_break != -1 and next_break < repeat_end:
+        return -1
+    return after_break
+
+
+def strip_mid_sentence_prefix(excerpt: str) -> str:
+    numbered_match = re.match(r"^(\d+\.\s)", excerpt)
+    if numbered_match:
+        prefix = numbered_match.group(1)
+        body = re.sub(r"^[,;:\-.–—\s]+", "", excerpt[len(prefix) :])
+        return f"{prefix}{body}"
+    return re.sub(r"^[,;:\-.–—\s]+", "", excerpt)
+
+
+def build_excerpt(
+    definition: str,
+    start_index: int,
+    target_length: int,
+    truncated_start: bool,
+) -> HintPreview:
+    excerpt = definition[start_index:]
+    truncated_end = False
+
+    if truncated_start:
+        excerpt = strip_mid_sentence_prefix(excerpt)
+
+    if len(excerpt) > target_length:
+        last_space = excerpt.rfind(" ", 0, target_length + 1)
+        if last_space > target_length / 2:
+            excerpt = excerpt[:last_space]
+        else:
+            excerpt = excerpt[:target_length]
+        truncated_end = True
+
+    return HintPreview(
+        text=excerpt.strip(),
+        start_index=start_index,
+        truncated_start=truncated_start,
+        truncated_end=truncated_end,
+        definition=definition,
+    )
+
+
+def build_hint_preview_meta(definition: str, words_to_avoid: list[str]) -> HintPreview:
+    text = definition
+    target_length = HINT_TARGET_LENGTH
+    list_search_limit = target_length * 4
+
+    list_match = re.search(r"(?:^|\n)(1\. )", text[:list_search_limit])
+    if list_match:
+        list_start = list_match.start(1)
+        text = text[list_start:]
+
+    first_spoiler = find_first_spoiler(text, words_to_avoid)
+    has_spoilers = first_spoiler is not None
+
+    if len(text) <= target_length:
+        if not has_spoilers:
+            return HintPreview(
+                text=text.strip(),
+                start_index=0,
+                truncated_start=False,
+                truncated_end=False,
+                definition=text,
+            )
+        masked = mask_spoiler_words(text, words_to_avoid).strip()
+        return HintPreview(
+            text=masked,
+            start_index=0,
+            truncated_start=False,
+            truncated_end=False,
+            definition=text,
+        )
+
+    if not has_spoilers:
+        return build_excerpt(text, 0, target_length, False)
+
+    start_index = 0
+    iterations = 0
+    max_iterations = 100
+
+    while start_index <= len(text) - target_length and iterations < max_iterations:
+        iterations += 1
+
+        spoiler = find_spoiler_with_boundary(
+            text,
+            words_to_avoid,
+            start_index,
+            start_index + target_length,
+        )
+        if spoiler is not None:
+            start_index = spoiler[0] + spoiler[1] + 1
+            continue
+
+        if start_index > 0:
+            first_spoiler_pos = find_first_spoiler(text, words_to_avoid)
+            first_spoiler_start = (
+                first_spoiler_pos[0] if first_spoiler_pos else len(text)
+            )
+            text_before_spoiler = text[:first_spoiler_start].strip()
+            if first_spoiler_start >= target_length / 2:
+                return HintPreview(
+                    text=text_before_spoiler,
+                    start_index=0,
+                    truncated_start=False,
+                    truncated_end=True,
+                    definition=text,
+                )
+
+            boundary_pos = find_definition_boundary(text, start_index, len(text))
+            if boundary_pos == -1:
+                boundary_pos = find_double_line_break(
+                    text,
+                    start_index,
+                    target_length * 2,
+                    target_length * 4,
+                )
+            if boundary_pos != -1 and boundary_pos < start_index + target_length * 4:
+                spoiler_at_boundary = find_spoiler_with_boundary(
+                    text,
+                    words_to_avoid,
+                    boundary_pos,
+                    boundary_pos + target_length,
+                )
+                if spoiler_at_boundary is None:
+                    start_index = boundary_pos
+
+        return build_excerpt(text, start_index, target_length, start_index > 0)
+
+    first_spoiler_pos = find_first_spoiler(text, words_to_avoid)
+    first_spoiler_start = first_spoiler_pos[0] if first_spoiler_pos else len(text)
+    if first_spoiler_start >= target_length / 2:
+        text_before_spoiler = text[:first_spoiler_start].strip()
+        return HintPreview(
+            text=text_before_spoiler,
+            start_index=0,
+            truncated_start=False,
+            truncated_end=True,
+            definition=text,
+        )
+
+    spoiler_ranges = sorted(
+        find_all_spoilers(text, words_to_avoid), key=lambda item: item[0]
+    )
+    merged_spoilers: list[tuple[int, int]] = []
+    for start, end in spoiler_ranges:
+        if not merged_spoilers or merged_spoilers[-1][1] < start:
+            merged_spoilers.append((start, end))
+        else:
+            merged_spoilers[-1] = (
+                merged_spoilers[-1][0],
+                max(merged_spoilers[-1][1], end),
+            )
+
+    clean_regions: list[tuple[int, int]] = []
+    last_end = 0
+    for start, end in merged_spoilers:
+        if start > last_end:
+            clean_regions.append((last_end, start))
+        last_end = max(last_end, end)
+    if last_end < len(text):
+        clean_regions.append((last_end, len(text)))
+
+    best_region = clean_regions[0] if clean_regions else (0, len(text))
+    for region in clean_regions:
+        if region[1] - region[0] > best_region[1] - best_region[0]:
+            best_region = region
+
+    region_start = best_region[0]
+    if region_start > 0:
+        boundary_pos = find_definition_boundary(text, region_start, best_region[1])
+        if boundary_pos == -1:
+            boundary_pos = find_double_line_break(
+                text,
+                region_start,
+                target_length * 2,
+                target_length * 4,
+            )
+        if boundary_pos != -1:
+            region_start = boundary_pos
+
+    excerpt = text[region_start : best_region[1]].strip()
+    truncated_start = region_start > 0
+    truncated_end = best_region[1] < len(text)
+    if truncated_start:
+        excerpt = strip_mid_sentence_prefix(excerpt)
+
+    return HintPreview(
+        text=excerpt,
+        start_index=region_start,
+        truncated_start=truncated_start,
+        truncated_end=truncated_end,
+        definition=text,
+    )
+
+
+def build_hint_preview(definition: str, words_to_avoid: list[str]) -> str:
+    return build_hint_preview_meta(definition, words_to_avoid).text
+
+
+def normalize_hint_prefix(text: str) -> str:
+    normalized = text.strip()
+    while True:
+        updated = re.sub(r"^\d+\.\s*", "", normalized)
+        if updated == normalized:
+            break
+        normalized = updated
+    return normalized.strip()
+
+
+def has_bad_start_boundary(preview: HintPreview) -> bool:
+    if preview.start_index <= 0:
+        return False
+    if (
+        preview.start_index >= 2
+        and preview.definition[preview.start_index - 2 : preview.start_index] == "\n\n"
+    ):
+        return False
+    if re.match(r"\d+\.\s", preview.definition[preview.start_index :]):
+        return False
+    return True
+
+
+def score_hint_preview(preview_or_text: HintPreview | str) -> tuple[float, set[str]]:
+    if isinstance(preview_or_text, HintPreview):
+        preview = preview_or_text
+        text = preview.text
+    else:
+        preview = None
+        text = preview_or_text
+
+    normalized = normalize_hint_prefix(text)
+    lowered = normalized.lower()
+    reasons: set[str] = set()
+
+    if re.match(r"^(see|same as)\b", lowered):
+        reasons.add(HINT_REASON_CROSSREF)
+    if re.match(r"^(l\.\s*pl\.|imp\.|p\.\s*p\.|imp\.\s*&\s*p\.\s*p\.)\s*of\b", lowered):
+        reasons.add(HINT_REASON_CROSSREF)
+
+    if "[redacted]" in lowered:
+        remaining_letters = re.sub(r"[^a-z]", "", lowered.replace("[redacted]", " "))
+        if len(remaining_letters) < 4:
+            reasons.add(HINT_REASON_REDACTED_ONLY)
+
+    if preview and has_bad_start_boundary(preview):
+        reasons.add(HINT_REASON_BAD_START)
+
+    score = min(len(normalized), 90) / 10
+    if HINT_REASON_CROSSREF in reasons:
+        score -= 45
+    if HINT_REASON_REDACTED_ONLY in reasons:
+        score -= 35
+    if HINT_REASON_BAD_START in reasons:
+        score -= 25
+    if re.search(r"\[(obs\.|r\.|scot\.|n\. of eng)", text, flags=re.IGNORECASE):
+        score -= 12
+    if re.match(r"^[a-z(]", normalized) or re.match(r"^or\b", lowered):
+        score -= 5
+    if re.search(r"\"\s*$", text) or re.search(
+        r"\b(as|a|an|the|of|to|and|or)\s*$", text, flags=re.IGNORECASE
+    ):
+        score -= 6
+    if re.search(r"[.!?;)]$", text):
+        score += 2
+
+    return score, reasons
+
 
 def simplified_forms(word: str) -> set[str]:
     forms = {word}
@@ -331,6 +699,8 @@ def build_lookup_data(
     lookup: dict[str, str | None] = {}
     definitions: dict[str, str] = {}
     canonical_to_words: dict[str, set[str]] = {}
+    canonical_definition_by_source: dict[str, dict[str, str]] = {}
+    canonical_primary_source: dict[str, str] = {}
     unresolved: list[str] = []
     direct_match_count = 0
     lemma_match_count = 0
@@ -365,10 +735,12 @@ def build_lookup_data(
 
         lookup[word] = canonical
         canonical_to_words.setdefault(canonical, set()).add(word)
+        if source and canonical not in canonical_primary_source:
+            canonical_primary_source[canonical] = source
+        source_map = canonical_definition_by_source.setdefault(canonical, {})
         for dictionary_source, dictionary in dictionaries:
-            if dictionary_source == source:
-                definitions[canonical] = dictionary[canonical]
-                break
+            if canonical in dictionary:
+                source_map[dictionary_source] = dictionary[canonical]
         if canonical == word:
             direct_match_count += 1
         else:
@@ -397,6 +769,72 @@ def build_lookup_data(
             and has_stem_similarity(canonical, form)
         )
         hint_related_forms[canonical] = sorted(related.union(filtered))
+
+    primary_definition_count = 0
+    fallback_definition_selected_count = 0
+    low_quality_replacement_count = 0
+    bad_start_replacement_count = 0
+    score_upgrade_replacement_count = 0
+
+    for canonical in sorted(canonical_to_words):
+        source_map = canonical_definition_by_source.get(canonical, {})
+        if not source_map:
+            continue
+
+        primary_source = canonical_primary_source.get(canonical)
+        if not primary_source or primary_source not in source_map:
+            primary_source = next(iter(source_map.keys()))
+
+        words_to_avoid = hint_related_forms.get(canonical, [canonical])
+        if canonical not in words_to_avoid:
+            words_to_avoid = [canonical, *words_to_avoid]
+
+        primary_text = source_map[primary_source]
+        primary_preview = build_hint_preview_meta(primary_text, words_to_avoid)
+        primary_score, primary_reasons = score_hint_preview(primary_preview)
+
+        best_source = primary_source
+        best_score = primary_score
+        for candidate_source, candidate_text in source_map.items():
+            if candidate_source == primary_source:
+                continue
+            candidate_preview = build_hint_preview_meta(candidate_text, words_to_avoid)
+            candidate_score, _ = score_hint_preview(candidate_preview)
+            if candidate_score > best_score:
+                best_source = candidate_source
+                best_score = candidate_score
+
+        selected_source = primary_source
+        has_low_quality_reason = (
+            HINT_REASON_CROSSREF in primary_reasons
+            or HINT_REASON_REDACTED_ONLY in primary_reasons
+            or HINT_REASON_BAD_START in primary_reasons
+        )
+        if best_source != primary_source:
+            if has_low_quality_reason and best_score > primary_score:
+                selected_source = best_source
+                low_quality_replacement_count += 1
+                if HINT_REASON_BAD_START in primary_reasons:
+                    bad_start_replacement_count += 1
+            elif best_score >= primary_score + 8:
+                selected_source = best_source
+                score_upgrade_replacement_count += 1
+
+        definitions[canonical] = source_map[selected_source]
+        if selected_source == primary_source:
+            primary_definition_count += 1
+        else:
+            fallback_definition_selected_count += 1
+
+    match_stats.update(
+        {
+            "primaryDefinitionCount": primary_definition_count,
+            "fallbackDefinitionSelectedCount": fallback_definition_selected_count,
+            "lowQualityReplacementCount": low_quality_replacement_count,
+            "badStartReplacementCount": bad_start_replacement_count,
+            "scoreUpgradeReplacementCount": score_upgrade_replacement_count,
+        }
+    )
 
     return (
         lookup,
@@ -464,6 +902,19 @@ def write_split_files(
             "directMatchCount": direct_match_count,
             "lemmaMatchCount": lemma_match_count,
             "fallbackMatchCount": int(match_stats.get("fallbackMatchCount", 0)),
+            "primaryDefinitionCount": int(match_stats.get("primaryDefinitionCount", 0)),
+            "fallbackDefinitionSelectedCount": int(
+                match_stats.get("fallbackDefinitionSelectedCount", 0)
+            ),
+            "lowQualityReplacementCount": int(
+                match_stats.get("lowQualityReplacementCount", 0)
+            ),
+            "badStartReplacementCount": int(
+                match_stats.get("badStartReplacementCount", 0)
+            ),
+            "scoreUpgradeReplacementCount": int(
+                match_stats.get("scoreUpgradeReplacementCount", 0)
+            ),
             "letterCount": len(all_letters),
             "licenses": licenses,
         },
@@ -478,6 +929,14 @@ def write_split_files(
         "Built dictionary lookup (split) "
         f"(words={word_count} mapped={word_count - len(unresolved)} "
         f"definitions={len(definitions)} unresolved={len(unresolved)})"
+    )
+    print(
+        "  Definition source selection: "
+        f"primary={int(match_stats.get('primaryDefinitionCount', 0))} "
+        f"fallback={int(match_stats.get('fallbackDefinitionSelectedCount', 0))} "
+        f"replacedLowQuality={int(match_stats.get('lowQualityReplacementCount', 0))} "
+        f"replacedBadStart={int(match_stats.get('badStartReplacementCount', 0))} "
+        f"replacedByScore={int(match_stats.get('scoreUpgradeReplacementCount', 0))}"
     )
     print(f"  Meta: {meta_path}")
     print(f"  Letter files: {len(all_letters)} files (dictionary.A.json, ...)")
