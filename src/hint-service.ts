@@ -242,14 +242,13 @@ function scoreHintExcerpt(excerpt: HintExcerpt): number {
   score += Math.min(text.length, 80) / 10;
 
   if (excerpt.truncatedStart) score -= 8;
-  if (excerpt.truncatedEnd) score -= 1;
   if (isCrossReferenceHint(text)) score -= 40;
   if (/\[redacted\]/i.test(text)) score -= 25;
   if (/\[(obs\.|r\.|scot\.|n\. of eng)/i.test(text)) score -= 20;
 
   const normalized = normalizeHintText(text);
   if (/^[a-z(]/.test(normalized) || /^or\b/i.test(normalized)) score -= 6;
-  if (/"\s*$/.test(text) || /\b(as|a|an|the|of|to|and|or)\s*$/i.test(text)) score -= 8;
+  if (!excerpt.truncatedEnd && (/"\s*$/.test(text) || /\b(as|a|an|the|of|to|and|or)\s*$/i.test(text))) score -= 8;
   if (/[.!?;)]$/.test(text)) score += 2;
 
   return score;

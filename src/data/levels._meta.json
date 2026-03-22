@@ -24,7 +24,6 @@
       "id": "A",
       "index": 0,
       "wheelSize": 3,
-      "targetSize": 12,
       "levelCount": 12,
       "file": "levels.A.json"
     },
@@ -32,7 +31,6 @@
       "id": "B",
       "index": 1,
       "wheelSize": 4,
-      "targetSize": 18,
       "levelCount": 18,
       "file": "levels.B.json"
     },
@@ -40,7 +38,6 @@
       "id": "C",
       "index": 2,
       "wheelSize": 5,
-      "targetSize": 24,
       "levelCount": 24,
       "file": "levels.C.json"
     },
@@ -48,7 +45,6 @@
       "id": "D",
       "index": 3,
       "wheelSize": 6,
-      "targetSize": 30,
       "levelCount": 30,
       "file": "levels.D.json"
     },
@@ -56,7 +52,6 @@
       "id": "E",
       "index": 4,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.E.json"
     },
@@ -64,7 +59,6 @@
       "id": "F",
       "index": 5,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.F.json"
     },
@@ -72,7 +66,6 @@
       "id": "G",
       "index": 6,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.G.json"
     },
@@ -80,7 +73,6 @@
       "id": "H",
       "index": 7,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.H.json"
     },
@@ -88,7 +80,6 @@
       "id": "I",
       "index": 8,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.I.json"
     },
@@ -96,7 +87,6 @@
       "id": "J",
       "index": 9,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.J.json"
     },
@@ -104,7 +94,6 @@
       "id": "K",
       "index": 10,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.K.json"
     },
@@ -112,7 +101,6 @@
       "id": "L",
       "index": 11,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.L.json"
     },
@@ -120,7 +108,6 @@
       "id": "M",
       "index": 12,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.M.json"
     },
@@ -128,7 +115,6 @@
       "id": "N",
       "index": 13,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.N.json"
     },
@@ -136,7 +122,6 @@
       "id": "O",
       "index": 14,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.O.json"
     },
@@ -144,7 +129,6 @@
       "id": "P",
       "index": 15,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.P.json"
     },
@@ -152,7 +136,6 @@
       "id": "Q",
       "index": 16,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.Q.json"
     },
@@ -160,7 +143,6 @@
       "id": "R",
       "index": 17,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.R.json"
     },
@@ -168,7 +150,6 @@
       "id": "S",
       "index": 18,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.S.json"
     },
@@ -176,7 +157,6 @@
       "id": "T",
       "index": 19,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.T.json"
     },
@@ -184,7 +164,6 @@
       "id": "U",
       "index": 20,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.U.json"
     },
@@ -192,7 +171,6 @@
       "id": "V",
       "index": 21,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.V.json"
     },
@@ -200,7 +178,6 @@
       "id": "W",
       "index": 22,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.W.json"
     },
@@ -208,7 +185,6 @@
       "id": "X",
       "index": 23,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.X.json"
     },
@@ -216,7 +192,6 @@
       "id": "Y",
       "index": 24,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.Y.json"
     },
@@ -224,7 +199,6 @@
       "id": "Z",
       "index": 25,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.Z.json"
     },
@@ -232,7 +206,6 @@
       "id": "AA",
       "index": 26,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AA.json"
     },
@@ -240,7 +213,6 @@
       "id": "AB",
       "index": 27,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AB.json"
     },
@@ -248,7 +220,6 @@
       "id": "AC",
       "index": 28,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AC.json"
     },
@@ -256,7 +227,6 @@
       "id": "AD",
       "index": 29,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AD.json"
     },
@@ -264,7 +234,6 @@
       "id": "AE",
       "index": 30,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AE.json"
     },
@@ -272,7 +241,6 @@
       "id": "AF",
       "index": 31,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AF.json"
     },
@@ -280,7 +248,6 @@
       "id": "AG",
       "index": 32,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AG.json"
     },
@@ -288,7 +255,6 @@
       "id": "AH",
       "index": 33,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AH.json"
     },
@@ -296,7 +262,6 @@
       "id": "AI",
       "index": 34,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AI.json"
     },
@@ -304,7 +269,6 @@
       "id": "AJ",
       "index": 35,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AJ.json"
     },
@@ -312,7 +276,6 @@
       "id": "AK",
       "index": 36,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AK.json"
     },
@@ -320,7 +283,6 @@
       "id": "AL",
       "index": 37,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AL.json"
     },
@@ -328,7 +290,6 @@
       "id": "AM",
       "index": 38,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AM.json"
     },
@@ -336,7 +297,6 @@
       "id": "AN",
       "index": 39,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AN.json"
     },
@@ -344,7 +304,6 @@
       "id": "AO",
       "index": 40,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AO.json"
     },
@@ -352,7 +311,6 @@
       "id": "AP",
       "index": 41,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AP.json"
     },
@@ -360,7 +318,6 @@
       "id": "AQ",
       "index": 42,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AQ.json"
     },
@@ -368,7 +325,6 @@
       "id": "AR",
       "index": 43,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AR.json"
     },
@@ -376,7 +332,6 @@
       "id": "AS",
       "index": 44,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AS.json"
     },
@@ -384,7 +339,6 @@
       "id": "AT",
       "index": 45,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AT.json"
     },
@@ -392,7 +346,6 @@
       "id": "AU",
       "index": 46,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AU.json"
     },
@@ -400,7 +353,6 @@
       "id": "AV",
       "index": 47,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AV.json"
     },
@@ -408,7 +360,6 @@
       "id": "AW",
       "index": 48,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AW.json"
     },
@@ -416,7 +367,6 @@
       "id": "AX",
       "index": 49,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AX.json"
     },
@@ -424,7 +374,6 @@
       "id": "AY",
       "index": 50,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AY.json"
     },
@@ -432,7 +381,6 @@
       "id": "AZ",
       "index": 51,
       "wheelSize": 7,
-      "targetSize": 50,
       "levelCount": 50,
       "file": "levels.AZ.json"
     }

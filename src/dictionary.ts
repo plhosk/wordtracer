@@ -72,18 +72,20 @@ export function getDictionaryEntryByCanonical(
   letterData: DictionaryLetterFile,
   canonical: string
 ): DictionaryEntry | null {
-  const definition = letterData.definitions[canonical];
-  const selectedDefinition = cleanDefinition(definition);
+  const sourceDefinitions = letterData.sourceDefinitions[canonical];
+  const selectedSource = normalizeSelectedSource(sourceDefinitions?.selectedSource);
+  const definitions = buildDefinitionsBySource(sourceDefinitions);
+  const selectedDefinition = selectedSource
+    ? definitions[selectedSource]
+    : (definitions.webster ?? definitions.wordnet);
   if (!selectedDefinition) {
     return null;
   }
 
-  const sourceDefinitions = letterData.sourceDefinitions?.[canonical];
-  const selectedSource = normalizeSelectedSource(sourceDefinitions?.selectedSource);
   return {
     canonical,
     definition: selectedDefinition,
     selectedSource,
-    definitions: buildDefinitionsBySource(sourceDefinitions),
+    definitions,
   };
 }

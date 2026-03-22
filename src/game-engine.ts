@@ -70,7 +70,6 @@ export interface GridStrings {
 export interface RuntimeLevelGroup {
   id: string;
   index: number;
-  targetSize: number;
   wheelSize?: number;
   levelCount: number;
 }
@@ -457,9 +456,6 @@ export function buildRuntimeGroupsFromDefinitions(
       throw new Error(`Group definition has duplicate group index ${group.index}`);
     }
     seenGroupIndices.add(group.index);
-    if (!Number.isInteger(group.targetSize) || group.targetSize <= 0) {
-      throw new Error(`Group definition ${id} has invalid targetSize`);
-    }
     if (!Number.isInteger(group.wheelSize) || group.wheelSize <= 0) {
       throw new Error(`Group definition ${id} has invalid wheelSize`);
     }
@@ -467,7 +463,6 @@ export function buildRuntimeGroupsFromDefinitions(
     groupsFromDefinitions.push({
       id,
       index: group.index,
-      targetSize: group.targetSize,
       wheelSize: group.wheelSize,
       levelCount: group.levelCount,
     });

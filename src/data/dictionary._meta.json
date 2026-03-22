@@ -13,13 +13,13 @@
     "directMatchCount": 7622,
     "lemmaMatchCount": 3007,
     "fallbackMatchCount": 1240,
-    "primaryDefinitionCount": 7569,
-    "fallbackDefinitionSelectedCount": 321,
+    "primaryDefinitionCount": 7608,
+    "fallbackDefinitionSelectedCount": 282,
     "websterDefinitionAvailableCount": 6821,
     "wordnetDefinitionAvailableCount": 6071,
     "lowQualityReplacementCount": 223,
     "badStartReplacementCount": 82,
-    "scoreUpgradeReplacementCount": 98,
+    "scoreUpgradeReplacementCount": 59,
     "letterCount": 26,
     "licenses": [
       {

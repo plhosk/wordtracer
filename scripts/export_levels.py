@@ -48,6 +48,7 @@ BUILD_ONLY_GROUP_FIELDS = frozenset(
     {
         "runId",
         "runIds",
+        "targetSize",
         "targetAvgAnswerFreq",
         "shapeTargets",
         "shapeCounts",

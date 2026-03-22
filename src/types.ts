@@ -51,7 +51,6 @@ export interface LevelGroupDefinition {
   id: string;
   index: number;
   wheelSize: number;
-  targetSize: number;
   levelCount: number;
   file: string;
 }
@@ -100,6 +99,5 @@ export interface DictionarySourceDefinitions {
 
 export interface DictionaryLetterFile {
   letter: string;
-  definitions: Record<string, string>;
-  sourceDefinitions?: Record<string, DictionarySourceDefinitions>;
+  sourceDefinitions: Record<string, DictionarySourceDefinitions>;
 }

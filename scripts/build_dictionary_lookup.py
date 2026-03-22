@@ -601,8 +601,9 @@ def score_hint_preview(preview_or_text: HintPreview | str) -> tuple[float, set[s
         score -= 12
     if re.match(r"^[a-z(]", normalized) or re.match(r"^or\b", lowered):
         score -= 5
-    if re.search(r"\"\s*$", text) or re.search(
-        r"\b(as|a|an|the|of|to|and|or)\s*$", text, flags=re.IGNORECASE
+    if (not preview or not preview.truncated_end) and (
+        re.search(r"\"\s*$", text)
+        or re.search(r"\b(as|a|an|the|of|to|and|or)\s*$", text, flags=re.IGNORECASE)
     ):
         score -= 6
     if re.search(r"[.!?;)]$", text):
@@ -882,7 +883,6 @@ def write_split_files(
     source_path: Path,
     dictionary_paths: list[Path],
     lookup: dict[str, str | None],
-    definitions: dict[str, str],
     source_definitions: dict[str, dict[str, str]],
     hint_related_forms: dict[str, list[str]],
     unresolved: list[str],
@@ -893,14 +893,7 @@ def write_split_files(
 ) -> None:
     split_dir.mkdir(parents=True, exist_ok=True)
 
-    definitions_by_letter: dict[str, dict[str, str]] = {}
     source_definitions_by_letter: dict[str, dict[str, dict[str, str]]] = {}
-
-    for canonical, definition in definitions.items():
-        letter = canonical[0].upper()
-        if letter not in definitions_by_letter:
-            definitions_by_letter[letter] = {}
-        definitions_by_letter[letter][canonical] = definition
 
     for canonical, source_definition in source_definitions.items():
         letter = canonical[0].upper()
@@ -908,14 +901,11 @@ def write_split_files(
             source_definitions_by_letter[letter] = {}
         source_definitions_by_letter[letter][canonical] = source_definition
 
-    all_letters = sorted(definitions_by_letter.keys())
+    all_letters = sorted(source_definitions_by_letter.keys())
 
     for letter in all_letters:
-        letter_definitions = definitions_by_letter.get(letter, {})
-
         letter_payload = {
             "letter": letter,
-            "definitions": letter_definitions,
             "sourceDefinitions": source_definitions_by_letter.get(letter, {}),
         }
         letter_file = split_dir / f"dictionary.{letter}.json"
@@ -935,7 +925,7 @@ def write_split_files(
             "sourceDictionaries": dictionary_sources,
             "wordCount": word_count,
             "mappedWordCount": word_count - len(unresolved),
-            "definitionCount": len(definitions),
+            "definitionCount": len(source_definitions),
             "unresolvedWordCount": len(unresolved),
             "directMatchCount": direct_match_count,
             "lemmaMatchCount": lemma_match_count,
@@ -972,7 +962,7 @@ def write_split_files(
     print(
         "Built dictionary lookup (split) "
         f"(words={word_count} mapped={word_count - len(unresolved)} "
-        f"definitions={len(definitions)} unresolved={len(unresolved)})"
+        f"definitions={len(source_definitions)} unresolved={len(unresolved)})"
     )
     print(
         "  Definition source selection: "
@@ -1025,7 +1015,6 @@ def main() -> None:
             source_path,
             dictionary_paths,
             lookup,
-            definitions,
             source_definitions,
             hint_related_forms,
             unresolved,
