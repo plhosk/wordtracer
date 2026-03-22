@@ -1,6 +1,6 @@
 # Word Tracer
 
-Word Tracer is a minimal word puzzle game with crossword-style boards and a swipeable letter wheel. Trace words from the wheel to reveal the grid, clear each level, and keep an eye out for bonus words.
+Word Tracer is a word puzzle game with crossword-style boards and a swipeable letter wheel. Trace words from the wheel to reveal the grid, clear each level, and keep an eye out for bonus words.
 
 Fully offline and ad-free.
 

@@ -1,1 +1,1 @@
-A crossword-like word puzzle game
+A crossword-like puzzle game
