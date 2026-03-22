@@ -104,14 +104,6 @@ export function findDoubleLineBreak(
   return afterBreak;
 }
 
-function endsAtCleanBoundary(text: string, pos: number): boolean {
-  if (pos <= 0 || pos > text.length) return false;
-  const beforeSpoiler = text.slice(0, pos).trim();
-  if (beforeSpoiler.length < 20) return false;
-  const lastChar = beforeSpoiler.slice(-1);
-  return ['.', ';', ')', ']'].includes(lastChar);
-}
-
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -236,13 +228,9 @@ export function sanitizeHintExcerpt(
         const firstSpoilerPos = findFirstSpoiler(def, wordsToAvoid);
         const firstSpoilerStart = firstSpoilerPos ? firstSpoilerPos.index : def.length;
 
-        const hasNumberedList = /(?:^|\n)1\. /.test(def);
         const textBeforeSpoiler = def.slice(0, firstSpoilerStart).trim();
-        // Use text up to spoiler if: no numbered list, OR text ends at clean boundary
         if (firstSpoilerStart >= targetLength / 2) {
-          if (!hasNumberedList || endsAtCleanBoundary(def, firstSpoilerStart)) {
-            return { text: textBeforeSpoiler, truncatedStart: false, truncatedEnd: false };
-          }
+          return { text: textBeforeSpoiler, truncatedStart: false, truncatedEnd: true };
         }
 
         let boundaryPos = findDefinitionBoundary(def, startIndex, def.length);
@@ -260,15 +248,12 @@ export function sanitizeHintExcerpt(
     }
   }
 
-  const hasNumberedList = /(?:^|\n)1\. /.test(def);
   const firstSpoilerPos = findFirstSpoiler(def, wordsToAvoid);
   const firstSpoilerStart = firstSpoilerPos ? firstSpoilerPos.index : def.length;
 
   if (firstSpoilerStart >= targetLength / 2) {
     const textBeforeSpoiler = def.slice(0, firstSpoilerStart).trim();
-    if (!hasNumberedList || endsAtCleanBoundary(def, firstSpoilerStart)) {
-      return { text: textBeforeSpoiler, truncatedStart: false, truncatedEnd: false };
-    }
+    return { text: textBeforeSpoiler, truncatedStart: false, truncatedEnd: true };
   }
 
   const spoilerRanges = findAllSpoilers(def, wordsToAvoid);
