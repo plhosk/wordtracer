@@ -34,9 +34,9 @@ Play online: https://plhosk.github.io/wordtracer/
 
 - Use the Hint button for a clue to an unsolved word.
 
-- Guess and submit every word on the board to advance to the next level.
-
 - Solving words will reveal some of the letters of connected words. Solve a partially revealed word by submitting the full word.
+
+- Guess and submit every word on the board to advance to the next level.
 
 ## Play Locally
 
