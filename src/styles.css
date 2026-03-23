@@ -686,7 +686,7 @@ button:disabled {
 .next-level-btn {
   position: absolute;
   right: 0;
-  bottom: calc(230px * var(--compact-scale));
+  bottom: calc(172px * var(--compact-scale));
   display: grid;
   place-items: center;
   min-width: calc(64px * var(--compact-scale));
@@ -741,6 +741,7 @@ button:disabled {
 .dictionary-open-btn,
 .bonus-open-btn,
 .hint-open-btn,
+.help-open-btn,
 .settings-open-btn {
   border: 2px solid var(--swap-btn-border);
   color: var(--swap-btn-text);
@@ -761,6 +762,7 @@ button:disabled {
 .dictionary-open-btn,
 .bonus-open-btn,
 .hint-open-btn,
+.help-open-btn,
 .settings-open-btn {
   position: absolute;
   top: 50%;
@@ -779,7 +781,7 @@ button:disabled {
 
 .bonus-open-btn {
   right: 0;
-  bottom: calc(56px * var(--compact-scale));
+  bottom: calc(-2px * var(--compact-scale));
   top: auto;
   transform: none;
   color: var(--swap-btn-border);
@@ -787,7 +789,7 @@ button:disabled {
 
 .hint-open-btn {
   right: 0;
-  bottom: calc(114px * var(--compact-scale));
+  bottom: calc(56px * var(--compact-scale));
   top: auto;
   transform: none;
   color: var(--swap-btn-border);
@@ -795,15 +797,23 @@ button:disabled {
 
 .dictionary-open-btn {
   right: 0;
-  bottom: calc(172px * var(--compact-scale));
+  bottom: calc(114px * var(--compact-scale));
   top: auto;
   transform: none;
   color: var(--swap-btn-border);
 }
 
 .settings-open-btn {
-  right: 0;
+  left: 0;
   bottom: calc(-2px * var(--compact-scale));
+  top: auto;
+  transform: none;
+  color: var(--swap-btn-border);
+}
+
+.help-open-btn {
+  left: 0;
+  bottom: calc(56px * var(--compact-scale));
   top: auto;
   transform: none;
   color: var(--swap-btn-border);
@@ -848,6 +858,23 @@ button:disabled {
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+.help-icon {
+  width: calc(24px * var(--compact-scale));
+  height: calc(24px * var(--compact-scale));
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform: scale(1.2);
+  transform-origin: center;
+}
+
+.help-icon circle {
+  fill: currentColor;
+  stroke: none;
 }
 
 .refresh-hint-icon {
@@ -1087,6 +1114,38 @@ button:disabled {
   width: min(420px, 100%);
   max-height: min(72vh, 560px);
   overflow-y: auto;
+}
+
+.help-card {
+  border-color: var(--wall);
+  width: min(420px, 100%);
+  max-height: min(72vh, 560px);
+  overflow-y: auto;
+}
+
+.help-head {
+  margin-bottom: 4px;
+}
+
+.help-content {
+  display: grid;
+  gap: 10px;
+}
+
+.help-section {
+  display: grid;
+  gap: 8px;
+}
+
+.help-section-title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.help-text {
+  color: var(--text);
+  font-size: 0.96rem;
+  line-height: 1.35;
 }
 
 .hint-head {
@@ -1354,5 +1413,10 @@ gap: calc(9px * var(--compact-scale));
 
   .next-level-btn {
     right: calc(-6px * var(--compact-scale));
+  }
+
+  .settings-open-btn,
+  .help-open-btn {
+    left: calc(-56px * var(--compact-scale));
   }
 }

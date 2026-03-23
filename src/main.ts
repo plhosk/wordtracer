@@ -103,6 +103,9 @@ const settingsActivity = required('#settings-activity');
 const nextLevelInlineButton = required('#next-level-inline') as HTMLButtonElement;
 const swapTokensButton = required('#swap-tokens') as HTMLButtonElement;
 const bonusButton = required('#bonus-button') as HTMLButtonElement;
+const helpButton = required('#help-button') as HTMLButtonElement;
+const helpModal = required('#help-modal');
+const closeHelpModalButton = required('#close-help-modal') as HTMLButtonElement;
 const bonusModal = required('#bonus-modal');
 const closeBonusModalButton = required('#close-bonus-modal') as HTMLButtonElement;
 const dictionaryModal = required('#dictionary-modal');
@@ -210,6 +213,9 @@ async function init(): Promise<void> {
   bindStaticEvents();
   preloadAdjacentGroups();
   render();
+  if (!hasSolvedAnyWords()) {
+    openHelpModal();
+  }
 }
 
 function bindStaticEvents(): void {
@@ -291,6 +297,12 @@ function bindStaticEvents(): void {
     }
   });
 
+  helpModal.addEventListener('click', (event) => {
+    if (event.target === helpModal) {
+      closeHelpModal(true);
+    }
+  });
+
   dictionaryModal.addEventListener('click', (event) => {
     if (event.target === dictionaryModal) {
       closeDictionaryModal(true);
@@ -313,6 +325,10 @@ function bindStaticEvents(): void {
       }
       if (!bonusModal.hidden) {
         closeBonusModal(true);
+        return;
+      }
+      if (!helpModal.hidden) {
+        closeHelpModal(true);
         return;
       }
       if (!dictionaryModal.hidden) {
@@ -371,6 +387,14 @@ function bindStaticEvents(): void {
 
   bonusButton.addEventListener('click', () => {
     openBonusModal();
+  });
+
+  helpButton.addEventListener('click', () => {
+    openHelpModal();
+  });
+
+  closeHelpModalButton.addEventListener('click', () => {
+    closeHelpModal(true);
   });
 
   closeBonusModalButton.addEventListener('click', () => {
@@ -540,6 +564,15 @@ function renderSettings(): void {
   preferModernHintsInput.checked = settings.preferModernHints;
   disableSwapAnimationInput.checked = settings.disableSwapAnimation;
   applyTheme();
+}
+
+function hasSolvedAnyWords(): boolean {
+  for (const [levelId, levelState] of gameManager.getAllLevelStates()) {
+    if (levelState.solved.size > 0 || gameManager.isLevelMarkedComplete(levelId)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function currentGroupStatus(): { group: RuntimeLevelGroup; groupIndex: number } | null {
@@ -1138,6 +1171,7 @@ function onDocumentPointerMove(event: PointerEvent): void {
   if (
     !settingsActivity.hidden
     || !bonusModal.hidden
+    || !helpModal.hidden
     || !dictionaryModal.hidden
     || !levelPackModal.hidden
     || !resetLevelModal.hidden
@@ -1642,6 +1676,7 @@ function applyTheme(): void {
 }
 
 function openSettingsActivity(): void {
+  closeHelpModal(false);
   closeDictionaryModal(false);
   closeHintModal(false);
   closeRefreshHintModal(false);
@@ -1657,7 +1692,31 @@ function closeSettingsActivity(): void {
   menuButton.setAttribute('aria-expanded', 'false');
 }
 
+function openHelpModal(): void {
+  closeSettingsActivity();
+  closeBonusModal(false);
+  closeDictionaryModal(false);
+  closeHintModal(false);
+  closeRefreshHintModal(false);
+  closeLevelPackModal(false);
+  helpModal.hidden = false;
+  helpButton.setAttribute('aria-expanded', 'true');
+  closeHelpModalButton.focus();
+}
+
+function closeHelpModal(restoreFocus: boolean): void {
+  if (helpModal.hidden) {
+    return;
+  }
+  helpModal.hidden = true;
+  helpButton.setAttribute('aria-expanded', 'false');
+  if (restoreFocus) {
+    helpButton.focus();
+  }
+}
+
 function openLevelPackModal(): void {
+  closeHelpModal(false);
   closeDictionaryModal(false);
   closeHintModal(false);
   closeRefreshHintModal(false);
@@ -1705,6 +1764,7 @@ async function jumpToGroup(groupIndex: number): Promise<void> {
 }
 
 function openBonusModal(): void {
+  closeHelpModal(false);
   closeDictionaryModal(false);
   closeHintModal(false);
   closeRefreshHintModal(false);
@@ -1731,6 +1791,7 @@ async function openDictionaryModal(): Promise<void> {
     return;
   }
 
+  closeHelpModal(false);
   closeBonusModal(false);
   closeHintModal(false);
   closeRefreshHintModal(false);
@@ -1875,6 +1936,7 @@ async function updatePersistentHint(): Promise<void> {
 }
 
 async function openHintModal(): Promise<void> {
+  closeHelpModal(false);
   closeBonusModal(false);
   closeDictionaryModal(false);
   closeRefreshHintModal(false);

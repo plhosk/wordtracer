@@ -58,6 +58,12 @@ Level</button>
               <path d="m12 3.3 2.8 5.6 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2-4.5-4.4 6.2-.9z" />
             </svg>
           </button>
+          <button id="help-button" type="button" class="help-open-btn" aria-label="Open help" aria-expanded="false">
+            <svg class="help-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M9.1 9a2.9 2.9 0 1 1 5.8 0c0 2-2.9 2.3-2.9 4.9" />
+              <circle cx="12" cy="18.2" r="1.2" />
+            </svg>
+          </button>
           <button id="menu-button" type="button" class="settings-open-btn" aria-label="Open settings" aria-expanded="false">
             <svg class="settings-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <circle cx="12" cy="12" r="3.8" />
@@ -126,6 +132,33 @@ Level</button>
           Word Tracer v<span id="app-version"></span><br />
           <a href="https://github.com/plhosk/wordtracer" target="_blank" rel="noopener noreferrer">https://github.com/plhosk/wordtracer</a>
         </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="help-modal" class="confirm-modal help-modal" role="dialog" aria-modal="true" aria-labelledby="help-title" hidden>
+    <div class="confirm-card help-card">
+      <div class="settings-head help-head">
+        <h2 id="help-title">Help</h2>
+        <button id="close-help-modal" type="button" class="close-menu" aria-label="Close help">✕</button>
+      </div>
+      <div class="help-content">
+        <section class="help-section">
+          <p class="help-text">Open these instructions at any time with the <b>?</b> button.</p>
+          <h1 class="help-section-title">How to Play</h1>
+          <p class="help-text">Swipe across the <b>wheel</b> (bottom of screen) to build a word from the available <b>tokens</b>, then lift to submit it.</p>
+          <p class="help-text"><b>Example:</b> to spell the word <b>EAT</b>, start the swipe on <b>EA</b> and lift after reaching <b>T</b>.</p>
+          <p class="help-text">Words are built from two or more tokens. Each token can only be used once per word.</p>
+          <h1 class="help-section-title">Swap Button</h1>
+          <p class="help-text">Press the <b>swap button</b> (below the wheel) to swap the order of all tokens with two or more letters.</p>
+          <p class="help-text"><b>Example:</b> to spell the word <b>HOT</b>, press the swap button once to change the <b>OH</b> token to <b>HO</b>, then swipe from <b>HO</b> to <b>T</b>.</p>
+          <h1 class="help-section-title">Hints</h1>
+          <p class="help-text">Use the Hint button for a clue to an unsolved word.</p>
+          <h1 class="help-section-title">The Board</h1>
+          <p class="help-text">On the board (top of screen), words are positioned like a crossword, spelled either downwards or to the right.</p>
+          <p class="help-text">Solve every word on the board to advance to the next level.</p>
+          <p class="help-text">Solving words will reveal some of the letters of connected words. Solve a partially revealed word by submitting the full word.</p>
+        </section>
       </div>
     </div>
   </section>

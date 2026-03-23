@@ -12,9 +12,9 @@ Repo: https://github.com/plhosk/wordtracer
 Binaries: https://github.com/plhosk/wordtracer/releases/download/v%v/wordtracer-v%v.apk
 
 Builds:
-  - versionName: 1.0.12
-    versionCode: 12
-    commit: v1.0.12
+  - versionName: 1.0.14
+    versionCode: 14
+    commit: v1.0.14
     subdir: android/app
     sudo:
       - echo "deb https://deb.debian.org/debian forky main" > /etc/apt/sources.list.d/forky.list
@@ -32,5 +32,5 @@ AllowedAPKSigningKeys: cad55d3f2477cb3590d6c09f2f9f8f0c9e4de68156ff4c19ad45ce6e2
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags ^v(\d+\.)?(\d+\.)?(\*|\d+)$
-CurrentVersion: 1.0.12
-CurrentVersionCode: 12
+CurrentVersion: 1.0.14
+CurrentVersionCode: 14
