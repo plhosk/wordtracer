@@ -74,7 +74,7 @@ const DEFAULT_SETTINGS: SavedSettings = {
   theme: 'dark',
   alwaysShowHint: false,
   preferModernHints: false,
-  enableLetterRevealHint: false,
+  disableLetterRevealHint: false,
   disableSwapAnimation: false,
 };
 
@@ -129,7 +129,7 @@ const autoAdvanceInput = required('#auto-advance') as HTMLInputElement;
 const lightThemeInput = required('#light-theme') as HTMLInputElement;
 const alwaysShowHintInput = required('#always-show-hint') as HTMLInputElement;
 const preferModernHintsInput = required('#prefer-modern-hints') as HTMLInputElement;
-const enableLetterRevealHintInput = required('#enable-letter-reveal-hint') as HTMLInputElement;
+const disableLetterRevealHintInput = required('#disable-letter-reveal-hint') as HTMLInputElement;
 const disableSwapAnimationInput = required('#disable-swap-animation') as HTMLInputElement;
 const persistentHintEl = required('#persistent-hint') as HTMLParagraphElement;
 const resetLevelButton = required('#reset-level') as HTMLButtonElement;
@@ -494,9 +494,9 @@ function bindStaticEvents(): void {
     saveState();
   });
 
-  enableLetterRevealHintInput.addEventListener('change', () => {
-    settings.enableLetterRevealHint = enableLetterRevealHintInput.checked;
-    if (!settings.enableLetterRevealHint) {
+  disableLetterRevealHintInput.addEventListener('change', () => {
+    settings.disableLetterRevealHint = disableLetterRevealHintInput.checked;
+    if (settings.disableLetterRevealHint) {
       cancelRevealLetterSelectionMode();
     }
     saveState();
@@ -592,7 +592,7 @@ function renderSettings(): void {
   lightThemeInput.checked = settings.theme === 'light';
   alwaysShowHintInput.checked = settings.alwaysShowHint;
   preferModernHintsInput.checked = settings.preferModernHints;
-  enableLetterRevealHintInput.checked = settings.enableLetterRevealHint;
+  disableLetterRevealHintInput.checked = settings.disableLetterRevealHint;
   disableSwapAnimationInput.checked = settings.disableSwapAnimation;
   applyTheme();
 }
@@ -1893,10 +1893,10 @@ function loadSettings(raw: SavedGameState['settings']): SavedSettings {
       typeof raw?.preferModernHints === 'boolean'
         ? raw.preferModernHints
         : DEFAULT_SETTINGS.preferModernHints,
-    enableLetterRevealHint:
-      typeof raw?.enableLetterRevealHint === 'boolean'
-        ? raw.enableLetterRevealHint
-        : DEFAULT_SETTINGS.enableLetterRevealHint,
+    disableLetterRevealHint:
+      typeof raw?.disableLetterRevealHint === 'boolean'
+        ? raw.disableLetterRevealHint
+        : DEFAULT_SETTINGS.disableLetterRevealHint,
     disableSwapAnimation:
       typeof raw?.disableSwapAnimation === 'boolean'
         ? raw.disableSwapAnimation
@@ -2261,8 +2261,8 @@ async function openRefreshHintModal(): Promise<void> {
   refreshHintModal.hidden = false;
   modalRefreshHintButton.setAttribute('aria-expanded', 'true');
   confirmRefreshHintButton.disabled = !canRefresh;
-  revealLetterHintButton.hidden = !settings.enableLetterRevealHint;
-  revealLetterHintButton.disabled = !settings.enableLetterRevealHint || !canRefresh;
+  revealLetterHintButton.hidden = settings.disableLetterRevealHint;
+  revealLetterHintButton.disabled = settings.disableLetterRevealHint || !canRefresh;
   cancelRefreshHintButton.focus();
 
   if (!canRefresh) {

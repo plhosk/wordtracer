@@ -38,6 +38,14 @@ Play online: https://plhosk.github.io/wordtracer/
 
 - Guess and submit every word on the board to advance to the next level.
 
+### Level Packs
+
+- Switch between different level packs using the **Level** button in the top right. Earlier packs are easier and later ones are more difficult.
+
+## Settings
+
+- A few game options can be controlled using the Settings button. For example, turning on the **Always show hint** option will show a hint at the bottom of the screen at all times, if one is available.
+
 ## Play Locally
 
 Clone the Git repository to play locally (requires Git and Node.js v20 or newer):

@@ -53,7 +53,7 @@ export interface SavedSettings {
   theme: 'dark' | 'light';
   alwaysShowHint: boolean;
   preferModernHints: boolean;
-  enableLetterRevealHint: boolean;
+  disableLetterRevealHint: boolean;
   disableSwapAnimation: boolean;
 }
 
@@ -117,14 +117,14 @@ export interface GridState {
 export const DEFAULT_MIN_SWIPE_LENGTH = 3;
 export const REQUIRED_SCHEMA_VERSION = 5;
 export const GAME_STATE_SCHEMA_VERSION = 2;
-export const MAX_HINT_REFRESHES_PER_LEVEL = 2;
+export const MAX_HINT_REFRESHES_PER_LEVEL = 3;
 export const DEFAULT_TOKEN_ORDER_MODE: TokenOrderMode = 'forward';
 export const DEFAULT_SETTINGS: SavedSettings = {
   autoAdvance: false,
   theme: 'dark',
   alwaysShowHint: false,
   preferModernHints: false,
-  enableLetterRevealHint: false,
+  disableLetterRevealHint: false,
   disableSwapAnimation: false,
 };
 
