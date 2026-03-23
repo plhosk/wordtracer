@@ -37,6 +37,8 @@ import {
 } from './dictionary.js';
 import {
   getUnguessedWordHint as sharedGetUnguessedWordHint,
+  canonicalHasUnsolvedWords,
+  type HintResult,
 } from './hint-service.js';
 
 interface ApiError {
@@ -108,6 +110,7 @@ interface CachedSession {
   version: number;
 }
 const sessionCache = new Map<string, CachedSession>();
+const MAX_MODAL_HINT_STACK_SIZE = MAX_HINT_REFRESHES_PER_LEVEL + 1;
 
 async function loadLevelData(): Promise<void> {
   const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -935,10 +938,129 @@ async function handleGetDictionaryExists(
   sendJson(res, 200, { exists });
 }
 
+function hasHintRefreshesRemaining(state: LevelState): boolean {
+  return state.hints.hintRefreshCount < MAX_HINT_REFRESHES_PER_LEVEL;
+}
+
+function canOpenHintRefresh(level: Level, state: LevelState): boolean {
+  return hasHintRefreshesRemaining(state) && !isLevelComplete(level, state.solved);
+}
+
+function formatHintExcerptForDisplay(hint: HintResult): string {
+  const excerpt = hint.excerpt;
+  return (excerpt.truncatedStart ? '...' : '') + excerpt.text + (excerpt.truncatedEnd ? '...' : '');
+}
+
+function getCurrentLevelModalHintEntries(level: Level, state: LevelState): LevelState['hints']['modalHintStack'] {
+  const entries: LevelState['hints']['modalHintStack'] = [];
+  const seenCanonicals = new Set<string>();
+
+  for (const rawEntry of state.hints.modalHintStack) {
+    const canonical = normalizeWord(rawEntry.canonical);
+    const text = rawEntry.text.trim();
+    if (!canonical || !text || seenCanonicals.has(canonical)) {
+      continue;
+    }
+    if (!canonicalHasUnsolvedWords(level, state.solved, dictionaryLookup, canonical)) {
+      continue;
+    }
+
+    seenCanonicals.add(canonical);
+    entries.push({ canonical, text });
+    if (entries.length >= MAX_MODAL_HINT_STACK_SIZE) {
+      break;
+    }
+  }
+
+  return entries;
+}
+
+function setCurrentLevelModalHintEntries(
+  state: LevelState,
+  entries: LevelState['hints']['modalHintStack']
+): LevelState['hints']['modalHintStack'] {
+  const limitedEntries = entries.slice(0, MAX_MODAL_HINT_STACK_SIZE);
+  state.hints.modalHintStack = limitedEntries;
+  return limitedEntries;
+}
+
+function prependCurrentLevelModalHintEntry(
+  level: Level,
+  state: LevelState,
+  entry: LevelState['hints']['modalHintStack'][number]
+): LevelState['hints']['modalHintStack'] {
+  const existing = getCurrentLevelModalHintEntries(level, state).filter((item) => item.canonical !== entry.canonical);
+  return setCurrentLevelModalHintEntries(state, [entry, ...existing]);
+}
+
+function hintModalTexts(level: Level, state: LevelState): string[] {
+  return getCurrentLevelModalHintEntries(level, state).map((entry) => entry.text);
+}
+
+function trackHintUsage(state: LevelState, canonical: string): void {
+  state.hints.currentHintCanonical = canonical;
+  if (!state.hints.hintedCanonicals.has(canonical)) {
+    state.hints.hintedCanonicals.add(canonical);
+    state.hints.hintCount += 1;
+  }
+}
+
+async function findHintForState(
+  level: Level,
+  state: LevelState,
+  preferModernHints: boolean,
+  excludedCanonicals: Set<string>,
+  currentHintCanonical: string | null
+): Promise<HintResult | null> {
+  const solvedWords = new Set(state.solved);
+  return sharedGetUnguessedWordHint(
+    level,
+    solvedWords,
+    excludedCanonicals,
+    currentHintCanonical,
+    dictionaryLookup,
+    dictionaryHintRelatedForms,
+    getDictionaryEntry,
+    loadDictionaryLetter,
+    preferModernHints
+  );
+}
+
+async function hasRefreshableWordHint(
+  level: Level,
+  state: LevelState,
+  preferModernHints: boolean
+): Promise<boolean> {
+  const currentCanonical = state.hints.currentHintCanonical;
+  if (!currentCanonical || !canOpenHintRefresh(level, state)) {
+    return false;
+  }
+
+  const excludedCanonicals = new Set(state.hints.excludedHintCanonicals);
+  excludedCanonicals.add(currentCanonical);
+  const hint = await findHintForState(level, state, preferModernHints, excludedCanonicals, null);
+  return hint !== null;
+}
+
+async function hintAvailability(
+  level: Level,
+  state: LevelState,
+  preferModernHints: boolean
+): Promise<{ canRefresh: boolean; canShowNewHint: boolean }> {
+  const canRefresh = canOpenHintRefresh(level, state);
+  if (!canRefresh) {
+    return { canRefresh: false, canShowNewHint: false };
+  }
+
+  const canShowNewHint = await hasRefreshableWordHint(level, state, preferModernHints);
+  return { canRefresh, canShowNewHint };
+}
+
 async function handleGetHint(
   _req: import('node:http').IncomingMessage,
   res: import('node:http').ServerResponse,
-  sessionId: string
+  sessionId: string,
+  preferModernHints: boolean
 ): Promise<void> {
   const cached = await getSession(sessionId);
 
@@ -949,34 +1071,38 @@ async function handleGetHint(
 
   const level = cached.gameManager.getCurrentLevel();
   const state = cached.gameManager.getCurrentLevelState();
-  const solvedWords = new Set(state.solved);
-
-  const hint = await sharedGetUnguessedWordHint(
+  const hint = await findHintForState(
     level,
-    solvedWords,
+    state,
+    preferModernHints,
     state.hints.excludedHintCanonicals,
-    state.hints.currentHintCanonical,
-    dictionaryLookup,
-    dictionaryHintRelatedForms,
-    getDictionaryEntry,
-    loadDictionaryLetter
+    state.hints.currentHintCanonical
   );
 
   if (!hint) {
-    sendJson(res, 200, { version: cached.version, hint: null });
+    const hadCurrentHint = state.hints.currentHintCanonical !== null;
+    state.hints.currentHintCanonical = null;
+    if (hadCurrentHint) {
+      await persistSession(sessionId, cached);
+    }
+    const availability = await hintAvailability(level, state, preferModernHints);
+    sendJson(res, 200, {
+      version: cached.version,
+      hint: null,
+      canRefresh: availability.canRefresh,
+      canShowNewHint: availability.canShowNewHint,
+      hints: hintModalTexts(level, state),
+    });
     return;
   }
 
-  state.hints.currentHintCanonical = hint.canonical;
-
-  if (!state.hints.hintedCanonicals.has(hint.canonical)) {
-    state.hints.hintedCanonicals.add(hint.canonical);
-    state.hints.hintCount += 1;
-  }
-
+  trackHintUsage(state, hint.canonical);
+  const stackedHints = prependCurrentLevelModalHintEntry(level, state, {
+    canonical: hint.canonical,
+    text: formatHintExcerptForDisplay(hint),
+  });
   await persistSession(sessionId, cached);
-
-  const canRefresh = state.hints.hintRefreshCount < MAX_HINT_REFRESHES_PER_LEVEL;
+  const availability = await hintAvailability(level, state, preferModernHints);
 
   sendJson(res, 200, {
     version: cached.version,
@@ -984,14 +1110,60 @@ async function handleGetHint(
     truncatedStart: hint.excerpt.truncatedStart,
     truncatedEnd: hint.excerpt.truncatedEnd,
     hintCount: state.hints.hintCount,
-    canRefresh,
+    canRefresh: availability.canRefresh,
+    canShowNewHint: availability.canShowNewHint,
+    hints: stackedHints.map((entry) => entry.text),
   });
+}
+
+interface HintRequestBody {
+  preferModernHints?: boolean;
+}
+
+function parseHintRequestBody(body: unknown): { preferModernHints: boolean } | null {
+  if (!body || typeof body !== 'object') {
+    return null;
+  }
+
+  const data = body as HintRequestBody;
+  if (data.preferModernHints !== undefined && typeof data.preferModernHints !== 'boolean') {
+    return null;
+  }
+
+  return {
+    preferModernHints: data.preferModernHints === true,
+  };
+}
+
+async function handlePostHint(
+  req: import('node:http').IncomingMessage,
+  res: import('node:http').ServerResponse,
+  sessionId: string
+): Promise<void> {
+  try {
+    const body = await parseJsonBody<HintRequestBody>(req);
+    const parsed = parseHintRequestBody(body);
+    if (!parsed) {
+      sendError(
+        res,
+        400,
+        'BAD_REQUEST',
+        'Body must be JSON with optional preferModernHints (boolean)'
+      );
+      return;
+    }
+
+    return handleGetHint(req, res, sessionId, parsed.preferModernHints);
+  } catch (e) {
+    sendError(res, 400, 'BAD_REQUEST', (e as Error).message);
+  }
 }
 
 async function handleRefreshHint(
   _req: import('node:http').IncomingMessage,
   res: import('node:http').ServerResponse,
-  sessionId: string
+  sessionId: string,
+  preferModernHints: boolean
 ): Promise<void> {
   const cached = await getSession(sessionId);
 
@@ -1000,56 +1172,52 @@ async function handleRefreshHint(
     return;
   }
 
+  const level = cached.gameManager.getCurrentLevel();
   const state = cached.gameManager.getCurrentLevelState();
 
-  if (state.hints.hintRefreshCount >= MAX_HINT_REFRESHES_PER_LEVEL) {
-    sendError(res, 400, 'BAD_REQUEST', 'Hint refresh already used for this level');
+  if (isLevelComplete(level, state.solved)) {
+    sendError(res, 400, 'BAD_REQUEST', 'Current level is already complete');
     return;
   }
 
-  if (!state.hints.currentHintCanonical) {
+  if (!hasHintRefreshesRemaining(state)) {
+    sendError(res, 400, 'BAD_REQUEST', 'No hint refreshes remaining for this level');
+    return;
+  }
+
+  const currentCanonical = state.hints.currentHintCanonical;
+  if (!currentCanonical) {
     sendError(res, 400, 'BAD_REQUEST', 'No current hint to refresh');
     return;
   }
 
-  state.hints.excludedHintCanonicals.add(state.hints.currentHintCanonical);
-  state.hints.hintRefreshCount += 1;
+  const excludedCanonicals = new Set(state.hints.excludedHintCanonicals);
+  excludedCanonicals.add(currentCanonical);
 
-  if (state.hints.hintedCanonicals.has(state.hints.currentHintCanonical)) {
-    state.hints.hintedCanonicals.delete(state.hints.currentHintCanonical);
-    state.hints.hintCount -= 1;
-  }
-
-  state.hints.currentHintCanonical = null;
-
-  const level = cached.gameManager.getCurrentLevel();
-  const solvedWords = new Set(state.solved);
-
-  const newHint = await sharedGetUnguessedWordHint(
-    level,
-    solvedWords,
-    state.hints.excludedHintCanonicals,
-    state.hints.currentHintCanonical,
-    dictionaryLookup,
-    dictionaryHintRelatedForms,
-    getDictionaryEntry,
-    loadDictionaryLetter
-  );
+  const newHint = await findHintForState(level, state, preferModernHints, excludedCanonicals, null);
 
   if (!newHint) {
-    await persistSession(sessionId, cached);
-    sendJson(res, 200, { version: cached.version, hint: null });
+    const canRefresh = canOpenHintRefresh(level, state);
+    sendJson(res, 200, {
+      version: cached.version,
+      hint: null,
+      canRefresh,
+      canShowNewHint: false,
+      hints: hintModalTexts(level, state),
+    });
     return;
   }
 
-  state.hints.currentHintCanonical = newHint.canonical;
-
-  if (!state.hints.hintedCanonicals.has(newHint.canonical)) {
-    state.hints.hintedCanonicals.add(newHint.canonical);
-    state.hints.hintCount += 1;
-  }
+  state.hints.excludedHintCanonicals.add(currentCanonical);
+  state.hints.hintRefreshCount += 1;
+  trackHintUsage(state, newHint.canonical);
+  const stackedHints = prependCurrentLevelModalHintEntry(level, state, {
+    canonical: newHint.canonical,
+    text: formatHintExcerptForDisplay(newHint),
+  });
 
   await persistSession(sessionId, cached);
+  const availability = await hintAvailability(level, state, preferModernHints);
 
   sendJson(res, 200, {
     version: cached.version,
@@ -1057,7 +1225,116 @@ async function handleRefreshHint(
     truncatedStart: newHint.excerpt.truncatedStart,
     truncatedEnd: newHint.excerpt.truncatedEnd,
     hintCount: state.hints.hintCount,
-    canRefresh: state.hints.hintRefreshCount < MAX_HINT_REFRESHES_PER_LEVEL,
+    canRefresh: availability.canRefresh,
+    canShowNewHint: availability.canShowNewHint,
+    hints: stackedHints.map((entry) => entry.text),
+  });
+}
+
+async function handlePostRefreshHint(
+  req: import('node:http').IncomingMessage,
+  res: import('node:http').ServerResponse,
+  sessionId: string
+): Promise<void> {
+  try {
+    const body = await parseJsonBody<HintRequestBody>(req);
+    const parsed = parseHintRequestBody(body);
+    if (!parsed) {
+      sendError(
+        res,
+        400,
+        'BAD_REQUEST',
+        'Body must be JSON with optional preferModernHints (boolean)'
+      );
+      return;
+    }
+
+    return handleRefreshHint(req, res, sessionId, parsed.preferModernHints);
+  } catch (e) {
+    sendError(res, 400, 'BAD_REQUEST', (e as Error).message);
+  }
+}
+
+interface RevealHintBody {
+  row: number;
+  col: number;
+}
+
+function parseRevealHintBody(body: unknown): { row: number; col: number } | null {
+  if (!body || typeof body !== 'object') {
+    return null;
+  }
+
+  const data = body as RevealHintBody;
+  if (!Number.isInteger(data.row) || !Number.isInteger(data.col)) {
+    return null;
+  }
+
+  return {
+    row: data.row,
+    col: data.col,
+  };
+}
+
+async function handleRevealHint(
+  req: import('node:http').IncomingMessage,
+  res: import('node:http').ServerResponse,
+  sessionId: string
+): Promise<void> {
+  const cached = await getSession(sessionId);
+  if (!cached) {
+    sendError(res, 404, 'NOT_FOUND', 'Session not found');
+    return;
+  }
+
+  let parsedBody: { row: number; col: number } | null;
+  try {
+    const body = await parseJsonBody<RevealHintBody>(req);
+    parsedBody = parseRevealHintBody(body);
+  } catch (e) {
+    sendError(res, 400, 'BAD_REQUEST', (e as Error).message);
+    return;
+  }
+
+  if (!parsedBody) {
+    sendError(res, 400, 'BAD_REQUEST', 'Body must include integer row and col values');
+    return;
+  }
+
+  const level = cached.gameManager.getCurrentLevel();
+  const state = cached.gameManager.getCurrentLevelState();
+
+  if (isLevelComplete(level, state.solved)) {
+    sendError(res, 400, 'BAD_REQUEST', 'Current level is already complete');
+    return;
+  }
+
+  if (!hasHintRefreshesRemaining(state)) {
+    sendError(res, 400, 'BAD_REQUEST', 'No hint refreshes remaining for this level');
+    return;
+  }
+
+  const revealResult = cached.gameManager.revealCell(parsedBody.row, parsedBody.col);
+  if (!revealResult.revealed) {
+    sendJson(res, 200, {
+      version: cached.version,
+      revealed: false,
+      autoSolved: [],
+      levelComplete: revealResult.levelComplete,
+      canRefresh: canOpenHintRefresh(level, state),
+    });
+    return;
+  }
+
+  state.hints.hintRefreshCount += 1;
+  await persistSession(sessionId, cached);
+
+  sendJson(res, 200, {
+    version: cached.version,
+    revealed: true,
+    autoSolved: revealResult.autoSolved,
+    levelComplete: revealResult.levelComplete,
+    canRefresh: canOpenHintRefresh(level, state),
   });
 }
 
@@ -1099,6 +1376,21 @@ async function handleRequest(
 
     if (req.method === 'POST' && path === '/api/games') {
       return handleCreateSession(req, res);
+    }
+
+    const hintMatch = path.match(/^\/api\/games\/([^/]+)\/hint$/);
+    if (req.method === 'POST' && hintMatch) {
+      return handlePostHint(req, res, hintMatch[1]);
+    }
+
+    const hintRefreshMatch = path.match(/^\/api\/games\/([^/]+)\/hint\/refresh$/);
+    if (req.method === 'POST' && hintRefreshMatch) {
+      return handlePostRefreshHint(req, res, hintRefreshMatch[1]);
+    }
+
+    const hintRevealMatch = path.match(/^\/api\/games\/([^/]+)\/hint\/reveal$/);
+    if (req.method === 'POST' && hintRevealMatch) {
+      return handleRevealHint(req, res, hintRevealMatch[1]);
     }
 
     const sessionMatch = path.match(/^\/api\/games\/([^/]+)$/);
@@ -1164,16 +1456,6 @@ async function handleRequest(
     const dictionaryExistsMatch = path.match(/^\/api\/dictionary\/([^/]+)\/exists$/);
     if (req.method === 'GET' && dictionaryExistsMatch) {
       return handleGetDictionaryExists(req, res, dictionaryExistsMatch[1]);
-    }
-
-    const hintMatch = path.match(/^\/api\/games\/([^/]+)\/hint$/);
-    if (req.method === 'GET' && hintMatch) {
-      return handleGetHint(req, res, hintMatch[1]);
-    }
-
-    const hintRefreshMatch = path.match(/^\/api\/games\/([^/]+)\/hint\/refresh$/);
-    if (req.method === 'POST' && hintRefreshMatch) {
-      return handleRefreshHint(req, res, hintRefreshMatch[1]);
     }
 
     if (path === '/health') {

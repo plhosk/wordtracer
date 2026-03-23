@@ -120,6 +120,7 @@ const hintTextStack = required('#hint-text-stack') as HTMLDivElement;
 const modalRefreshHintButton = required('#modal-refresh-hint-button') as HTMLButtonElement;
 const refreshHintModal = required('#refresh-hint-modal');
 const refreshHintSubtitle = required('#refresh-hint-subtitle');
+const refreshHintNote = required('#refresh-hint-note') as HTMLParagraphElement;
 const refreshHintActions = required('#refresh-hint-actions');
 const cancelRefreshHintButton = required('#cancel-refresh-hint') as HTMLButtonElement;
 const confirmRefreshHintButton = required('#confirm-refresh-hint') as HTMLButtonElement;
@@ -167,6 +168,7 @@ let feedbackToneClass = '';
 let feedbackLookupWord = '';
 let completionSummaryCarryover = '';
 let recentSolvedCells = new Set<string>();
+let refreshHintModalCheckSequence = 0;
 let previewingSelection = false;
 let wheelSize = BASE_WHEEL_SIZE;
 let tokenSwapAnimationTimer: ReturnType<typeof window.setTimeout> | null = null;
@@ -445,7 +447,7 @@ function bindStaticEvents(): void {
   });
 
   modalRefreshHintButton.addEventListener('click', () => {
-    openRefreshHintModal();
+    void openRefreshHintModal();
   });
 
   cancelRefreshHintButton.addEventListener('click', () => {
@@ -2046,23 +2048,31 @@ function closeDictionaryModal(restoreFocus: boolean): void {
   }
 }
 
-async function getUnguessedWordHint(): Promise<HintResult | null> {
+async function getUnguessedWordHintForState(
+  state: ActiveLevelState,
+  excludedCanonicals: Set<string>,
+  currentHintCanonical: string | null
+): Promise<HintResult | null> {
   const level = gameManager.getCurrentLevel();
-  const state = gameManager.getCurrentLevelState();
   const solvedWords = new Set(state.solved);
   const lookup = dataLoader.getDictionaryLookup();
 
   return sharedGetUnguessedWordHint(
     level,
     solvedWords,
-    state.hints.excludedHintCanonicals,
-    state.hints.currentHintCanonical,
+    excludedCanonicals,
+    currentHintCanonical,
     lookup,
     dataLoader.getDictionaryHintRelatedForms(),
     getDictionaryEntry,
     (letter) => dataLoader.loadDictionaryLetter(letter),
     settings.preferModernHints
   );
+}
+
+async function getUnguessedWordHint(): Promise<HintResult | null> {
+  const state = gameManager.getCurrentLevelState();
+  return getUnguessedWordHintForState(state, state.hints.excludedHintCanonicals, state.hints.currentHintCanonical);
 }
 
 function formatHintExcerptForDisplay(hint: HintResult): string {
@@ -2081,6 +2091,31 @@ function trackHintUsage(state: ActiveLevelState, canonical: string): void {
 
 function canRefreshHint(state: ActiveLevelState): boolean {
   return state.hints.hintRefreshCount < MAX_HINT_REFRESHES_PER_LEVEL;
+}
+
+function isLevelComplete(state: ActiveLevelState): boolean {
+  const level = gameManager.getCurrentLevel();
+  return state.solved.size >= level.answers.length;
+}
+
+function shouldDisableHintModalRefreshButton(state: ActiveLevelState): boolean {
+  return !canRefreshHint(state) || isLevelComplete(state);
+}
+
+async function hasRefreshableWordHint(state: ActiveLevelState): Promise<boolean> {
+  const currentCanonical = state.hints.currentHintCanonical;
+  if (!currentCanonical) {
+    return false;
+  }
+
+  const excludedCanonicals = new Set(state.hints.excludedHintCanonicals);
+  excludedCanonicals.add(currentCanonical);
+  const hint = await getUnguessedWordHintForState(state, excludedCanonicals, null);
+  return hint !== null;
+}
+
+function renderRefreshHintNoMoreMessage(show: boolean): void {
+  refreshHintNote.hidden = !show;
 }
 
 function remainingHintRefreshes(state: ActiveLevelState): number {
@@ -2154,13 +2189,14 @@ async function updatePersistentHint(): Promise<void> {
     return;
   }
 
+  const state = gameManager.getCurrentLevelState();
   const hint = await getUnguessedWordHint();
   if (!hint) {
+    state.hints.currentHintCanonical = null;
     persistentHintEl.hidden = true;
     return;
   }
 
-  const state = gameManager.getCurrentLevelState();
   trackHintUsage(state, hint.canonical);
   persistentHintEl.textContent = formatHintExcerptForDisplay(hint);
   persistentHintEl.hidden = false;
@@ -2178,8 +2214,9 @@ async function openHintModal(): Promise<void> {
   const existingModalHints = getCurrentLevelModalHintEntries(state);
   const hint = await getUnguessedWordHint();
   if (!hint) {
+    state.hints.currentHintCanonical = null;
     renderHintModalEntries(NO_HINTS_AVAILABLE_TEXT, existingModalHints);
-    modalRefreshHintButton.disabled = true;
+    modalRefreshHintButton.disabled = shouldDisableHintModalRefreshButton(state);
     hintModal.hidden = false;
     hintButton.setAttribute('aria-expanded', 'true');
     closeHintModalButton.focus();
@@ -2193,7 +2230,7 @@ async function openHintModal(): Promise<void> {
   });
   renderHintModalEntries(stackedHints[0].text, stackedHints.slice(1));
 
-  modalRefreshHintButton.disabled = !canRefreshHint(state);
+  modalRefreshHintButton.disabled = shouldDisableHintModalRefreshButton(state);
 
   hintModal.hidden = false;
   hintButton.setAttribute('aria-expanded', 'true');
@@ -2213,10 +2250,12 @@ function closeHintModal(restoreFocus: boolean): void {
   }
 }
 
-function openRefreshHintModal(): void {
+async function openRefreshHintModal(): Promise<void> {
   const state = gameManager.getCurrentLevelState();
   const canRefresh = canRefreshHint(state);
+  const checkSequence = ++refreshHintModalCheckSequence;
   updateRefreshHintSubtitle(state);
+  renderRefreshHintNoMoreMessage(false);
   closeHintModal(false);
   refreshHintActions.hidden = false;
   refreshHintModal.hidden = false;
@@ -2225,14 +2264,28 @@ function openRefreshHintModal(): void {
   revealLetterHintButton.hidden = !settings.enableLetterRevealHint;
   revealLetterHintButton.disabled = !settings.enableLetterRevealHint || !canRefresh;
   cancelRefreshHintButton.focus();
+
+  if (!canRefresh) {
+    return;
+  }
+
+  const noMoreHints = !(await hasRefreshableWordHint(state));
+  if (checkSequence !== refreshHintModalCheckSequence || refreshHintModal.hidden) {
+    return;
+  }
+
+  confirmRefreshHintButton.disabled = noMoreHints;
+  renderRefreshHintNoMoreMessage(noMoreHints);
 }
 
 function closeRefreshHintModal(returnToHint: boolean): void {
+  refreshHintModalCheckSequence += 1;
   if (refreshHintModal.hidden) {
     return;
   }
 
   refreshHintModal.hidden = true;
+  renderRefreshHintNoMoreMessage(false);
   modalRefreshHintButton.setAttribute('aria-expanded', 'false');
   if (returnToHint) {
     hintModal.hidden = false;
@@ -2257,7 +2310,7 @@ async function refreshHint(): Promise<void> {
   if (!newHint) {
     renderHintModalEntries(NO_HINTS_AVAILABLE_TEXT, existingModalHints);
     persistentHintEl.hidden = true;
-    modalRefreshHintButton.disabled = true;
+    modalRefreshHintButton.disabled = shouldDisableHintModalRefreshButton(state);
     hintModal.hidden = false;
     hintButton.setAttribute('aria-expanded', 'true');
     closeHintModalButton.focus();
@@ -2275,7 +2328,7 @@ async function refreshHint(): Promise<void> {
     persistentHintEl.textContent = stackedHints[0].text;
   }
 
-  modalRefreshHintButton.disabled = !canRefreshHint(state);
+  modalRefreshHintButton.disabled = shouldDisableHintModalRefreshButton(state);
   hintModal.hidden = false;
   hintButton.setAttribute('aria-expanded', 'true');
   closeHintModalButton.focus();

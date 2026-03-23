@@ -243,8 +243,11 @@ Get spoiler-free hints for unsolved words.
 ### Get Hint
 
 ```
-GET /api/games/:id/hint
+POST /api/games/:id/hint
 ```
+
+Body:
+`{ "preferModernHints"?: boolean }`
 
 Returns a hint for an unsolved word in the current level. The hint is a sanitized excerpt from the word's definition with the answer word and related forms removed.
 
@@ -253,10 +256,12 @@ Returns a hint for an unsolved word in the current level. The hint is a sanitize
 - `truncatedStart` - Whether the excerpt was truncated at the start
 - `truncatedEnd` - Whether the excerpt was truncated at the end
 - `hintCount` - Total hints used for this level
-- `canRefresh` - Whether hint refresh is available
+- `canRefresh` - Whether refresh actions are available (refresh budget left and level not complete)
+- `canShowNewHint` - Whether a refresh can return a different hint right now
+- `hints` - Hint excerpt history for still-unsolved words (newest first)
 - `version` - Current game version (incremented after this mutation)
 
-Returns `{ hint: null }` if no hints available (all words solved or excluded).
+Returns `{ hint: null, canRefresh, canShowNewHint, hints, version }` if no hints are available.
 
 ### Refresh Hint
 
@@ -264,18 +269,61 @@ Returns `{ hint: null }` if no hints available (all words solved or excluded).
 POST /api/games/:id/hint/refresh
 ```
 
-Excludes the current hint and requests a new one. Can only be used once per level.
+Body:
+`{ "preferModernHints"?: boolean }`
 
-**Returns:** Same as GET hint
+Excludes the current hint and requests a new one. Can be used up to 2 times per level.
+
+If no replacement hint exists, returns `{ hint: null, canRefresh, canShowNewHint: false, hints, version }` without consuming a refresh.
+
+**Returns:** Same response shape as Get Hint.
 
 **Errors:**
-- `400` - Hint refresh already used or no current hint to refresh
+- `400` - No refreshes remaining, level already complete, or no current hint to refresh
+
+### Reveal Letter Hint
+
+```
+POST /api/games/:id/hint/reveal
+```
+
+Body:
+`{ "row": number, "col": number }`
+
+Reveals a single hidden occupied cell and consumes one hint refresh only when a cell is actually revealed.
+
+**Returns:**
+- `version` - Current game version (incremented only when a cell is revealed)
+- `revealed` - Whether a new cell was revealed
+- `autoSolved` - Newly auto-solved answers after the reveal
+- `levelComplete` - Whether the level is complete after this reveal
+- `canRefresh` - Whether refresh actions are still available
+
+**Errors:**
+- `400` - Invalid row/col, no refreshes remaining, or level already complete
+
+### Hint Endpoint Behavior Matrix
+
+| Endpoint | Condition | HTTP | Response shape | Consumes refresh? |
+| --- | --- | --- | --- | --- |
+| `POST /api/games/:id/hint` | Hint found | `200` | `{ version, excerpt, truncatedStart, truncatedEnd, hintCount, canRefresh, canShowNewHint, hints }` | No |
+| `POST /api/games/:id/hint` | No hint available | `200` | `{ version, hint: null, canRefresh, canShowNewHint, hints }` | No |
+| `POST /api/games/:id/hint/refresh` | Replacement hint found | `200` | `{ version, excerpt, truncatedStart, truncatedEnd, hintCount, canRefresh, canShowNewHint, hints }` | Yes |
+| `POST /api/games/:id/hint/refresh` | No replacement hint exists | `200` | `{ version, hint: null, canRefresh, canShowNewHint: false, hints }` | No |
+| `POST /api/games/:id/hint/refresh` | No current hint / no refreshes left / level complete | `400` | `{ error, message }` | No |
+| `POST /api/games/:id/hint/reveal` | Hidden occupied cell revealed | `200` | `{ version, revealed: true, autoSolved, levelComplete, canRefresh }` | Yes |
+| `POST /api/games/:id/hint/reveal` | Invalid target (not occupied or already revealed) | `200` | `{ version, revealed: false, autoSolved: [], levelComplete, canRefresh }` | No |
+| `POST /api/games/:id/hint/reveal` | Invalid body / no refreshes left / level complete | `400` | `{ error, message }` | No |
+
+All hint endpoints return `404 { error, message }` when `:id` does not map to an existing game.
 
 ---
 
 ## Concurrency
 
-All mutation endpoints require a `version` field that must match the current game version.
+Most mutation endpoints require a `version` field that must match the current game version.
+
+Hint endpoints (`/hint`, `/hint/refresh`, `/hint/reveal`) do not use version checks.
 
 **Version mismatch response:**
 - HTTP status: `409 Conflict`
