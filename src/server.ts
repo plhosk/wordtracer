@@ -286,6 +286,9 @@ async function getSession(sessionId: string): Promise<CachedSession | null> {
       const levelState = createEmptyLevelState();
       levelState.solved = new Set(state.solved.map(normalizeWord));
       levelState.bonus = new Set(state.bonus.map(normalizeWord));
+      levelState.revealedCells = new Set(
+        (state.revealedCells ?? []).filter((key): key is string => typeof key === 'string' && /^\d+:\d+$/.test(key))
+      );
       levelState.hints.hintedCanonicals = new Set((state.hints?.hintedCanonicals ?? []).map(normalizeWord));
       levelState.hints.excludedHintCanonicals = new Set((state.hints?.excludedHintCanonicals ?? []).map(normalizeWord));
       levelState.hints.hintCount = state.hints?.hintCount ?? 0;
@@ -293,6 +296,7 @@ async function getSession(sessionId: string): Promise<CachedSession | null> {
         state.hints?.hintRefreshCount
         ?? (state.hints?.hintRefreshUsed ? 1 : 0);
       levelState.hints.currentHintCanonical = state.hints?.currentHintCanonical ?? null;
+      levelState.hints.modalHintStack = state.hints?.modalHintStack ?? [];
       levelStates.set(levelId, levelState);
     }
   }
@@ -404,6 +408,7 @@ function buildSessionLevelInfo(cached: CachedSession): SessionLevelResponse {
   const gm = cached.gameManager;
   const level = gm.getCurrentLevel();
   const { walls: _, ...base } = buildLevelInfo(level);
+  const state = gm.getCurrentLevelState();
   
   const solvedWords = gm.getSolvedWords();
   const solvedSet = new Set(solvedWords.map(normalizeWord));
@@ -412,7 +417,7 @@ function buildSessionLevelInfo(cached: CachedSession): SessionLevelResponse {
     .map((a) => a.path.length)
     .sort((a, b) => a - b);
   
-  const gridStrings = buildAllGridStrings(level.rows, level.cols, level.answers, solvedSet);
+  const gridStrings = buildAllGridStrings(level.rows, level.cols, level.answers, solvedSet, state.revealedCells);
   
   return {
     ...base,
@@ -706,10 +711,11 @@ async function handleGetGrid(
 function buildGridSimple(
   gridState: GridState,
   answers: LevelAnswer[],
-  solvedWords: Set<string>
+  solvedWords: Set<string>,
+  revealedCells: Set<string>
 ): GridSimpleResponse {
   const { rows, cols, bounds } = gridState;
-  const gridStrings = buildAllGridStrings(rows, cols, answers, solvedWords);
+  const gridStrings = buildAllGridStrings(rows, cols, answers, solvedWords, revealedCells);
   const wordStarts = extractWordStarts(answers);
 
   return {
@@ -739,7 +745,12 @@ async function handleGetGridSimple(
   const gridState: GridState = cached.gameManager.getGridState();
   const level = cached.gameManager.getCurrentLevel();
   const solvedWords = cached.gameManager.getSolvedWords();
-  const simpleResponse = buildGridSimple(gridState, level.answers, new Set(solvedWords));
+  const simpleResponse = buildGridSimple(
+    gridState,
+    level.answers,
+    new Set(solvedWords),
+    cached.gameManager.getCurrentLevelState().revealedCells
+  );
   sendJson(res, 200, simpleResponse);
 }
 

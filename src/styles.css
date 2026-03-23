@@ -22,6 +22,7 @@
   --grid-line-soft: #22344d;
   --grid-line-strong: #5d86c5;
   --accent: #2f7ef2;
+  --accent-glow: rgb(47 126 242 / 0.32);
   --feedback-good: #5aa9ff;
   --complete: #3a9d5c;
   --next-level: var(--complete);
@@ -152,6 +153,7 @@
   --grid-line-soft: #cddbef;
   --grid-line-strong: #2e5f99;
   --accent: #2a7ff0;
+  --accent-glow: rgb(42 127 240 / 0.22);
   --feedback-good: #006fe8;
   --complete: #0a8f39;
   --next-level: #22c457;
@@ -429,6 +431,8 @@ button:disabled {
   background: var(--bg);
   position: relative;
   z-index: 1;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .cell-hidden {
@@ -442,6 +446,13 @@ button:disabled {
 .cell-revealed {
   color: var(--text);
   background: var(--bg);
+}
+
+.cell-reveal-target {
+  outline: 5px solid var(--accent);
+  outline-offset: -2.5px;
+  box-shadow: 0 0 10px 2px var(--accent-glow);
+  z-index: 3;
 }
 
 .cell-recent-solved {

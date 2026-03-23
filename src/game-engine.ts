@@ -26,6 +26,7 @@ export interface HintState {
 export interface LevelState {
   solved: Set<string>;
   bonus: Set<string>;
+  revealedCells: Set<string>;
   hints: HintState;
 }
 
@@ -42,6 +43,7 @@ export interface SavedHintState {
 export interface SavedLevelState {
   solved: string[];
   bonus: string[];
+  revealedCells?: string[];
   hints?: SavedHintState;
   completed?: boolean;
 }
@@ -51,6 +53,7 @@ export interface SavedSettings {
   theme: 'dark' | 'light';
   alwaysShowHint: boolean;
   preferModernHints: boolean;
+  enableLetterRevealHint: boolean;
   disableSwapAnimation: boolean;
 }
 
@@ -80,6 +83,12 @@ export interface SubmitWordResult {
   autoSolved: string[];
   levelComplete: boolean;
   completionMessage?: string;
+}
+
+export interface RevealCellResult {
+  revealed: boolean;
+  autoSolved: string[];
+  levelComplete: boolean;
 }
 
 export interface GridCell {
@@ -115,6 +124,7 @@ export const DEFAULT_SETTINGS: SavedSettings = {
   theme: 'dark',
   alwaysShowHint: false,
   preferModernHints: false,
+  enableLetterRevealHint: false,
   disableSwapAnimation: false,
 };
 
@@ -183,6 +193,7 @@ export function createEmptyLevelState(): LevelState {
   return {
     solved: new Set(),
     bonus: new Set(),
+    revealedCells: new Set(),
     hints: {
       hintedCanonicals: new Set(),
       excludedHintCanonicals: new Set(),
@@ -224,10 +235,29 @@ function sanitizeModalHintStack(entries: SavedHintState['modalHintStack']): Save
   return sanitized;
 }
 
+function sanitizeRevealedCells(cells: SavedLevelState['revealedCells']): Set<string> {
+  if (!cells || cells.length === 0) {
+    return new Set<string>();
+  }
+
+  const sanitized = new Set<string>();
+  for (const key of cells) {
+    if (typeof key !== 'string') {
+      continue;
+    }
+    if (!/^\d+:\d+$/.test(key)) {
+      continue;
+    }
+    sanitized.add(key);
+  }
+  return sanitized;
+}
+
 export function hydrateLevelState(saved: SavedLevelState): LevelState {
   return {
     solved: new Set(saved.solved.map(normalizeWord)),
     bonus: new Set(saved.bonus.map(normalizeWord)),
+    revealedCells: sanitizeRevealedCells(saved.revealedCells),
     hints: {
       hintedCanonicals: new Set(saved.hints?.hintedCanonicals?.map(normalizeWord) ?? []),
       excludedHintCanonicals: new Set(saved.hints?.excludedHintCanonicals?.map(normalizeWord) ?? []),
@@ -250,6 +280,7 @@ export function serializeLevelState(state: LevelState, completed?: boolean): Sav
   const serialized: SavedLevelState = {
     solved: [...state.solved],
     bonus: [...state.bonus],
+    revealedCells: state.revealedCells.size > 0 ? [...state.revealedCells] : undefined,
     hints: hasHintData ? {
       hintedCanonicals: [...state.hints.hintedCanonicals],
       excludedHintCanonicals: [...state.hints.excludedHintCanonicals],
@@ -280,7 +311,11 @@ export function buildOccupiedCells(level: Level): Set<string> {
   return occupied;
 }
 
-export function buildRevealedCells(level: Level, solved: Set<string>): Set<string> {
+export function buildRevealedCells(
+  level: Level,
+  solved: Set<string>,
+  revealedCells: Set<string> = new Set()
+): Set<string> {
   const revealed = new Set<string>();
   for (const answer of level.answers) {
     if (!solved.has(normalizeWord(answer.text))) {
@@ -289,6 +324,9 @@ export function buildRevealedCells(level: Level, solved: Set<string>): Set<strin
     for (const [row, col] of answer.path) {
       revealed.add(cellKey(row, col));
     }
+  }
+  for (const key of revealedCells) {
+    revealed.add(key);
   }
   return revealed;
 }
@@ -315,7 +353,7 @@ export function autoSolveFullyRevealedAnswers(level: Level, state: LevelState): 
   let changed = true;
   while (changed) {
     changed = false;
-    const revealed = buildRevealedCells(level, state.solved);
+    const revealed = buildRevealedCells(level, state.solved, state.revealedCells);
     for (const answer of level.answers) {
       const word = normalizeWord(answer.text);
       if (state.solved.has(word)) {
@@ -331,6 +369,45 @@ export function autoSolveFullyRevealedAnswers(level: Level, state: LevelState): 
     }
   }
   return added;
+}
+
+export function revealCell(level: Level, state: LevelState, row: number, col: number): RevealCellResult {
+  const target = cellKey(row, col);
+  const occupied = buildOccupiedCells(level);
+  if (!occupied.has(target)) {
+    return {
+      revealed: false,
+      autoSolved: [],
+      levelComplete: isLevelComplete(level, state.solved),
+    };
+  }
+
+  const currentlyRevealed = buildRevealedCells(level, state.solved, state.revealedCells);
+  if (currentlyRevealed.has(target)) {
+    return {
+      revealed: false,
+      autoSolved: [],
+      levelComplete: isLevelComplete(level, state.solved),
+    };
+  }
+
+  const solvedBefore = new Set(state.solved);
+  state.revealedCells.add(target);
+  autoSolveFullyRevealedAnswers(level, state);
+
+  const autoSolved: string[] = [];
+  for (const answer of level.answers) {
+    const normalized = normalizeWord(answer.text);
+    if (!solvedBefore.has(normalized) && state.solved.has(normalized)) {
+      autoSolved.push(normalized);
+    }
+  }
+
+  return {
+    revealed: true,
+    autoSolved,
+    levelComplete: isLevelComplete(level, state.solved),
+  };
 }
 
 export function submitWord(
@@ -504,9 +581,13 @@ export function computeOccupiedBounds(level: Level): GridBounds {
   return { minRow, maxRow, minCol, maxCol };
 }
 
-export function buildGridState(level: Level, solvedWords: Set<string>): GridState {
+export function buildGridState(
+  level: Level,
+  solvedWords: Set<string>,
+  revealedCells: Set<string> = new Set()
+): GridState {
   const occupied = buildOccupiedCells(level);
-  const revealed = buildRevealedCells(level, solvedWords);
+  const revealed = buildRevealedCells(level, solvedWords, revealedCells);
   const bounds = computeOccupiedBounds(level);
 
   const wordStarts = new Set<string>();
@@ -557,18 +638,25 @@ export function buildAllGridStrings(
   rows: number,
   cols: number,
   answers: LevelAnswer[],
-  solvedWords: Set<string>
+  solvedWords: Set<string>,
+  revealedCells: Set<string> = new Set()
 ): AllGridStrings {
   const allOccupied = new Set<string>();
   const allWordStarts = new Set<string>();
+  const letterByCell = new Map<string, string>();
   
   for (const answer of answers) {
     if (answer.path.length > 0) {
       const [startRow, startCol] = answer.path[0];
       allWordStarts.add(`${startRow}:${startCol}`);
     }
-    for (const [row, col] of answer.path) {
-      allOccupied.add(`${row}:${col}`);
+    for (let i = 0; i < answer.path.length; i += 1) {
+      const [row, col] = answer.path[i];
+      const key = `${row}:${col}`;
+      allOccupied.add(key);
+      if (!letterByCell.has(key)) {
+        letterByCell.set(key, answer.text[i]?.toUpperCase() ?? '');
+      }
     }
   }
   
@@ -590,6 +678,16 @@ export function buildAllGridStrings(
         const key = `${row}:${col}`;
         revealedLetters.set(key, answer.text[i].toUpperCase());
       }
+    }
+  }
+
+  for (const key of revealedCells) {
+    if (!allOccupied.has(key) || revealedLetters.has(key)) {
+      continue;
+    }
+    const letter = letterByCell.get(key);
+    if (letter) {
+      revealedLetters.set(key, letter);
     }
   }
   
@@ -813,6 +911,16 @@ export class GameStateManager {
     }
     return result;
   }
+
+  revealCell(row: number, col: number): RevealCellResult {
+    const level = this.getCurrentLevel();
+    const state = this.getCurrentLevelState();
+    const result = revealCell(level, state, row, col);
+    if (result.levelComplete) {
+      this.completedLevelIds.add(level.id);
+    }
+    return result;
+  }
   
   isCurrentLevelComplete(): boolean {
     const level = this.getCurrentLevel();
@@ -939,7 +1047,8 @@ export class GameStateManager {
   }
   
   getGridState(): GridState {
-    return buildGridState(this.getCurrentLevel(), this.getCurrentLevelState().solved);
+    const state = this.getCurrentLevelState();
+    return buildGridState(this.getCurrentLevel(), state.solved, state.revealedCells);
   }
   
   getWheelState(): string[] {
@@ -965,6 +1074,7 @@ export class GameStateManager {
       if (
         state.solved.size > 0
         || state.bonus.size > 0
+        || state.revealedCells.size > 0
         || state.hints.hintCount > 0
         || state.hints.hintRefreshCount > 0
         || state.hints.excludedHintCanonicals.size > 0
@@ -1030,6 +1140,7 @@ export class GameSession {
     this.state = {
       solved: initialState?.solved ?? new Set(),
       bonus: initialState?.bonus ?? new Set(),
+      revealedCells: initialState?.revealedCells ?? new Set(),
       hints: {
         hintedCanonicals: initialState?.hints?.hintedCanonicals ?? new Set(),
         excludedHintCanonicals: initialState?.hints?.excludedHintCanonicals ?? new Set(),
@@ -1068,7 +1179,7 @@ export class GameSession {
   }
 
   getRevealedCells(): Set<string> {
-    return buildRevealedCells(this.level, this.state.solved);
+    return buildRevealedCells(this.level, this.state.solved, this.state.revealedCells);
   }
 
   isLevelComplete(): boolean {
@@ -1098,7 +1209,7 @@ export class GameSession {
   }
 
   getGridState(): GridState {
-    return buildGridState(this.level, this.state.solved);
+    return buildGridState(this.level, this.state.solved, this.state.revealedCells);
   }
 
   getWheelState(): string[] {

@@ -26,15 +26,15 @@ Play online: https://plhosk.github.io/wordtracer/
 
 - **Example:** to spell the word **HOT**, press the swap button once to change the **OH** token to **HO**, then swipe from **HO** to **T**.
 
-### Hints
+### The Board
+
+- On the board (top of screen), hidden words are positioned like a crossword, spelled either downwards or to the right.
+
+- Find words by guessing and using information from the board such as word lengths and revealed letters.
 
 - Use the Hint button for a clue to an unsolved word.
 
-### The Board
-
-- On the board (top of screen), words are positioned like a crossword, spelled either downwards or to the right.
-
-- Solve every word on the board to advance to the next level.
+- Guess and submit every word on the board to advance to the next level.
 
 - Solving words will reveal some of the letters of connected words. Solve a partially revealed word by submitting the full word.
 

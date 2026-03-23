@@ -98,6 +98,13 @@ Level</button>
           </span>
         </label>
         <label class="setting-row setting-row-switch">
+          <span class="setting-label">Enable letter reveal hint</span>
+          <span class="switch">
+            <input id="enable-letter-reveal-hint" class="switch-input" type="checkbox" />
+            <span class="switch-ui" aria-hidden="true"></span>
+          </span>
+        </label>
+        <label class="setting-row setting-row-switch">
           <span class="setting-label">Auto-advance to next level</span>
           <span class="switch">
             <input id="auto-advance" class="switch-input" type="checkbox" />
@@ -145,18 +152,18 @@ Level</button>
       <div class="help-content">
         <section class="help-section">
           <p class="help-text">Open these instructions at any time with the <b>?</b> button.</p>
-          <h1 class="help-section-title">How to Play</h1>
+          <h1 class="help-section-title">The Wheel</h1>
           <p class="help-text">Swipe across the <b>wheel</b> (bottom of screen) to build a word from the available <b>tokens</b>, then lift to submit it.</p>
           <p class="help-text"><b>Example:</b> to spell the word <b>EAT</b>, start the swipe on <b>EA</b> and lift after reaching <b>T</b>.</p>
           <p class="help-text">Words are built from two or more tokens. Each token can only be used once per word.</p>
           <h1 class="help-section-title">Swap Button</h1>
           <p class="help-text">Press the <b>swap button</b> (below the wheel) to swap the order of all tokens with two or more letters.</p>
           <p class="help-text"><b>Example:</b> to spell the word <b>HOT</b>, press the swap button once to change the <b>OH</b> token to <b>HO</b>, then swipe from <b>HO</b> to <b>T</b>.</p>
-          <h1 class="help-section-title">Hints</h1>
-          <p class="help-text">Use the Hint button for a clue to an unsolved word.</p>
           <h1 class="help-section-title">The Board</h1>
-          <p class="help-text">On the board (top of screen), words are positioned like a crossword, spelled either downwards or to the right.</p>
-          <p class="help-text">Solve every word on the board to advance to the next level.</p>
+          <p class="help-text">On the board (top of screen), hidden words are positioned like a crossword, spelled either downwards or to the right.</p>
+          <p class="help-text">Find words by guessing and using information from the board such as word lengths and revealed letters.</p>
+          <p class="help-text">Use the Hint button for a clue to an unsolved word.</p>
+          <p class="help-text">Guess and submit every word on the board to advance to the next level.</p>
           <p class="help-text">Solving words will reveal some of the letters of connected words. Solve a partially revealed word by submitting the full word.</p>
         </section>
       </div>
@@ -245,7 +252,8 @@ Level</button>
       <p id="refresh-hint-subtitle" class="small">Refreshes available this level: 2</p>
       <div id="refresh-hint-actions" class="confirm-actions">
         <button id="cancel-refresh-hint" type="button">Cancel</button>
-        <button id="confirm-refresh-hint" type="button">Refresh</button>
+        <button id="confirm-refresh-hint" type="button">Show new hint</button>
+        <button id="reveal-letter-hint" type="button">Reveal a letter</button>
       </div>
     </div>
   </section>

@@ -74,6 +74,7 @@ const DEFAULT_SETTINGS: SavedSettings = {
   theme: 'dark',
   alwaysShowHint: false,
   preferModernHints: false,
+  enableLetterRevealHint: false,
   disableSwapAnimation: false,
 };
 
@@ -122,10 +123,12 @@ const refreshHintSubtitle = required('#refresh-hint-subtitle');
 const refreshHintActions = required('#refresh-hint-actions');
 const cancelRefreshHintButton = required('#cancel-refresh-hint') as HTMLButtonElement;
 const confirmRefreshHintButton = required('#confirm-refresh-hint') as HTMLButtonElement;
+const revealLetterHintButton = required('#reveal-letter-hint') as HTMLButtonElement;
 const autoAdvanceInput = required('#auto-advance') as HTMLInputElement;
 const lightThemeInput = required('#light-theme') as HTMLInputElement;
 const alwaysShowHintInput = required('#always-show-hint') as HTMLInputElement;
 const preferModernHintsInput = required('#prefer-modern-hints') as HTMLInputElement;
+const enableLetterRevealHintInput = required('#enable-letter-reveal-hint') as HTMLInputElement;
 const disableSwapAnimationInput = required('#disable-swap-animation') as HTMLInputElement;
 const persistentHintEl = required('#persistent-hint') as HTMLParagraphElement;
 const resetLevelButton = required('#reset-level') as HTMLButtonElement;
@@ -169,6 +172,13 @@ let wheelSize = BASE_WHEEL_SIZE;
 let tokenSwapAnimationTimer: ReturnType<typeof window.setTimeout> | null = null;
 let tokenSwapAnimationSequence = 0;
 let suppressSwapButtonClickUntil = 0;
+let revealLetterSelectionMode = false;
+let revealModeFeedbackSnapshot: {
+  text: string;
+  trailingWord: string;
+  toneClass: string;
+  lookupWord: string;
+} | null = null;
 
 void init();
 
@@ -244,6 +254,7 @@ function bindStaticEvents(): void {
   document.addEventListener('pointermove', onDocumentPointerMove);
   document.addEventListener('pointerup', onDocumentPointerUp);
   document.addEventListener('pointercancel', onDocumentPointerCancel);
+  document.addEventListener('pointerdown', onDocumentPointerDown, true);
 
   window.addEventListener('resize', () => {
     cancelCurrentSwipe();
@@ -311,6 +322,10 @@ function bindStaticEvents(): void {
 
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
+      if (revealLetterSelectionMode) {
+        cancelRevealLetterSelectionMode();
+        return;
+      }
       if (!resetLevelModal.hidden) {
         closeResetLevelModal(true);
         return;
@@ -442,6 +457,11 @@ function bindStaticEvents(): void {
     refreshHint();
   });
 
+  revealLetterHintButton.addEventListener('click', () => {
+    closeRefreshHintModal(false);
+    enterRevealLetterSelectionMode();
+  });
+
   autoAdvanceInput.addEventListener('change', () => {
     settings.autoAdvance = autoAdvanceInput.checked;
     setFeedback(`Auto-advance ${settings.autoAdvance ? 'enabled' : 'disabled'}.`, 'muted');
@@ -468,6 +488,14 @@ function bindStaticEvents(): void {
     settings.preferModernHints = preferModernHintsInput.checked;
     if (settings.alwaysShowHint) {
       updatePersistentHint();
+    }
+    saveState();
+  });
+
+  enableLetterRevealHintInput.addEventListener('change', () => {
+    settings.enableLetterRevealHint = enableLetterRevealHintInput.checked;
+    if (!settings.enableLetterRevealHint) {
+      cancelRevealLetterSelectionMode();
     }
     saveState();
   });
@@ -562,6 +590,7 @@ function renderSettings(): void {
   lightThemeInput.checked = settings.theme === 'light';
   alwaysShowHintInput.checked = settings.alwaysShowHint;
   preferModernHintsInput.checked = settings.preferModernHints;
+  enableLetterRevealHintInput.checked = settings.enableLetterRevealHint;
   disableSwapAnimationInput.checked = settings.disableSwapAnimation;
   applyTheme();
 }
@@ -841,7 +870,7 @@ function renderGrid(level: Level, state: ActiveLevelState): void {
   const wallsLayer = createGridWallsLayer(visibleRows, boardCols);
   gridEl.appendChild(wallsLayer.root);
 
-  const revealed = buildRevealedCells(level, state.solved);
+  const revealed = buildRevealedCells(level, state.solved, state.revealedCells);
 
   for (let row = 0; row < visibleRows; row += 1) {
     for (let col = 0; col < boardCols; col += 1) {
@@ -863,6 +892,9 @@ function renderGrid(level: Level, state: ActiveLevelState): void {
         gridEl.appendChild(cell);
         continue;
       }
+
+      cell.dataset.levelRow = String(levelRow);
+      cell.dataset.levelCol = String(levelCol);
 
       const topOccupied = isOccupiedLevelCell(level, occupied, levelRow - 1, levelCol);
       const leftOccupied = isOccupiedLevelCell(level, occupied, levelRow, levelCol - 1);
@@ -888,6 +920,9 @@ function renderGrid(level: Level, state: ActiveLevelState): void {
       } else {
         cell.textContent = '';
         cell.classList.add('cell-hidden');
+        if (revealLetterSelectionMode) {
+          cell.classList.add('cell-reveal-target');
+        }
       }
       if (recentSolvedCells.has(key)) {
         cell.classList.add('cell-recent-solved');
@@ -1154,6 +1189,151 @@ function computeLetterCentersFromCount(count: number): Point[] {
   }
 
   return points;
+}
+
+function enterRevealLetterSelectionMode(): void {
+  if (revealLetterSelectionMode) {
+    return;
+  }
+
+  const state = gameManager.getCurrentLevelState();
+  if (!canRefreshHint(state)) {
+    return;
+  }
+
+  revealModeFeedbackSnapshot = {
+    text: feedbackText,
+    trailingWord: feedbackWordText,
+    toneClass: feedbackToneClass,
+    lookupWord: feedbackLookupWord,
+  };
+  revealLetterSelectionMode = true;
+  setFeedback('Choose an unrevealed cell...', 'good');
+  render();
+}
+
+function cancelRevealLetterSelectionMode(): void {
+  if (!revealLetterSelectionMode) {
+    return;
+  }
+
+  revealLetterSelectionMode = false;
+  restoreFeedbackSnapshot(revealModeFeedbackSnapshot);
+  revealModeFeedbackSnapshot = null;
+  render();
+}
+
+function restoreFeedbackSnapshot(snapshot: {
+  text: string;
+  trailingWord: string;
+  toneClass: string;
+  lookupWord: string;
+} | null): void {
+  previewingSelection = false;
+
+  if (!snapshot) {
+    clearFeedback();
+    return;
+  }
+
+  feedbackText = snapshot.text;
+  feedbackWordText = snapshot.trailingWord;
+  feedbackToneClass = snapshot.toneClass;
+  feedbackLookupWord = snapshot.lookupWord;
+  renderFeedback(feedbackText, feedbackWordText);
+  const splitClass = feedbackWordText ? ' feedback-split' : '';
+  feedback.className = feedbackToneClass
+    ? `feedback${splitClass} ${feedbackToneClass}`
+    : `feedback${splitClass}`;
+  refreshDictionaryButton();
+}
+
+function markRecentSolvedWords(words: string[]): void {
+  const level = gameManager.getCurrentLevel();
+  const solvedWords = new Set(words.map(normalizeWord));
+  const solvedCells = new Set<string>();
+
+  for (const answer of level.answers) {
+    const normalized = normalizeWord(answer.text);
+    if (!solvedWords.has(normalized)) {
+      continue;
+    }
+    for (const [row, col] of answer.path) {
+      solvedCells.add(cellKey(row, col));
+    }
+  }
+
+  recentSolvedCells = solvedCells;
+}
+
+async function revealCellFromSelectionMode(row: number, col: number): Promise<void> {
+  const state = gameManager.getCurrentLevelState();
+  if (!canRefreshHint(state)) {
+    cancelRevealLetterSelectionMode();
+    return;
+  }
+
+  const revealResult = gameManager.revealCell(row, col);
+  if (!revealResult.revealed) {
+    cancelRevealLetterSelectionMode();
+    return;
+  }
+
+  revealLetterSelectionMode = false;
+  revealModeFeedbackSnapshot = null;
+  clearCompletionSummaryCarryover();
+  state.hints.hintRefreshCount += 1;
+
+  if (revealResult.autoSolved.length > 0) {
+    markRecentSolvedWords(revealResult.autoSolved);
+    if (revealResult.autoSolved.length === 1) {
+      setFeedback('Solved:', 'good', revealResult.autoSolved[0].toUpperCase());
+    } else {
+      setFeedback(`Solved ${revealResult.autoSolved.length} words.`, 'good');
+    }
+    void updatePersistentHint();
+  } else {
+    clearRecentSolvedCells();
+    setFeedback('Letter revealed.', 'muted');
+  }
+
+  if (revealResult.levelComplete) {
+    await completeCurrentLevel();
+  }
+
+  render();
+  saveState();
+}
+
+function onDocumentPointerDown(event: PointerEvent): void {
+  if (!revealLetterSelectionMode) {
+    return;
+  }
+
+  const target = event.target;
+  const cell = target instanceof Element
+    ? target.closest<HTMLElement>('.cell[data-level-row][data-level-col]')
+    : null;
+
+  if (!cell || !cell.classList.contains('cell-hidden')) {
+    cancelRevealLetterSelectionMode();
+    event.preventDefault();
+    event.stopPropagation();
+    return;
+  }
+
+  const row = Number(cell.dataset.levelRow);
+  const col = Number(cell.dataset.levelCol);
+  if (!Number.isInteger(row) || !Number.isInteger(col)) {
+    cancelRevealLetterSelectionMode();
+    event.preventDefault();
+    event.stopPropagation();
+    return;
+  }
+
+  void revealCellFromSelectionMode(row, col);
+  event.preventDefault();
+  event.stopPropagation();
 }
 
 function onWheelPointerDown(event: PointerEvent): void {
@@ -1558,6 +1738,41 @@ function sanitizeStoredHintRefreshCount(rawHints: Record<string, unknown>): numb
   return 0;
 }
 
+function sanitizeStoredRevealedCells(raw: unknown): string[] {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+
+  const sanitized: string[] = [];
+  const seen = new Set<string>();
+  for (const item of raw) {
+    if (typeof item !== 'string') {
+      continue;
+    }
+    if (!/^\d+:\d+$/.test(item) || seen.has(item)) {
+      continue;
+    }
+    seen.add(item);
+    sanitized.push(item);
+  }
+
+  return sanitized;
+}
+
+function isStoredRevealedCellsSanitized(raw: unknown, sanitized: string[]): boolean {
+  if (!Array.isArray(raw) || raw.length !== sanitized.length) {
+    return false;
+  }
+
+  for (let index = 0; index < sanitized.length; index += 1) {
+    if (raw[index] !== sanitized[index]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 function isStoredModalHintStackSanitized(raw: unknown, sanitized: ModalHintEntry[]): boolean {
   if (!Array.isArray(raw) || raw.length !== sanitized.length) {
     return false;
@@ -1597,6 +1812,19 @@ function migrateLoadedState(raw: unknown): { state: SavedGameState | null; didMi
     }
 
     const levelState = rawLevelState as Record<string, unknown>;
+
+    const originalRevealedCells = levelState.revealedCells;
+    const sanitizedRevealedCells = sanitizeStoredRevealedCells(originalRevealedCells);
+    if (!isStoredRevealedCellsSanitized(originalRevealedCells, sanitizedRevealedCells)) {
+      didMigrate = true;
+    }
+    if (sanitizedRevealedCells.length > 0) {
+      levelState.revealedCells = sanitizedRevealedCells;
+    } else if ('revealedCells' in levelState) {
+      delete levelState.revealedCells;
+      didMigrate = true;
+    }
+
     const hints = isRecord(levelState.hints) ? levelState.hints : null;
     if (hints) {
       const sanitizedRefreshCount = sanitizeStoredHintRefreshCount(hints);
@@ -1663,6 +1891,10 @@ function loadSettings(raw: SavedGameState['settings']): SavedSettings {
       typeof raw?.preferModernHints === 'boolean'
         ? raw.preferModernHints
         : DEFAULT_SETTINGS.preferModernHints,
+    enableLetterRevealHint:
+      typeof raw?.enableLetterRevealHint === 'boolean'
+        ? raw.enableLetterRevealHint
+        : DEFAULT_SETTINGS.enableLetterRevealHint,
     disableSwapAnimation:
       typeof raw?.disableSwapAnimation === 'boolean'
         ? raw.disableSwapAnimation
@@ -1982,11 +2214,16 @@ function closeHintModal(restoreFocus: boolean): void {
 }
 
 function openRefreshHintModal(): void {
-  updateRefreshHintSubtitle(gameManager.getCurrentLevelState());
+  const state = gameManager.getCurrentLevelState();
+  const canRefresh = canRefreshHint(state);
+  updateRefreshHintSubtitle(state);
   closeHintModal(false);
   refreshHintActions.hidden = false;
   refreshHintModal.hidden = false;
   modalRefreshHintButton.setAttribute('aria-expanded', 'true');
+  confirmRefreshHintButton.disabled = !canRefresh;
+  revealLetterHintButton.hidden = !settings.enableLetterRevealHint;
+  revealLetterHintButton.disabled = !settings.enableLetterRevealHint || !canRefresh;
   cancelRefreshHintButton.focus();
 }
 
