@@ -10,6 +10,34 @@ Play online: https://plhosk.github.io/wordtracer/
 
 <img src="images/screenshot2.png" alt="Word Tracer gameplay" width="180" />
 
+## How To Play
+
+### The Wheel
+
+- Swipe across the **wheel** (bottom of screen) to build a word from the available **tokens**, then lift to submit it.
+
+- **Example:** to spell the word **EAT**, start the swipe on **EA** and lift after reaching **T**.
+
+- Words are built from two or more tokens. Each token can only be used once per word.
+
+### Swap Button
+
+- Press the **swap button** (below the wheel) to swap the order of all tokens with two or more letters.
+
+- **Example:** to spell the word **HOT**, press the swap button once to change the **OH** token to **HO**, then swipe from **HO** to **T**.
+
+### Hints
+
+- Use the Hint button for a clue to an unsolved word.
+
+### The Board
+
+- On the board (top of screen), words are positioned like a crossword, spelled either downwards or to the right.
+
+- Solve every word on the board to advance to the next level.
+
+- Solving words will reveal some of the letters of connected words. Solve a partially revealed word by submitting the full word.
+
 ## Play Locally
 
 Clone the Git repository to play locally (requires Git and Node.js v20 or newer):
@@ -22,15 +50,6 @@ npm run dev
 ```
 
 Then open the local Vite URL shown in your terminal. Default: `http://localhost:5173`
-
-## How To Play
-
-- Swipe across the wheel to build a word from the available tokens.
-- Correct answers reveal words on the board.
-- Use the swap button below the wheel to reverse multi-letter tokens when a word needs the other direction.
-- Need a hint? Try the hint button.
-- Guess all the words correctly to finish the level and unlock the next one.
-- Comes with 2,484 levels of increasing difficulty.
 
 ## Features
 
