@@ -38,19 +38,19 @@
           </button>
           <button id="next-level-inline" type="button" class="next-level-btn" aria-hidden="true" disabled>Next
 Level</button>
+          <button id="hint-button" type="button" class="hint-open-btn" aria-label="Get hint" aria-expanded="false">
+            <svg class="hint-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 4 5.74V17a.8 .8 0 0 0 .8 .8h4.4a.8 .8 0 0 0 .8-.8v-2.26c2.81-1.27 4-3.36 4-5.74a7 7 0 0 0-7-7z" />
+              <path d="M9.6 17h4.8" />
+              <path d="M9.4 20.3h5.2" />
+              <path d="M9.6 23h4.8" />
+            </svg>
+          </button>
           <button id="dictionary-button" type="button" class="dictionary-open-btn" aria-label="Look up word definition" aria-expanded="false" disabled>
             <svg class="dictionary-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v15M20 22H6.5a2.5 2.5 0 0 1 0-5H20" />
               <path d="M20 17v5" />
               <path d="M9 2v6l2-1.5L13 8V2" />
-            </svg>
-          </button>
-          <button id="hint-button" type="button" class="hint-open-btn" aria-label="Get hint" aria-expanded="false">
-            <svg class="hint-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z" />
-              <path d="M9 21h6" />
-              <path d="M10 17v4" />
-              <path d="M14 17v4" />
             </svg>
           </button>
           <button id="bonus-button" type="button" class="bonus-open-btn" aria-label="Bonus words" aria-expanded="false">
@@ -146,7 +146,7 @@ Level</button>
   <section id="help-modal" class="confirm-modal help-modal" role="dialog" aria-modal="true" aria-labelledby="help-title" hidden>
     <div class="confirm-card help-card">
       <div class="settings-head help-head">
-        <h2 id="help-title">Help</h2>
+        <h2 id="help-title">Welcome to Word Tracer</h2>
         <button id="close-help-modal" type="button" class="close-menu" aria-label="Close help">✕</button>
       </div>
       <div class="help-content">

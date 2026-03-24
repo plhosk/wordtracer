@@ -800,7 +800,7 @@ button:disabled {
 
 .hint-open-btn {
   right: 0;
-  bottom: calc(56px * var(--compact-scale));
+  bottom: calc(114px * var(--compact-scale));
   top: auto;
   transform: none;
   color: var(--swap-btn-border);
@@ -808,7 +808,7 @@ button:disabled {
 
 .dictionary-open-btn {
   right: 0;
-  bottom: calc(114px * var(--compact-scale));
+  bottom: calc(56px * var(--compact-scale));
   top: auto;
   transform: none;
   color: var(--swap-btn-border);

@@ -1,12 +1,10 @@
 # Word Tracer
 
-Word Tracer is a word puzzle game with crossword-style boards and a swipeable letter wheel. Trace words from the wheel to reveal the grid, clear each level, and keep an eye out for bonus words.
-
-Fully offline and ad-free.
+Word Tracer is a word puzzle game with crossword-style boards and a swipeable letter wheel. Trace words from the wheel to reveal the grid, clear each level, and keep an eye out for bonus words. Offline and ad-free.
 
 ## Start Playing
 
-Play online: https://plhosk.github.io/wordtracer/
+Play on GitHub: https://plhosk.github.io/wordtracer/
 
 <img src="images/screenshot2.png" alt="Word Tracer gameplay" width="180" />
 
@@ -48,7 +46,7 @@ Play online: https://plhosk.github.io/wordtracer/
 
 ## Play Locally
 
-Clone the Git repository to play locally (requires Git and Node.js v20 or newer):
+Clone the Git repository to play locally (requires Git and Node.js v22 or newer):
 
 ```bash
 git clone https://github.com/plhosk/wordtracer.git
@@ -98,9 +96,9 @@ npm run dev           # start the Vite web app
 npm run check         # run TypeScript and ESLint
 npm run build         # build the web app
 npm run build:server  # build the Node API server
+npm run preview       # preview the production web build locally
 npm run server        # build and start the API server
 npm run server:watch  # rebuild and restart the API server on changes
-npm run preview       # preview the production web build locally
 ```
 
 Android helpers:
@@ -108,14 +106,7 @@ Android helpers:
 ```bash
 npm run cap:sync      # build web assets and sync them into Capacitor
 npm run android:build # build a debug APK
-npm run android:open  # open the Android project in Android Studio
-npm run android:run   # sync and run the app on Android
-npm run android:release:preflight -- x.x.x  # require clean tree, matching versions, and exact release tag
 npm run android:build:release:unsigned  # reproducible unsigned release APK build (npm ci + cap sync + gradle release)
-npm run android:sign:release  # sign unsigned release APK with pinned apksigner (requires env vars)
-npm run android:release:repro  # run preflight + unsigned build + signing
-npm run release:set-version -- x.x.x  # bump app + F-Droid release versions
-npm run fdroid:prepare-release -- x.x.x  # normalize metadata commit to git hash for this release
 ```
 
 Reproducible Android release runbook: `docs/reproducible-builds.md`
