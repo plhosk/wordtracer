@@ -106,7 +106,29 @@ def trim_level_for_production(level: dict) -> dict:
             trim_answer_for_production(ans) if isinstance(ans, dict) else ans
             for ans in trimmed["answers"]
         ]
-    return trimmed
+
+    ordered: dict = {}
+    for key in (
+        "id",
+        "rows",
+        "cols",
+        "groupId",
+        "groupIndex",
+        "indexInGroup",
+        "letterWheel",
+        "combos",
+        "bonusWords",
+        "answers",
+        "walls",
+    ):
+        if key in trimmed:
+            ordered[key] = trimmed[key]
+
+    for key, value in trimmed.items():
+        if key not in ordered:
+            ordered[key] = value
+
+    return ordered
 
 
 def trim_group_for_production(group: dict) -> dict:

@@ -40,8 +40,7 @@ export interface Level {
   walls: LevelWalls;
   letterWheel: string[];
   answers: LevelAnswer[];
-  validWords: string[];
-  bonusWords?: string[];
+  bonusWords: string[];
   groupId?: string;
   groupIndex?: number;
   indexInGroup?: number;

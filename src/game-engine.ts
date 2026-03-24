@@ -486,10 +486,9 @@ export function submitWord(
     };
   }
 
-  const bonusSet = new Set((level.bonusWords ?? []).map(normalizeWord));
-  const validSet = new Set(level.validWords.map(normalizeWord));
+  const bonusSet = new Set(level.bonusWords.map(normalizeWord));
 
-  if (bonusSet.has(normalizedWord) || validSet.has(normalizedWord)) {
+  if (bonusSet.has(normalizedWord)) {
     if (state.bonus.has(normalizedWord)) {
       return {
         result: 'already-bonus',

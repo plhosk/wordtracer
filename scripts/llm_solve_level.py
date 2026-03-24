@@ -473,9 +473,8 @@ def submit_word(word: str, level: dict, state: GameState) -> tuple[bool, str]:
 
     # Check if it's a bonus word
     bonus_words = [w.lower() for w in level.get("bonusWords", [])]
-    valid_words = [w.lower() for w in level.get("validWords", [])]
 
-    if word_lower in bonus_words or word_lower in valid_words:
+    if word_lower in bonus_words:
         if word_lower in state.bonus_words:
             return False, f"'{word.upper()}' already found as bonus."
         state.bonus_words.add(word_lower)

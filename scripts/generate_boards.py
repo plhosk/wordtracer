@@ -173,7 +173,6 @@ def parse_args() -> argparse.Namespace:
         default=0,
         help="Maximum answers per level (0 = uncapped).",
     )
-    parser.add_argument("--max-valid-words", type=int, default=320)
     parser.add_argument("--max-bonus-words", type=int, default=220)
     parser.add_argument("--max-candidate-words", type=int, default=2500)
     parser.add_argument("--max-attempts", type=int, default=6000)
@@ -1812,11 +1811,7 @@ def build_level(
             item,
         ),
     )
-    bonus_words = bonus_words_ranked[: args.max_bonus_words]
-    visible_valid_words = (
-        sorted(answer_set)
-        + bonus_words_ranked[: max(0, args.max_valid_words - len(answer_set))]
-    )
+    bonus_words = sorted(bonus_words_ranked[: args.max_bonus_words])
 
     combos: set[str] = set()
     for answer in answers:
@@ -1838,13 +1833,12 @@ def build_level(
         "seed": seed_word,
         "layoutMode": layout_mode,
         "placementStats": layout_stats,
-        "walls": derive_walls_sparse(rows, cols, paths, h, v),
-        "letterWheel": wheel_tokens,
-        "answers": answer_objects,
-        "combos": sorted(combos),
-        "validWords": visible_valid_words,
-        "bonusWords": bonus_words,
         "_signature": signature,
+        "letterWheel": wheel_tokens,
+        "combos": sorted(combos),
+        "bonusWords": bonus_words,
+        "answers": answer_objects,
+        "walls": derive_walls_sparse(rows, cols, paths, h, v),
     }
 
 
