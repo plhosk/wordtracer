@@ -806,8 +806,9 @@ export function formatCompletionSummary(state: LevelState): string {
   if (state.bonus.size > 0) {
     base = `${base}, ${state.bonus.size} bonus`;
   }
-  if (state.hints.hintCount > 0) {
-    base = `${base}, ${state.hints.hintCount} hint${state.hints.hintCount !== 1 ? 's' : ''} used`;
+  const totalHintsUsed = state.hints.hintCount + state.revealedCells.size;
+  if (totalHintsUsed > 0) {
+    base = `${base}, ${totalHintsUsed} hint${totalHintsUsed !== 1 ? 's' : ''} used`;
   }
   return base;
 }
