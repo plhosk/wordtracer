@@ -147,6 +147,9 @@ const levelPackModal = required('#level-pack-modal');
 const closeLevelPackModalButton = required('#close-level-pack-modal') as HTMLButtonElement;
 const levelPackSummary = required('#level-pack-summary');
 const levelPackList = required('#level-pack-list');
+const packCompleteModal = required('#pack-complete-modal');
+const packCompleteMessage = required('#pack-complete-message') as HTMLParagraphElement;
+const confirmPackCompleteButton = required('#confirm-pack-complete') as HTMLButtonElement;
 
 let levelGroups: RuntimeLevelGroup[] = [];
 let boardRows = 1;
@@ -175,6 +178,7 @@ let tokenSwapAnimationTimer: ReturnType<typeof window.setTimeout> | null = null;
 let tokenSwapAnimationSequence = 0;
 let suppressSwapButtonClickUntil = 0;
 let revealLetterSelectionMode = false;
+let pendingPackCompleteAutoAdvance = false;
 let revealModeFeedbackSnapshot: {
   text: string;
   trailingWord: string;
@@ -282,6 +286,16 @@ function bindStaticEvents(): void {
     }
   });
 
+  packCompleteModal.addEventListener('click', (event) => {
+    if (event.target === packCompleteModal) {
+      void acknowledgePackCompleteModal();
+    }
+  });
+
+  confirmPackCompleteButton.addEventListener('click', () => {
+    void acknowledgePackCompleteModal();
+  });
+
   closeMenuButton.addEventListener('click', () => {
     closeSettingsActivity();
   });
@@ -326,6 +340,10 @@ function bindStaticEvents(): void {
     if (event.key === 'Escape') {
       if (revealLetterSelectionMode) {
         cancelRevealLetterSelectionMode();
+        return;
+      }
+      if (!packCompleteModal.hidden) {
+        void acknowledgePackCompleteModal();
         return;
       }
       if (!resetLevelModal.hidden) {
@@ -618,6 +636,10 @@ function groupSolvedLevels(group: RuntimeLevelGroup): number {
   return Math.min(group.levelCount, countSavedCompletedInGroup(group));
 }
 
+function isGroupComplete(group: RuntimeLevelGroup): boolean {
+  return group.levelCount > 0 && groupSolvedLevels(group) >= group.levelCount;
+}
+
 function countSavedCompletedInGroup(group: RuntimeLevelGroup): number {
   const sortedGroupIds = levelGroups
     .map(levelGroup => levelGroup.id)
@@ -694,10 +716,21 @@ function renderLevelPackModal(): void {
 function renderTokenOrderToggle(levelDone: boolean): void {
   const swapped = gameManager.getTokenOrderMode() === 'reverse';
   swapTokensButton.setAttribute('aria-pressed', swapped ? 'true' : 'false');
-  const canGoNext = levelDone && !settings.autoAdvance && gameManager.canAdvanceToNextLevel();
+  const canGoNext = shouldShowNextLevelButton(levelDone);
   nextLevelInlineButton.classList.toggle('next-level-btn-visible', canGoNext);
   nextLevelInlineButton.disabled = !canGoNext;
   nextLevelInlineButton.setAttribute('aria-hidden', canGoNext ? 'false' : 'true');
+}
+
+function shouldShowNextLevelButton(levelDone: boolean): boolean {
+  if (!levelDone || !gameManager.canAdvanceToNextLevel()) {
+    return false;
+  }
+  if (!settings.autoAdvance) {
+    return true;
+  }
+  const status = currentGroupStatus();
+  return status ? isGroupComplete(status.group) : false;
 }
 
 function swapTokenOrder(): void {
@@ -1657,16 +1690,30 @@ function clearRecentSolvedCells(): void {
 }
 
 async function completeCurrentLevel(): Promise<void> {
+  const status = currentGroupStatus();
+  if (status && isGroupComplete(status.group)) {
+    pendingPackCompleteAutoAdvance = settings.autoAdvance;
+    openPackCompleteModal(status.group.id);
+    return;
+  }
+
   if (!settings.autoAdvance) {
     return;
   }
 
+  await autoAdvanceAfterLevelComplete();
+}
+
+async function autoAdvanceAfterLevelComplete(): Promise<boolean> {
   completionSummaryCarryover = formatCompletionSummary(gameManager.getCurrentLevelState());
   const advanced = await advanceToNextLevelEnsuringLoaded();
-  if (!advanced) return;
+  if (!advanced) {
+    return false;
+  }
   
   clearRecentSolvedCells();
   preloadAdjacentGroups();
+  return true;
 }
 
 function saveState(): void {
@@ -1974,6 +2021,49 @@ function closeLevelPackModal(restoreFocus: boolean): void {
   if (restoreFocus) {
     levelPackButton.focus();
   }
+}
+
+function openPackCompleteModal(groupId: string): void {
+  closeSettingsActivity();
+  closeHelpModal(false);
+  closeBonusModal(false);
+  closeDictionaryModal(false);
+  closeHintModal(false);
+  closeRefreshHintModal(false);
+  closeLevelPackModal(false);
+  packCompleteMessage.textContent = `You completed level pack ${groupId}.`;
+  packCompleteModal.hidden = false;
+  confirmPackCompleteButton.focus();
+}
+
+function closePackCompleteModal(restoreFocus: boolean): void {
+  if (packCompleteModal.hidden) {
+    return;
+  }
+
+  packCompleteModal.hidden = true;
+  if (restoreFocus) {
+    levelPackButton.focus();
+  }
+}
+
+async function acknowledgePackCompleteModal(): Promise<void> {
+  const shouldAutoAdvance = pendingPackCompleteAutoAdvance;
+  pendingPackCompleteAutoAdvance = false;
+  closePackCompleteModal(!shouldAutoAdvance);
+
+  if (!shouldAutoAdvance) {
+    return;
+  }
+
+  const advanced = await autoAdvanceAfterLevelComplete();
+  if (!advanced) {
+    levelPackButton.focus();
+    return;
+  }
+
+  render();
+  saveState();
 }
 
 async function jumpToGroup(groupIndex: number): Promise<void> {
