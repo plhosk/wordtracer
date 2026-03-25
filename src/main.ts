@@ -11,6 +11,7 @@ import {
   type RuntimeLevelGroup,
   type SavedSettings,
   type SavedGameState,
+  type SavedLevelState,
   normalizeWord,
   clamp,
   cellKey,
@@ -56,7 +57,13 @@ interface Point {
   y: number;
 }
 
-const STORAGE_KEY = 'wordtracer-state-v2';
+const LEGACY_STORAGE_KEY = 'wordtracer-state-v2';
+const LEGACY_STORAGE_KEY_LETTERS_MAZE_V1 = 'letters-maze-state-v1';
+const LEGACY_STORAGE_KEY_LETTERS_MAZE_V2 = 'letters-maze-state-v2';
+const STORAGE_NAMESPACE_V3 = 'wordtracer-state-v3';
+const STORAGE_LAYOUT_VERSION = 3;
+const STORAGE_META_KEY = `${STORAGE_NAMESPACE_V3}:meta`;
+const STORAGE_PACK_KEY_PREFIX = `${STORAGE_NAMESPACE_V3}:pack:`;
 const IS_ANDROID = Capacitor.getPlatform() === 'android';
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const BASE_WHEEL_SIZE = 216;
@@ -185,16 +192,22 @@ let revealModeFeedbackSnapshot: {
   toneClass: string;
   lookupWord: string;
 } | null = null;
+let persistStateQueue: Promise<void> = Promise.resolve();
+let cachedPersistedMetaValue: string | null = null;
+const cachedPersistedPackValues = new Map<string, string>();
+let cachedPersistenceGroupIds: string[] | null = null;
+let hasPrunedKnownV3PackKeys = false;
 
 void init();
 
 async function init(): Promise<void> {
   let initialGroupId: string;
   let initialLevels: Level[];
+  let savedState: SavedGameState | null;
   
   try {
-    const saved = await loadState();
-    const preferredGroupId = saved?.currentGroupId;
+    savedState = await loadState();
+    const preferredGroupId = savedState?.currentGroupId;
     
     const data = await dataLoader.loadInitialLevels(preferredGroupId);
     levelGroups = data.groups;
@@ -208,17 +221,16 @@ async function init(): Promise<void> {
   const groupDefinitions = dataLoader.getGroupDefinitions();
   gameManager = new GameStateManager(groupDefinitions, initialGroupId, initialLevels);
 
-  const saved = await loadState();
-  if (saved) {
-    settings = loadSettings(saved.settings);
+  if (savedState) {
+    settings = loadSettings(savedState.settings);
 
-    const savedGroupId = saved.currentGroupId;
+    const savedGroupId = savedState.currentGroupId;
     if (savedGroupId && savedGroupId !== initialGroupId) {
       const savedLevels = await dataLoader.loadGroupLevels(savedGroupId);
       gameManager.setGroupLevels(savedGroupId, savedLevels);
     }
     
-    gameManager = GameStateManager.hydrate(groupDefinitions, initialGroupId, initialLevels, saved);
+    gameManager = GameStateManager.hydrate(groupDefinitions, initialGroupId, initialLevels, savedState);
   }
 
   const allLoadedLevels = dataLoader.getAllCachedLevels();
@@ -561,8 +573,8 @@ function bindStaticEvents(): void {
     const state = gameManager.serialize();
     state.settings = settings;
     const json = JSON.stringify(state, null, 2);
-    await copyToClipboard(encodeBase64Utf8(json));
-    setFeedback('Game state (base64) copied to clipboard.', 'muted');
+    await copyToClipboard(json);
+    setFeedback('Game state JSON copied to clipboard.', 'muted');
   });
 
   debugCopyLevelButton.addEventListener('click', async () => {
@@ -577,8 +589,8 @@ function bindStaticEvents(): void {
       tokenOrderMode: gameManager.getTokenOrderMode(),
     };
     const json = JSON.stringify(stateData, null, 2);
-    await copyToClipboard(encodeBase64Utf8(json));
-    setFeedback('Level state (base64) copied to clipboard.', 'muted');
+    await copyToClipboard(json);
+    setFeedback('Level state JSON copied to clipboard.', 'muted');
   });
 }
 
@@ -1480,7 +1492,9 @@ function onWheelPointerUp(event: PointerEvent): void {
     const result = submitted.length < minSwipeLength(gameManager.getCurrentLevel()) ? 'not-accepted' : submitWord(submitted);
     handleWordResult(result, submitted);
     render();
-    saveState();
+    if (didWordResultMutateState(result)) {
+      saveState();
+    }
     if (result === 'solved' || result === 'bonus') {
       updatePersistentHint();
     }
@@ -1628,6 +1642,10 @@ function submitWord(rawWord: string): WordResult {
   return result.result;
 }
 
+function didWordResultMutateState(result: WordResult): boolean {
+  return result === 'solved' || result === 'bonus';
+}
+
 function handleWordResult(result: WordResult, word: string): void {
   const upperWord = word.toUpperCase();
   switch (result) {
@@ -1719,19 +1737,347 @@ async function autoAdvanceAfterLevelComplete(): Promise<boolean> {
 function saveState(): void {
   const payload = gameManager.serialize();
   payload.settings = settings;
-  void persistState(payload);
+  persistStateQueue = persistStateQueue
+    .then(() => persistState(payload))
+    .catch(() => undefined);
+}
+
+interface SavedGameStateMetaV3 {
+  layoutVersion: number;
+  schemaVersion: number;
+  currentGroupId: string;
+  currentIndexInGroup: number;
+  settings?: Partial<SavedSettings>;
+  packsWithData: string[];
+}
+
+interface SavedGameStatePackV3 {
+  layoutVersion: number;
+  schemaVersion: number;
+  groupId: string;
+  levels: Record<string, SavedLevelState>;
+}
+
+function packStorageKey(groupId: string): string {
+  return `${STORAGE_PACK_KEY_PREFIX}${groupId}`;
+}
+
+async function readStorageValue(key: string): Promise<string | null> {
+  if (IS_ANDROID) {
+    return (await Preferences.get({ key })).value;
+  }
+  return localStorage.getItem(key);
+}
+
+async function writeStorageValue(key: string, value: string): Promise<void> {
+  if (IS_ANDROID) {
+    await Preferences.set({ key, value });
+    return;
+  }
+  localStorage.setItem(key, value);
+}
+
+async function removeStorageValue(key: string): Promise<void> {
+  if (IS_ANDROID) {
+    await Preferences.remove({ key });
+    return;
+  }
+  localStorage.removeItem(key);
+}
+
+function splitSavedLevelsByGroup(
+  levels: SavedGameState['levels'],
+  sortedGroupIds: string[]
+): Record<string, Record<string, SavedLevelState>> {
+  const split: Record<string, Record<string, SavedLevelState>> = {};
+  for (const [levelId, levelState] of Object.entries(levels)) {
+    const matchedGroupId = inferGroupIdFromLevelId(levelId, sortedGroupIds);
+    const fallbackGroupId = levelId.match(/^[A-Za-z]+/)?.[0] ?? '';
+    const groupId = matchedGroupId ?? fallbackGroupId;
+    if (!groupId) {
+      continue;
+    }
+    if (!split[groupId]) {
+      split[groupId] = {};
+    }
+    split[groupId][levelId] = levelState;
+  }
+  return split;
+}
+
+function setPersistedCache(metaValue: string, packValues: Map<string, string>): void {
+  cachedPersistedMetaValue = metaValue;
+  cachedPersistedPackValues.clear();
+  for (const [groupId, value] of packValues.entries()) {
+    cachedPersistedPackValues.set(groupId, value);
+  }
+}
+
+function clearPersistedCache(): void {
+  cachedPersistedMetaValue = null;
+  cachedPersistedPackValues.clear();
+}
+
+async function getPersistenceGroupIds(): Promise<string[]> {
+  if (cachedPersistenceGroupIds !== null) {
+    return cachedPersistenceGroupIds;
+  }
+
+  const existing = dataLoader.getGroupDefinitions();
+  if (existing.length > 0) {
+    cachedPersistenceGroupIds = existing.map((group) => group.id);
+    return cachedPersistenceGroupIds;
+  }
+
+  try {
+    const loaded = await dataLoader.loadMeta();
+    cachedPersistenceGroupIds = loaded.groupDefinitions.map((group) => group.id);
+  } catch {
+    cachedPersistenceGroupIds = [];
+  }
+
+  return cachedPersistenceGroupIds;
+}
+
+async function cleanupLegacyStorageKey(): Promise<void> {
+  await removeStorageValue(LEGACY_STORAGE_KEY);
+  await removeStorageValue(LEGACY_STORAGE_KEY_LETTERS_MAZE_V1);
+  await removeStorageValue(LEGACY_STORAGE_KEY_LETTERS_MAZE_V2);
 }
 
 async function persistState(payload: SavedGameState): Promise<void> {
   try {
-    const value = JSON.stringify(payload);
-    if (IS_ANDROID) {
-      await Preferences.set({ key: STORAGE_KEY, value });
-      return;
+    const groupIds = await getPersistenceGroupIds();
+    const sortedGroupIds = [...groupIds].sort((a, b) => b.length - a.length);
+    const groupedLevels = splitSavedLevelsByGroup(payload.levels, sortedGroupIds);
+    const groupedEntries = Object.entries(groupedLevels).filter(([, levels]) => Object.keys(levels).length > 0);
+
+    const nextPackValues = new Map<string, string>();
+    for (const [groupId, levels] of groupedEntries) {
+      const packPayload: SavedGameStatePackV3 = {
+        layoutVersion: STORAGE_LAYOUT_VERSION,
+        schemaVersion: GAME_STATE_SCHEMA_VERSION,
+        groupId,
+        levels,
+      };
+      nextPackValues.set(groupId, JSON.stringify(packPayload));
     }
-    localStorage.setItem(STORAGE_KEY, value);
+
+    for (const [groupId, value] of nextPackValues.entries()) {
+      if (cachedPersistedPackValues.get(groupId) === value) {
+        continue;
+      }
+      await writeStorageValue(packStorageKey(groupId), value);
+    }
+
+    for (const [groupId] of cachedPersistedPackValues.entries()) {
+      if (nextPackValues.has(groupId)) {
+        continue;
+      }
+      await removeStorageValue(packStorageKey(groupId));
+    }
+
+    if (!hasPrunedKnownV3PackKeys) {
+      const nextPackIds = new Set(nextPackValues.keys());
+      for (const groupId of groupIds) {
+        if (nextPackIds.has(groupId)) {
+          continue;
+        }
+        await removeStorageValue(packStorageKey(groupId));
+      }
+      hasPrunedKnownV3PackKeys = true;
+    }
+
+    const packsWithData = [...nextPackValues.keys()].sort((a, b) => a.localeCompare(b));
+    const metaPayload: SavedGameStateMetaV3 = {
+      layoutVersion: STORAGE_LAYOUT_VERSION,
+      schemaVersion: GAME_STATE_SCHEMA_VERSION,
+      currentGroupId: payload.currentGroupId,
+      currentIndexInGroup: payload.currentIndexInGroup,
+      settings: payload.settings,
+      packsWithData,
+    };
+    const metaValue = JSON.stringify(metaPayload);
+    if (cachedPersistedMetaValue !== metaValue) {
+      await writeStorageValue(STORAGE_META_KEY, metaValue);
+    }
+
+    setPersistedCache(metaValue, nextPackValues);
+    await cleanupLegacyStorageKey();
   } catch {
-    // Storage unavailable in restricted environments
+    return;
+  }
+}
+
+async function loadStateFromSplitStorage(): Promise<SavedGameState | null> {
+  const rawMeta = await readStorageValue(STORAGE_META_KEY);
+  if (!rawMeta) {
+    return null;
+  }
+
+  let parsedMeta: unknown;
+  try {
+    parsedMeta = JSON.parse(rawMeta);
+  } catch {
+    await removeStorageValue(STORAGE_META_KEY);
+    clearPersistedCache();
+    return null;
+  }
+
+  if (!isRecord(parsedMeta)) {
+    await removeStorageValue(STORAGE_META_KEY);
+    clearPersistedCache();
+    return null;
+  }
+
+  const knownGroupIds = new Set(await getPersistenceGroupIds());
+  const rawPacks = Array.isArray(parsedMeta.packsWithData) ? parsedMeta.packsWithData : [];
+  const dedupedPacks: string[] = [];
+  const seenPacks = new Set<string>();
+  let didRepair = !Array.isArray(parsedMeta.packsWithData);
+  for (const rawPackId of rawPacks) {
+    if (typeof rawPackId !== 'string') {
+      didRepair = true;
+      continue;
+    }
+    const packId = rawPackId.trim();
+    if (!packId || seenPacks.has(packId)) {
+      didRepair = true;
+      continue;
+    }
+    if (knownGroupIds.size > 0 && !knownGroupIds.has(packId)) {
+      await removeStorageValue(packStorageKey(packId));
+      didRepair = true;
+      continue;
+    }
+    seenPacks.add(packId);
+    dedupedPacks.push(packId);
+  }
+
+  const mergedLevels: SavedGameState['levels'] = {};
+  const loadedPackValues = new Map<string, string>();
+  const retainedPackIds: string[] = [];
+
+  for (const groupId of dedupedPacks) {
+    const rawPack = await readStorageValue(packStorageKey(groupId));
+    if (!rawPack) {
+      didRepair = true;
+      continue;
+    }
+
+    let parsedPack: unknown;
+    try {
+      parsedPack = JSON.parse(rawPack);
+    } catch {
+      await removeStorageValue(packStorageKey(groupId));
+      didRepair = true;
+      continue;
+    }
+
+    if (!isRecord(parsedPack) || !isRecord(parsedPack.levels)) {
+      await removeStorageValue(packStorageKey(groupId));
+      didRepair = true;
+      continue;
+    }
+
+    const normalizedPack: SavedGameStatePackV3 = {
+      layoutVersion: STORAGE_LAYOUT_VERSION,
+      schemaVersion: typeof parsedPack.schemaVersion === 'number' ? parsedPack.schemaVersion : GAME_STATE_SCHEMA_VERSION,
+      groupId,
+      levels: parsedPack.levels as Record<string, SavedLevelState>,
+    };
+    const normalizedPackValue = JSON.stringify(normalizedPack);
+    if (normalizedPackValue !== rawPack) {
+      didRepair = true;
+    }
+
+    for (const [levelId, levelState] of Object.entries(normalizedPack.levels)) {
+      mergedLevels[levelId] = levelState;
+    }
+
+    retainedPackIds.push(groupId);
+    loadedPackValues.set(groupId, normalizedPackValue);
+  }
+
+  const normalizedMeta: SavedGameStateMetaV3 = {
+    layoutVersion: STORAGE_LAYOUT_VERSION,
+    schemaVersion: typeof parsedMeta.schemaVersion === 'number' ? parsedMeta.schemaVersion : GAME_STATE_SCHEMA_VERSION,
+    currentGroupId:
+      typeof parsedMeta.currentGroupId === 'string'
+      && parsedMeta.currentGroupId.length > 0
+      && (knownGroupIds.size === 0 || knownGroupIds.has(parsedMeta.currentGroupId))
+        ? parsedMeta.currentGroupId
+        : (retainedPackIds[0] ?? [...knownGroupIds][0] ?? ''),
+    currentIndexInGroup:
+      typeof parsedMeta.currentIndexInGroup === 'number' && Number.isFinite(parsedMeta.currentIndexInGroup)
+        ? Math.max(0, Math.floor(parsedMeta.currentIndexInGroup))
+        : 0,
+    settings: isRecord(parsedMeta.settings) ? (parsedMeta.settings as Partial<SavedSettings>) : undefined,
+    packsWithData: retainedPackIds.sort((a, b) => a.localeCompare(b)),
+  };
+  const normalizedMetaValue = JSON.stringify(normalizedMeta);
+  if (normalizedMetaValue !== rawMeta) {
+    didRepair = true;
+  }
+
+  const { state, didMigrate } = migrateLoadedState({
+    schemaVersion: normalizedMeta.schemaVersion,
+    currentGroupId: normalizedMeta.currentGroupId,
+    currentIndexInGroup: normalizedMeta.currentIndexInGroup,
+    settings: normalizedMeta.settings,
+    levels: mergedLevels,
+  });
+
+  if (!state) {
+    await removeStorageValue(STORAGE_META_KEY);
+    clearPersistedCache();
+    return null;
+  }
+
+  if (didRepair || didMigrate) {
+    await persistState(state);
+  } else {
+    setPersistedCache(normalizedMetaValue, loadedPackValues);
+  }
+
+  await cleanupLegacyStorageKey();
+  return state;
+}
+
+async function loadStateFromLegacyStorage(): Promise<SavedGameState | null> {
+  const raw = await readStorageValue(LEGACY_STORAGE_KEY);
+  if (!raw) {
+    return null;
+  }
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return null;
+  }
+
+  const { state } = migrateLoadedState(parsed);
+  return state;
+}
+
+async function loadState(): Promise<SavedGameState | null> {
+  try {
+    const splitState = await loadStateFromSplitStorage();
+    if (splitState) {
+      return splitState;
+    }
+
+    const legacyState = await loadStateFromLegacyStorage();
+    if (!legacyState) {
+      return null;
+    }
+
+    await persistState(legacyState);
+    await cleanupLegacyStorageKey();
+    return legacyState;
+  } catch {
+    return null;
   }
 }
 
@@ -1906,28 +2252,6 @@ function migrateLoadedState(raw: unknown): { state: SavedGameState | null; didMi
   };
 
   return { state: migratedState, didMigrate };
-}
-
-async function loadState(): Promise<SavedGameState | null> {
-  try {
-    const raw = IS_ANDROID
-      ? (await Preferences.get({ key: STORAGE_KEY })).value
-      : localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      return null;
-    }
-    const parsed = JSON.parse(raw);
-    const { state, didMigrate } = migrateLoadedState(parsed);
-    if (!state) {
-      return null;
-    }
-    if (didMigrate) {
-      await persistState(state);
-    }
-    return state;
-  } catch {
-    return null;
-  }
 }
 
 function loadSettings(raw: SavedGameState['settings']): SavedSettings {
@@ -2559,23 +2883,6 @@ function required(selector: string): HTMLElement {
     throw new Error(`Missing element: ${selector}`);
   }
   return node;
-}
-
-function encodeBase64Utf8(text: string): string {
-  const bytes = new TextEncoder().encode(text);
-  const parts: string[] = [];
-  const chunkSize = 0x8000;
-
-  for (let i = 0; i < bytes.length; i += chunkSize) {
-    const end = Math.min(i + chunkSize, bytes.length);
-    let chunk = '';
-    for (let j = i; j < end; j += 1) {
-      chunk += String.fromCharCode(bytes[j]);
-    }
-    parts.push(chunk);
-  }
-
-  return btoa(parts.join(''));
 }
 
 async function copyToClipboard(text: string): Promise<void> {

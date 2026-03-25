@@ -270,28 +270,35 @@ export function hydrateLevelState(saved: SavedLevelState): LevelState {
 }
 
 export function serializeLevelState(state: LevelState, completed?: boolean): SavedLevelState {
-  const hasHintData = 
-    state.hints.hintCount > 0 || 
-    state.hints.hintRefreshCount > 0 ||
-    state.hints.excludedHintCanonicals.size > 0 || 
-    state.hints.currentHintCanonical !== null ||
-    state.hints.modalHintStack.length > 0;
+  const serializedHints: SavedHintState = {};
+  if (state.hints.hintedCanonicals.size > 0) {
+    serializedHints.hintedCanonicals = [...state.hints.hintedCanonicals];
+  }
+  if (state.hints.excludedHintCanonicals.size > 0) {
+    serializedHints.excludedHintCanonicals = [...state.hints.excludedHintCanonicals];
+  }
+  if (state.hints.hintCount > 0) {
+    serializedHints.hintCount = state.hints.hintCount;
+  }
+  if (state.hints.hintRefreshCount > 0) {
+    serializedHints.hintRefreshCount = state.hints.hintRefreshCount;
+  }
+  if (state.hints.currentHintCanonical !== null) {
+    serializedHints.currentHintCanonical = state.hints.currentHintCanonical;
+  }
+  if (state.hints.modalHintStack.length > 0) {
+    serializedHints.modalHintStack = state.hints.modalHintStack.map((entry) => ({
+      canonical: normalizeWord(entry.canonical),
+      text: entry.text,
+    }));
+  }
+  const hasHintData = Object.keys(serializedHints).length > 0;
 
   const serialized: SavedLevelState = {
     solved: [...state.solved],
     bonus: [...state.bonus],
     revealedCells: state.revealedCells.size > 0 ? [...state.revealedCells] : undefined,
-    hints: hasHintData ? {
-      hintedCanonicals: [...state.hints.hintedCanonicals],
-      excludedHintCanonicals: [...state.hints.excludedHintCanonicals],
-      hintCount: state.hints.hintCount,
-      hintRefreshCount: state.hints.hintRefreshCount,
-      currentHintCanonical: state.hints.currentHintCanonical,
-      modalHintStack: state.hints.modalHintStack.map((entry) => ({
-        canonical: normalizeWord(entry.canonical),
-        text: entry.text,
-      })),
-    } : undefined,
+    hints: hasHintData ? serializedHints : undefined,
   };
 
   if (completed === true) {
@@ -908,6 +915,7 @@ export class GameStateManager {
     const result = submitWord(word, level, state, this.tokenOrderMode);
     if (isLevelComplete(level, state.solved)) {
       this.completedLevelIds.add(level.id);
+      this.clearCompletedLevelHintState(state);
     }
     return result;
   }
@@ -918,6 +926,7 @@ export class GameStateManager {
     const result = revealCell(level, state, row, col);
     if (result.levelComplete) {
       this.completedLevelIds.add(level.id);
+      this.clearCompletedLevelHintState(state);
     }
     return result;
   }
@@ -1127,6 +1136,12 @@ export class GameStateManager {
       }
     }
     return null;
+  }
+
+  private clearCompletedLevelHintState(state: LevelState): void {
+    state.hints.currentHintCanonical = null;
+    state.hints.excludedHintCanonicals.clear();
+    state.hints.modalHintStack = [];
   }
 }
 
