@@ -270,11 +270,12 @@ export function hydrateLevelState(saved: SavedLevelState): LevelState {
 }
 
 export function serializeLevelState(state: LevelState, completed?: boolean): SavedLevelState {
+  const shouldOmitCompletionHintState = completed === true;
   const serializedHints: SavedHintState = {};
   if (state.hints.hintedCanonicals.size > 0) {
     serializedHints.hintedCanonicals = [...state.hints.hintedCanonicals];
   }
-  if (state.hints.excludedHintCanonicals.size > 0) {
+  if (!shouldOmitCompletionHintState && state.hints.excludedHintCanonicals.size > 0) {
     serializedHints.excludedHintCanonicals = [...state.hints.excludedHintCanonicals];
   }
   if (state.hints.hintCount > 0) {
@@ -283,10 +284,10 @@ export function serializeLevelState(state: LevelState, completed?: boolean): Sav
   if (state.hints.hintRefreshCount > 0) {
     serializedHints.hintRefreshCount = state.hints.hintRefreshCount;
   }
-  if (state.hints.currentHintCanonical !== null) {
+  if (!shouldOmitCompletionHintState && state.hints.currentHintCanonical !== null) {
     serializedHints.currentHintCanonical = state.hints.currentHintCanonical;
   }
-  if (state.hints.modalHintStack.length > 0) {
+  if (!shouldOmitCompletionHintState && state.hints.modalHintStack.length > 0) {
     serializedHints.modalHintStack = state.hints.modalHintStack.map((entry) => ({
       canonical: normalizeWord(entry.canonical),
       text: entry.text,
