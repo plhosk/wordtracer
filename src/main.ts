@@ -574,7 +574,7 @@ function bindStaticEvents(): void {
     state.settings = settings;
     const json = JSON.stringify(state, null, 2);
     await copyToClipboard(json);
-    setFeedback('Game state JSON copied to clipboard.', 'muted');
+    setFeedback('Game state copied to clipboard.', 'muted');
   });
 
   debugCopyLevelButton.addEventListener('click', async () => {
@@ -590,7 +590,7 @@ function bindStaticEvents(): void {
     };
     const json = JSON.stringify(stateData, null, 2);
     await copyToClipboard(json);
-    setFeedback('Level state JSON copied to clipboard.', 'muted');
+    setFeedback('Level state copied to clipboard.', 'muted');
   });
 }
 
