@@ -18,6 +18,7 @@ android {
     }
     buildFeatures {
         resValues true
+        baselineProfile false
     }
     buildTypes {
         debug {
