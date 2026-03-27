@@ -20,11 +20,11 @@ Builds:
       - echo "deb https://deb.debian.org/debian forky main" > /etc/apt/sources.list.d/forky.list
       - apt-get update
       - apt-get install -y -t forky npm
-    init:
-      - npm ci --prefix ../..
-      - npm --prefix ../.. run cap:sync
     gradle:
       - yes
+    prebuild:
+      - npm ci --prefix ../..
+      - npm --prefix ../.. run cap:sync
     scandelete:
       - node_modules
 
