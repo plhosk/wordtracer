@@ -7,6 +7,7 @@ import {
 } from './dictionary.js';
 
 const HINT_TARGET_LENGTH = 60;
+const HINT_MAX_TARGET_LENGTH = Math.floor(HINT_TARGET_LENGTH * 1.5);
 
 export interface HintExcerpt {
   text: string;
@@ -346,7 +347,10 @@ function sanitizeHintExcerptCore(
           }
         }
       }
-      return buildExcerpt(def, startIndex, targetLength, startIndex > 0);
+      const nextSpoiler = findSpoilerWithBoundary(def, wordsToAvoid, startIndex, def.length);
+      const spoilerFreeLength = nextSpoiler ? nextSpoiler.index - startIndex : def.length - startIndex;
+      const excerptLength = Math.min(HINT_MAX_TARGET_LENGTH, Math.max(targetLength, spoilerFreeLength));
+      return buildExcerpt(def, startIndex, excerptLength, startIndex > 0);
     }
   }
 

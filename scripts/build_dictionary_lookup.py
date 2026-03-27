@@ -245,6 +245,7 @@ COMMON_SUFFIXES = (
 )
 
 HINT_TARGET_LENGTH = 60
+HINT_MAX_TARGET_LENGTH = int(HINT_TARGET_LENGTH * 1.5)
 HINT_REASON_CROSSREF = "crossref"
 HINT_REASON_REDACTED_ONLY = "redacted_only"
 HINT_REASON_BAD_START = "bad_start"
@@ -469,7 +470,20 @@ def build_hint_preview_meta(definition: str, words_to_avoid: list[str]) -> HintP
                 if spoiler_at_boundary is None:
                     start_index = boundary_pos
 
-        return build_excerpt(text, start_index, target_length, start_index > 0)
+        next_spoiler = find_spoiler_with_boundary(
+            text,
+            words_to_avoid,
+            start_index,
+            len(text),
+        )
+        spoiler_free_length = (
+            next_spoiler[0] - start_index if next_spoiler else len(text) - start_index
+        )
+        excerpt_length = min(
+            HINT_MAX_TARGET_LENGTH,
+            max(target_length, spoiler_free_length),
+        )
+        return build_excerpt(text, start_index, excerpt_length, start_index > 0)
 
     first_spoiler_pos = find_first_spoiler(text, words_to_avoid)
     first_spoiler_start = first_spoiler_pos[0] if first_spoiler_pos else len(text)
