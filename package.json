@@ -33,20 +33,20 @@
   "license": "MIT",
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",
-    "@capacitor/cli": "^8.2.0",
+    "@capacitor/cli": "^8.3.0",
     "@eslint/css": "^0.14.1",
     "@eslint/js": "^10.0.1",
     "@types/node": "^25.5.0",
-    "eslint": "^10.0.3",
+    "eslint": "^10.1.0",
     "globals": "^17.4.0",
     "nodemon": "^3.1.14",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.57.1",
+    "typescript-eslint": "^8.57.2",
     "vite": "^7.3.1"
   },
   "dependencies": {
-    "@capacitor/android": "^8.2.0",
-    "@capacitor/core": "^8.2.0",
+    "@capacitor/android": "^8.3.0",
+    "@capacitor/core": "^8.3.0",
     "@capacitor/preferences": "^8.0.1"
   }
 }

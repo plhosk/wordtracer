@@ -6,18 +6,18 @@
       "data/raw/webster/webster.json",
       "data/processed/wordnet_dictionary.json"
     ],
-    "wordCount": 11483,
-    "mappedWordCount": 10629,
-    "definitionCount": 7890,
+    "wordCount": 11446,
+    "mappedWordCount": 10592,
+    "definitionCount": 7860,
     "unresolvedWordCount": 854,
-    "directMatchCount": 7622,
-    "lemmaMatchCount": 3007,
-    "fallbackMatchCount": 1240,
-    "primaryDefinitionCount": 7587,
-    "fallbackDefinitionSelectedCount": 303,
-    "websterDefinitionAvailableCount": 6821,
-    "wordnetDefinitionAvailableCount": 6071,
-    "lowQualityReplacementCount": 232,
+    "directMatchCount": 7603,
+    "lemmaMatchCount": 2989,
+    "fallbackMatchCount": 1235,
+    "primaryDefinitionCount": 7558,
+    "fallbackDefinitionSelectedCount": 302,
+    "websterDefinitionAvailableCount": 6795,
+    "wordnetDefinitionAvailableCount": 6051,
+    "lowQualityReplacementCount": 231,
     "badStartReplacementCount": 92,
     "scoreUpgradeReplacementCount": 71,
     "letterCount": 26,
@@ -99,7 +99,6 @@
     "abri": null,
     "abs": "abs",
     "abstain": "abstain",
-    "abused": "abused",
     "abut": "abut",
     "abuts": "abut",
     "abyss": "abyss",
@@ -458,7 +457,6 @@
     "aphid": "aphid",
     "aphis": "aphis",
     "apices": "apices",
-    "aping": "ape",
     "apod": "apod",
     "apogee": "apogee",
     "apollo": "apollo",
@@ -557,6 +555,7 @@
     "arts": "arts",
     "artsy": null,
     "arty": "arty",
+    "aru": null,
     "arum": "arum",
     "arvo": null,
     "aryl": null,
@@ -1211,7 +1210,6 @@
     "bone": "bone",
     "bones": "bones",
     "boney": null,
-    "bongs": "bong",
     "bonito": "bonito",
     "bonk": null,
     "bonks": null,
@@ -2057,7 +2055,6 @@
     "coir": "coir",
     "coke": "coke",
     "coked": "coke",
-    "cokes": "cokes",
     "col": "col",
     "cola": "cola",
     "colas": "cola",
@@ -2117,7 +2114,6 @@
     "conus": "conus",
     "cony": "cony",
     "coo": "coo",
-    "cooch": null,
     "cooed": "coo",
     "cook": "cook",
     "cooked": "cooked",
@@ -2131,7 +2127,6 @@
     "cooped": "coop",
     "coops": "coop",
     "coos": "coo",
-    "coot": "coot",
     "coots": "coot",
     "cop": "cop",
     "copal": "copal",
@@ -2143,7 +2138,6 @@
     "copra": "copra",
     "cops": "cops",
     "copse": "copse",
-    "copula": "copula",
     "copy": "copy",
     "cor": "cor",
     "coral": "coral",
@@ -2685,7 +2679,6 @@
     "dicer": "dicer",
     "dices": "dice",
     "dicey": "dicey",
-    "dicky": "dicky",
     "dicta": "dicta",
     "did": "did",
     "dido": "dido",
@@ -2725,7 +2718,6 @@
     "ding": "ding",
     "dinge": "dinge",
     "dinged": "dinge",
-    "dinger": "dinge",
     "dingo": "dingo",
     "dings": "ding",
     "dingy": "dingy",
@@ -2918,7 +2910,6 @@
     "dram": "dram",
     "drank": "drank",
     "drape": "drape",
-    "draper": "draper",
     "drapes": "drape",
     "drat": null,
     "draw": "draw",
@@ -3118,6 +3109,7 @@
     "ecru": "ecru",
     "ecu": null,
     "ecus": null,
+    "edc": null,
     "eddies": "eddy",
     "eddy": "eddy",
     "edema": "edema",
@@ -4348,7 +4340,6 @@
     "grog": "grog",
     "groin": "groin",
     "groom": "groom",
-    "groped": "grope",
     "gross": "gross",
     "grot": "grot",
     "group": "group",
@@ -4381,7 +4372,6 @@
     "guidon": "guidon",
     "guild": "guild",
     "guilt": "guilt",
-    "guinea": "guinea",
     "guise": "guise",
     "guises": "guise",
     "gular": "gular",
@@ -4406,7 +4396,6 @@
     "gush": "gush",
     "gushed": "gush",
     "gusher": "gusher",
-    "gussie": null,
     "gust": "gust",
     "gusto": "gusto",
     "gusts": "gust",
@@ -4422,7 +4411,6 @@
     "gym": "gym",
     "gyms": "gym",
     "gypsum": "gypsum",
-    "gypsy": "gypsy",
     "gyre": "gyre",
     "gyres": "gyre",
     "gyri": "gyri",
@@ -4732,7 +4720,6 @@
     "hones": "hone",
     "honest": "honest",
     "honey": "honey",
-    "hong": "hong",
     "honk": "honk",
     "honker": "honk",
     "honks": "honk",
@@ -4954,6 +4941,7 @@
     "infos": "info",
     "infra": "infra",
     "infuse": "infuse",
+    "ing": "ing",
     "ingest": "ingest",
     "ingle": "ingle",
     "ingles": "ingle",
@@ -5398,7 +5386,6 @@
     "lame": "lame",
     "lamed": "lame",
     "lamely": "lamely",
-    "lamer": "lame",
     "lames": "lames",
     "lamia": "lamia",
     "lamina": "lamina",
@@ -5586,7 +5573,6 @@
     "lent": "lent",
     "lento": "lento",
     "leone": "leone",
-    "lepers": "leper",
     "lept": null,
     "lepton": null,
     "less": "less",
@@ -5830,6 +5816,7 @@
     "loot": "loot",
     "looted": "looted",
     "loots": "loot",
+    "lop": "lop",
     "lope": "lope",
     "loper": "loper",
     "lopes": "lope",
@@ -5898,7 +5885,6 @@
     "lucent": "lucent",
     "lucid": "lucid",
     "luck": "luck",
-    "lucked": "luck",
     "lucks": "luck",
     "lucre": "lucre",
     "lude": null,
@@ -6166,7 +6152,6 @@
     "meals": "meal",
     "mean": "mean",
     "meander": "meander",
-    "meaner": "mean",
     "meaning": "meaning",
     "meanings": "meaning",
     "means": "means",
@@ -6426,7 +6411,6 @@
     "monie": null,
     "monies": "money",
     "monk": "monk",
-    "monkey": "monkey",
     "monks": "monk",
     "mono": "mono",
     "monorail": "monorail",
@@ -6468,7 +6452,6 @@
     "morgen": "morgen",
     "morn": "morn",
     "morning": "morning",
-    "morons": "moron",
     "morph": null,
     "morpho": "morpho",
     "morphs": null,
@@ -6773,8 +6756,6 @@
     "nitty": "nitty",
     "nixed": "nix",
     "nixes": "nix",
-    "nobby": "nobby",
-    "nobs": "nob",
     "nock": "nock",
     "nod": "nod",
     "node": "node",
@@ -6866,7 +6847,6 @@
     "nursed": "nursed",
     "nut": "nut",
     "nuts": "nuts",
-    "nutted": "nut",
     "nyala": null,
     "oafish": "oafish",
     "oak": "oak",
@@ -7196,7 +7176,6 @@
     "papas": "papa",
     "paper": "paper",
     "papers": "papers",
-    "papist": "papist",
     "paps": "pap",
     "par": "par",
     "para": "para",
@@ -7461,8 +7440,6 @@
     "pillow": "pillow",
     "pilsener": "pilsener",
     "pima": null,
-    "pimping": "pimping",
-    "pimps": "pimp",
     "pin": "pin",
     "pina": null,
     "pinas": null,
@@ -7653,7 +7630,6 @@
     "pool": "pool",
     "pooled": "pool",
     "pools": "pool",
-    "poop": "poop",
     "poops": "poop",
     "poor": "poor",
     "poori": null,
@@ -8001,7 +7977,6 @@
     "ranting": "ranting",
     "rants": "rant",
     "rap": "rap",
-    "rapes": "rape",
     "raphe": "raphe",
     "rapid": "rapid",
     "rappel": "rappel",
@@ -8323,7 +8298,6 @@
     "rifts": "rift",
     "rig": "rig",
     "rigged": "rigged",
-    "riggers": "rigger",
     "right": "right",
     "righter": "righter",
     "righto": null,
@@ -8846,7 +8820,6 @@
     "sedate": "sedate",
     "seder": "seder",
     "sedge": "sedge",
-    "seduced": "seduce",
     "sedum": "sedum",
     "see": "see",
     "seed": "seed",
@@ -8872,7 +8845,6 @@
     "seidel": "seidel",
     "seif": null,
     "seine": "seine",
-    "seiner": "seiner",
     "seis": null,
     "selah": "selah",
     "seldom": "seldom",
@@ -8892,7 +8864,6 @@
     "sends": "send",
     "sene": "sene",
     "seneca": null,
-    "senile": "senile",
     "senna": "senna",
     "senor": "senor",
     "senora": "senora",
@@ -8959,7 +8930,6 @@
     "sewer": "sewer",
     "sewn": "sewn",
     "sews": "sew",
-    "sexist": "sexist",
     "sext": "sext",
     "sha": null,
     "shack": "shack",
@@ -10083,7 +10053,6 @@
     "tapis": "tapis",
     "taps": "taps",
     "tar": "tar",
-    "tardy": "tardy",
     "tare": "tare",
     "tares": "tare",
     "targe": "targe",
@@ -10147,7 +10116,6 @@
     "teased": "teased",
     "teaser": "teaser",
     "teases": "tease",
-    "teats": "teat",
     "techy": "techy",
     "ted": "ted",
     "tedder": "tedder",
@@ -10358,7 +10326,6 @@
     "titan": "titan",
     "titanate": "titanate",
     "titans": "titan",
-    "titer": "titer",
     "tithe": "tithe",
     "title": "title",
     "titre": "titre",
@@ -10640,7 +10607,6 @@
     "tubing": "tubing",
     "tubs": "tub",
     "tuck": "tuck",
-    "tucker": "tucker",
     "tucks": "tuck",
     "tufa": "tufa",
     "tuff": "tuff",
@@ -11003,7 +10969,6 @@
     "vital": "vital",
     "viva": "viva",
     "vive": "vive",
-    "vixens": "vixen",
     "vocal": "vocal",
     "vocals": "vocal",
     "voces": null,
@@ -11187,7 +11152,6 @@
     "weir": "weir",
     "weird": "weird",
     "weirs": "weir",
-    "welch": "welch",
     "weld": "weld",
     "welds": "weld",
     "well": "well",
@@ -11439,7 +11403,6 @@
     "yamen": "yamen",
     "yams": "yam",
     "yang": "yang",
-    "yanks": "yank",
     "yaps": "yap",
     "yard": "yard",
     "yards": "yard",
@@ -11660,12 +11623,6 @@
       "abstained",
       "abstaining",
       "abstains"
-    ],
-    "abused": [
-      "abuse",
-      "abused",
-      "abuses",
-      "abusing"
     ],
     "abut": [
       "abut",
@@ -12714,8 +12671,7 @@
     "ape": [
       "ape",
       "aped",
-      "apes",
-      "aping"
+      "apes"
     ],
     "aper": [
       "aper"
@@ -15087,10 +15043,6 @@
       "boned",
       "bones",
       "boning"
-    ],
-    "bong": [
-      "bong",
-      "bongs"
     ],
     "bonito": [
       "bonito",
@@ -17718,12 +17670,6 @@
       "cokes",
       "coking"
     ],
-    "cokes": [
-      "coke",
-      "coked",
-      "cokes",
-      "coking"
-    ],
     "col": [
       "col",
       "cols"
@@ -17984,11 +17930,6 @@
     ],
     "copse": [
       "copse"
-    ],
-    "copula": [
-      "copula",
-      "copulae",
-      "copulas"
     ],
     "cor": [
       "cor"
@@ -19733,9 +19674,6 @@
       "dicier",
       "diciest"
     ],
-    "dicky": [
-      "dicky"
-    ],
     "dicta": [
       "dicta",
       "dictum",
@@ -19842,8 +19780,7 @@
     ],
     "dinge": [
       "dinge",
-      "dinged",
-      "dinger"
+      "dinged"
     ],
     "dingo": [
       "dingo",
@@ -20422,9 +20359,6 @@
       "draped",
       "drapes",
       "draping"
-    ],
-    "draper": [
-      "draper"
     ],
     "draw": [
       "draw",
@@ -25016,12 +24950,6 @@
       "grooming",
       "grooms"
     ],
-    "grope": [
-      "grope",
-      "groped",
-      "gropes",
-      "groping"
-    ],
     "gross": [
       "gross",
       "grossed",
@@ -25134,10 +25062,6 @@
     "guilt": [
       "guilt",
       "guilts"
-    ],
-    "guinea": [
-      "guinea",
-      "guineas"
     ],
     "guise": [
       "guise",
@@ -25261,10 +25185,6 @@
     "gypsum": [
       "gypsum",
       "gypsums"
-    ],
-    "gypsy": [
-      "gypsies",
-      "gypsy"
     ],
     "gyre": [
       "gyre",
@@ -26232,9 +26152,6 @@
       "honey",
       "honeys"
     ],
-    "hong": [
-      "hong"
-    ],
     "honk": [
       "honk",
       "honked",
@@ -26908,6 +26825,9 @@
       "infused",
       "infuses",
       "infusing"
+    ],
+    "ing": [
+      "ing"
     ],
     "ingest": [
       "ingest",
@@ -28752,10 +28672,6 @@
     "leone": [
       "leone"
     ],
-    "leper": [
-      "leper",
-      "lepers"
-    ],
     "less": [
       "least",
       "less"
@@ -29503,6 +29419,12 @@
       "looting",
       "loots"
     ],
+    "lop": [
+      "lop",
+      "lopped",
+      "lopping",
+      "lops"
+    ],
     "lope": [
       "lope",
       "loped",
@@ -29511,12 +29433,6 @@
     ],
     "loper": [
       "loper"
-    ],
-    "lop": [
-      "lop",
-      "lopped",
-      "lopping",
-      "lops"
     ],
     "loral": [
       "loral"
@@ -31286,12 +31202,6 @@
       "monk",
       "monks"
     ],
-    "monkey": [
-      "monkey",
-      "monkeyed",
-      "monkeying",
-      "monkeys"
-    ],
     "mono": [
       "mono",
       "monos"
@@ -31409,10 +31319,6 @@
     "morning": [
       "morning",
       "mornings"
-    ],
-    "moron": [
-      "moron",
-      "morons"
     ],
     "morpho": [
       "morpho"
@@ -32262,12 +32168,6 @@
       "nixed",
       "nixes",
       "nixing"
-    ],
-    "nobby": [
-      "nobby"
-    ],
-    "nob": [
-      "nobs"
     ],
     "nock": [
       "nock"
@@ -33489,9 +33389,6 @@
       "papering",
       "papers"
     ],
-    "papist": [
-      "papist"
-    ],
     "par": [
       "par",
       "pars",
@@ -34304,18 +34201,6 @@
     ],
     "pilsener": [
       "pilsener"
-    ],
-    "pimping": [
-      "pimp",
-      "pimped",
-      "pimping",
-      "pimps"
-    ],
-    "pimp": [
-      "pimp",
-      "pimped",
-      "pimping",
-      "pimps"
     ],
     "pin": [
       "pin",
@@ -35980,12 +35865,6 @@
       "rapping",
       "raps"
     ],
-    "rape": [
-      "rape",
-      "raped",
-      "rapes",
-      "raping"
-    ],
     "raphe": [
       "raphe"
     ],
@@ -37003,9 +36882,6 @@
       "rigged",
       "rigging",
       "rigs"
-    ],
-    "rigger": [
-      "riggers"
     ],
     "right": [
       "right",
@@ -38649,12 +38525,6 @@
       "sedge",
       "sedges"
     ],
-    "seduce": [
-      "seduce",
-      "seduced",
-      "seduces",
-      "seducing"
-    ],
     "sedum": [
       "sedum"
     ],
@@ -38733,9 +38603,6 @@
     "seine": [
       "seine"
     ],
-    "seiner": [
-      "seiner"
-    ],
     "selah": [
       "selah"
     ],
@@ -38786,9 +38653,6 @@
     ],
     "sene": [
       "sene"
-    ],
-    "senile": [
-      "senile"
     ],
     "senna": [
       "senna"
@@ -38997,10 +38861,6 @@
       "sewing",
       "sewn",
       "sews"
-    ],
-    "sexist": [
-      "sexist",
-      "sexists"
     ],
     "sext": [
       "sext"
@@ -43123,11 +42983,6 @@
       "taring",
       "tars"
     ],
-    "tardy": [
-      "tardier",
-      "tardiest",
-      "tardy"
-    ],
     "tare": [
       "tare",
       "tared",
@@ -43307,10 +43162,6 @@
     "teaser": [
       "teaser",
       "teasers"
-    ],
-    "teat": [
-      "teat",
-      "teats"
     ],
     "techy": [
       "techy"
@@ -43983,9 +43834,6 @@
     ],
     "titanate": [
       "titanate"
-    ],
-    "titer": [
-      "titer"
     ],
     "tithe": [
       "tithe",
@@ -44857,9 +44705,6 @@
       "tucked",
       "tucking",
       "tucks"
-    ],
-    "tucker": [
-      "tucker"
     ],
     "tufa": [
       "tufa"
@@ -45948,10 +45793,6 @@
     "vive": [
       "vive"
     ],
-    "vixen": [
-      "vixen",
-      "vixens"
-    ],
     "vocal": [
       "vocal",
       "vocals"
@@ -46570,12 +46411,6 @@
       "weird",
       "weirder",
       "weirdest"
-    ],
-    "welch": [
-      "welch",
-      "welched",
-      "welches",
-      "welching"
     ],
     "weld": [
       "weld",
@@ -47406,12 +47241,6 @@
     ],
     "yang": [
       "yang"
-    ],
-    "yank": [
-      "yank",
-      "yanked",
-      "yanking",
-      "yanks"
     ],
     "yap": [
       "yap",

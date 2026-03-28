@@ -1405,7 +1405,6 @@ def run_grouped_pipeline(script_dir: Path, args: argparse.Namespace) -> None:
 def main() -> None:
     args = parse_args()
     script_dir = Path(__file__).resolve().parent
-    levels_bundle_path = project_path("data", "generated", "levels.bundle.json")
 
     use_wordfreq = args.wordfreq_source != "off"
 
@@ -1462,8 +1461,8 @@ def main() -> None:
     run(
         script_dir,
         str(script_dir / "build_dictionary_lookup.py"),
-        "--bundle",
-        str(levels_bundle_path),
+        "--levels-dir",
+        str(project_path("src", "data")),
         "--dictionary",
         str(args.dictionary_source),
         "--fallback-dictionary",
