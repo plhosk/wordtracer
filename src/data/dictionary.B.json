@@ -492,7 +492,7 @@
     "bawdy": {
       "webster": "1. Dirty; foul; -- said of clothes. [Obs.] It [a garment] is al bawdy and to-tore also. Chaucer. 2. Obscene; filthy; unchaste. \"A bawdy story.\" Burke.",
       "wordnet": "lewd or obscene talk or writing; \"it was smoking-room bawdry\"; \"they published a collection of Elizabethan bawdy\"",
-      "selectedSource": "webster"
+      "selectedSource": "wordnet"
     },
     "bawl": {
       "webster": "1. To cry out with a loud, full sound; to cry with vehemence, as in calling or exultation; to shout; to vociferate. 2. To cry loudly, as a child from pain or vexation.\n\nTo proclaim with a loud voice, or by outcry, as a hawker or town-crier does. Swift.\n\nA loud, prolonged cry; an outcry.",
@@ -1235,7 +1235,7 @@
     "bleak": {
       "webster": "1. Without color; pale; pallid. [Obs.] When she came out she looked as pale and as bleak as one that were laid out dead. Foxe. 2. Desolate and exposed; swept by cold winds. Wastes too bleak to rear The common growth of earth, the foodful ear. Wordsworth. At daybreak, on the bleak sea beach. Longfellow. 3. Cold and cutting; cheerless; as, a bleak blast.  -- Bleak\"ish, a.  -- Bleak\"ly, adv.  -- Bleak\"ness, n.\n\nA small European river fish (Leuciscus alburnus), of the family Cyprinid\u00e6; the blay. [Written also blick.] Note: The silvery pigment lining the scales of the bleak is used in the manufacture of artificial pearls. Baird.",
       "wordnet": "offering little or no hope; \"the future looked black\"; \"prospects were bleak\"; \"Life in the Aran Islands has always been bleak and difficult\"- J.M.Synge; \"took a dim view of things\"",
-      "selectedSource": "wordnet"
+      "selectedSource": "webster"
     },
     "bleakly": {
       "wordnet": "without hope; \"he wondered bleakly\"",
@@ -2538,7 +2538,7 @@
     "busk": {
       "webster": "A thin, elastic strip of metal, whalebone, wood, or other material, worn in the front of a corset. Her long slit sleeves, stiff busk, puff verdingall, Is all that makes her thus angelical. Marston.\n\n1. To prepare; to make ready; to array; to dress. [Scot. & Old Eng.] Busk you, busk you, my bonny, bonny bride. Hamilton. 2. To go; to direct one's course. [Obs.] Ye might have busked you to Huntly banks. Skelton.",
       "wordnet": "play music in a public place and solicit money for it; \"three young men were busking in the plaza\"",
-      "selectedSource": "wordnet"
+      "selectedSource": "webster"
     },
     "busker": {
       "wordnet": "a person who entertains people for money in public places (as by singing or dancing), usually while asking for money",

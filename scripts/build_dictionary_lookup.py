@@ -785,9 +785,7 @@ def build_lookup_data(
         filtered = sorted(
             form
             for form in candidates
-            if form in lookup_words
-            and len(form) >= 3
-            and has_stem_similarity(canonical, form)
+            if len(form) >= 3 and has_stem_similarity(canonical, form)
         )
         hint_related_forms[canonical] = sorted(related.union(filtered))
 
