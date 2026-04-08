@@ -73,6 +73,10 @@
       "wordnet": "having or covered with hair; \"Jacob was a hairy man\"; \"a hairy caterpillar\"",
       "selectedSource": "webster"
     },
+    "haj": {
+      "wordnet": "the fifth pillar of Islam is a pilgrimage to Mecca during the month of Dhu al-Hijja; at least once in a lifetime a Muslim is expected to make a religious journey to Mecca and the Kaaba; \"for a Muslim the hajj is the ultimate act of worship\"",
+      "selectedSource": "wordnet"
+    },
     "hake": {
       "webster": "A drying shed, as for unburned tile.\n\nOne of several species of marine gadoid fishes, of the genera Phycis, Merlucius, and allies. The common European hake is M. vulgaris; the American silver hake or whiting is M. bilinearis. Two American species (Phycis chuss and P. tenius) are important food fishes, and are also valued for their oil and sounds. Called also squirrel hake, and codling.\n\nTo loiter; to sneak. [Prov. Eng.] HAKE'S-DAME Hake's\"-dame`, n.  See Forkbeard.",
       "selectedSource": "webster"
@@ -174,6 +178,10 @@
     "hansa": {
       "webster": "See 2d Hanse.",
       "selectedSource": "webster"
+    },
+    "hao": {
+      "wordnet": "10 hao equal 1 dong in Vietnam",
+      "selectedSource": "wordnet"
     },
     "hap": {
       "webster": "To clothe; to wrap. The surgeon happed her up carefully. Dr. J. Brown.\n\nA cloak or plaid. [O. Eng. & Scot.]\n\nThat which happens or comes suddenly or unexpectedly; also, the manner of occurrence or taking place; chance; fortune; accident; casual event; fate; luck; lot. Chaucer. Whether art it was or heedless hap. Spenser. Cursed be good haps, and cursed be they that build Their hopes on haps. Sir P. Sidney. Loving goes by haps: Some Cupid kills with arrows, some with traps. Shak.\n\nTo happen; to befall; to chance. Chaucer. Sends word of all that haps in Tyre. Shak. HA'PENNY; HAP'PENNY Hap'\"pen*ny, n.  A half-penny.",
@@ -568,6 +576,11 @@
       "wordnet": "a reddish brown dye used especially on hair",
       "selectedSource": "webster"
     },
+    "hep": {
+      "webster": "See Hip, the fruit of the dog-rose.",
+      "wordnet": "informed about the latest trends",
+      "selectedSource": "wordnet"
+    },
     "her": {
       "webster": "The form of the objective and the possessive case of the personal pronoun she; as, I saw her with her purse out. Note: The possessive her takes the form hers when the noun with which in agrees is not given, but implied. \"And what his fortune wanted, hers could mend.\" Dryden.\n\nOf them; their. [Obs.] Piers Plowman. On here bare knees adown they fall. Chaucer.",
       "selectedSource": "webster"
@@ -721,6 +734,11 @@
       "webster": "Them. See Hem. [Obs.] Chaucer.\n\nThe objective case of he. See He. Him that is weak in the faith receive. Rom. xiv. 1. Friends who have given him the most sympathy. Thackeray. Note: In old English his and him were respectively the genitive and dative forms of it as well as of he. This use is now obsolete. Poetically, him is sometimes used with the reflexive sense of himself. I never saw but Humphrey, duke of Gloster, Did bear him like a noble gentleman. Shak.",
       "selectedSource": "webster"
     },
+    "hin": {
+      "webster": "A Hebrew measure of liquids, containing three quarts, one pint, one gill, English measure. W. H. Ward.",
+      "wordnet": "ancient Hebrew unit of liquid measure = 1.5 gallons",
+      "selectedSource": "webster"
+    },
     "hind": {
       "webster": "1. (Zo\u00f6l.)  The female of the red deer, of which the male is the stag. 2. (Zo\u00f6l.)  A spotted food fish of the genus Epinephelus, as E. apua of Bermuda, and E. Drummond-hayi of Florida; -- called also coney, John Paw, spotted hind.\n\n1. A domestic; a servant. [Obs.] Shak. 2. A peasant; a rustic; a farm servant. [Eng.] The hind, that homeward driving the slow steer Tells how man's daily work goes forward here. Trench.\n\nIn the rear; -- opposed to front; of or pertaining to the part or end which follows or is behind, in opposition to the part which leads or is before; as, the hind legs or hind feet of a quadruped; the hind man in a procession.",
       "wordnet": "located at or near the back of an animal; \"back (or hind) legs\"; \"the hinder part of a carcass\"",
@@ -844,6 +862,11 @@
     },
     "hocus": {
       "webster": "1. To deceive or cheat. Halliwell. 2. To adulterate; to drug; as, liquor is said to be hocused for the purpose of stupefying the drinker. Dickens. 3. To stupefy with drugged liquor. Thackeray.\n\n1. One who cheats or deceives. South. 2. Drugged liquor.",
+      "selectedSource": "webster"
+    },
+    "hod": {
+      "webster": "1. A kind of wooden tray with a handle, borne on the shoulder, for carrying mortar, brick, etc. 2. A utensil for holding coal; a coal scuttle.",
+      "wordnet": "an open box attached to a long pole handle; bricks or mortar are carried on the shoulder",
       "selectedSource": "webster"
     },
     "hoe": {

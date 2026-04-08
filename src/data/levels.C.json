@@ -15,7 +15,9 @@
         "os",
         "af"
       ],
-      "bonusWords": [],
+      "bonusWords": [
+        "aff"
+      ],
       "answers": [
         {
           "text": "edit",
@@ -274,7 +276,9 @@
         "tl"
       ],
       "bonusWords": [
+        "ane",
         "man",
+        "nae",
         "nam"
       ],
       "answers": [
@@ -575,7 +579,10 @@
         "m"
       ],
       "bonusWords": [
-        "dub"
+        "dub",
+        "oud",
+        "oxo",
+        "udo"
       ],
       "answers": [
         {
@@ -798,6 +805,7 @@
         "het",
         "pat",
         "paty",
+        "yap",
         "yeh"
       ],
       "answers": [
@@ -1661,6 +1669,9 @@
       ],
       "bonusWords": [
         "bal",
+        "lar",
+        "lop",
+        "oar",
         "ora",
         "pol"
       ],
@@ -1936,6 +1947,7 @@
         "h"
       ],
       "bonusWords": [
+        "hin",
         "nit"
       ],
       "answers": [
@@ -2181,9 +2193,11 @@
         "es"
       ],
       "bonusWords": [
+        "ess",
         "hes",
         "nos",
         "ons",
+        "sel",
         "sels",
         "sones"
       ],
@@ -2802,6 +2816,7 @@
         "ne"
       ],
       "bonusWords": [
+        "ens",
         "net",
         "sen",
         "sent",
@@ -3332,7 +3347,9 @@
         "ale",
         "alef",
         "egal",
+        "emf",
         "feal",
+        "fem",
         "flam",
         "gal",
         "gem",
@@ -4210,6 +4227,7 @@
         "ra"
       ],
       "bonusWords": [
+        "arb",
         "are",
         "bar",
         "beg",
@@ -4218,6 +4236,8 @@
         "brag",
         "ear",
         "era",
+        "ess",
+        "gar",
         "garb",
         "gear",
         "rag",
@@ -5070,7 +5090,8 @@
       ],
       "bonusWords": [
         "aft",
-        "stet"
+        "stet",
+        "tog"
       ],
       "answers": [
         {
@@ -5572,6 +5593,7 @@
         "de"
       ],
       "bonusWords": [
+        "arb",
         "bra",
         "deb",
         "debar"
@@ -6172,7 +6194,8 @@
         "uc"
       ],
       "bonusWords": [
-        "cut"
+        "cut",
+        "tet"
       ],
       "answers": [
         {
@@ -6429,7 +6452,10 @@
         "aces",
         "fil",
         "filo",
-        "oil"
+        "oca",
+        "oes",
+        "oil",
+        "ose"
       ],
       "answers": [
         {

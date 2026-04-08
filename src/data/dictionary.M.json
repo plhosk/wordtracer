@@ -917,6 +917,11 @@
       "wordnet": "the courage to carry on; \"he kept fighting on pure spunk\"; \"you haven't got the heart for baseball\"",
       "selectedSource": "webster"
     },
+    "mew": {
+      "webster": "A gull, esp. the common British species (Larus canus); called also sea mew, maa, mar, mow, and cobb.\n\nTo shed or cast; to change; to molt; as, the hawk mewed his feathers. Nine times the moon had mewed her horns. Dryden.\n\nTo cast the feathers; to molt; hence, to change; to put on a new appearance. Now everything doth mew, And shifts his rustic winter robe. Turbervile.\n\n1. A cage for hawks while mewing; a coop for fattening fowls; hence, any inclosure; a place of confinement or shelter; -- in the latter sense usually in the plural. Full many a fat partrich had he in mewe. Chaucer. Forthcoming from her darksome mew. Spenser. Violets in their secret mews. Wordsworth. 2. A stable or range of stables for horses; -- compound used in the plural, and so called from the royal stables in London, built on the site of the king's mews for hawks.\n\nTo shut up; to inclose; to confine, as in a cage or other inclosure. More pity that the eagle should be mewed. Shak. Close mewed in their sedans, for fear of air. Dryden.\n\nTo cry as a cat. [Written also meaw, meow.] Shak.\n\nThe common cry of a cat. Shak.",
+      "wordnet": "cry like a cat; \"the cat meowed\"",
+      "selectedSource": "webster"
+    },
     "mews": {
       "webster": "An alley where there are stables; a narrow passage; a confined place. [Eng.] Mr. Turveydrop's great room... was built out into a mews at the back. Dickens.",
       "wordnet": "street lined with buildings that were originally private stables but have been remodeled as dwellings; \"she lives in a Chelsea mews\"",
@@ -925,6 +930,10 @@
     "mezcal": {
       "webster": "Same as Mescal.",
       "wordnet": "a small spineless globe-shaped cactus; source of mescal buttons",
+      "selectedSource": "wordnet"
+    },
+    "mib": {
+      "wordnet": "a unit of information equal to 1024 kibibytes or 2^20 (1,048,576) bytes",
       "selectedSource": "wordnet"
     },
     "mica": {

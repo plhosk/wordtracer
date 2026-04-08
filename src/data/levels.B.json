@@ -15,6 +15,7 @@
         "p"
       ],
       "bonusWords": [
+        "fop",
         "fro"
       ],
       "answers": [
@@ -766,6 +767,7 @@
       ],
       "bonusWords": [
         "nip",
+        "nus",
         "use"
       ],
       "answers": [
@@ -964,7 +966,8 @@
       ],
       "bonusWords": [
         "mar",
-        "rah"
+        "rah",
+        "yar"
       ],
       "answers": [
         {
@@ -1815,6 +1818,7 @@
       ],
       "bonusWords": [
         "dah",
+        "dap",
         "nap"
       ],
       "answers": [
@@ -2012,8 +2016,10 @@
         "ed"
       ],
       "bonusWords": [
+        "ort",
         "rot",
-        "tor"
+        "tor",
+        "tun"
       ],
       "answers": [
         {
@@ -2888,6 +2894,7 @@
         "oh"
       ],
       "bonusWords": [
+        "gab",
         "hog"
       ],
       "answers": [
@@ -3127,6 +3134,7 @@
       "bonusWords": [
         "bey",
         "nam",
+        "neb",
         "yam"
       ],
       "answers": [
@@ -3336,6 +3344,7 @@
       "bonusWords": [
         "ale",
         "alt",
+        "lar",
         "lat",
         "rale",
         "ret",

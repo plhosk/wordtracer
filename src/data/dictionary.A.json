@@ -5,6 +5,10 @@
       "wordnet": "express admiration and pleasure by uttering `ooh' or `aah'; \"They oohed and aahed when they unwrapped the presents\"",
       "selectedSource": "wordnet"
     },
+    "aas": {
+      "wordnet": "an associate degree in applied science",
+      "selectedSource": "wordnet"
+    },
     "abase": {
       "webster": "1. To lower or depress; to throw or cast down; as, to abase the eye. [Archaic] Bacon. Saying so, he abased his lance. Shelton. 2. To cast down or reduce low or lower, as in rank, office, condition in life, or estimation of worthiness; to depress; to humble; to degrade. Whosoever exalteth himself shall be abased. Luke xiv. ll. Syn.  -- To Abase, Debase, Degrade. These words agree in the idea of bringing down from a higher to a lower state. Abase has reference to a bringing down in condition or feelings; as to abase one's self before God. Debase has reference to the bringing down of a thing in purity, or making it base. It is, therefore, always used in a bad sense, as, to debase the coin of the kingdom, to debase the mind by vicious indulgence, to debase one's style by coarse or vulgar expressions. Degrade has reference to a bringing down from some higher grade or from some standard. Thus, a priest is degraded from the clerical office. When used in a moral sense, it denotes a bringing down in character and just estimation; as, degraded by intemperance, a degrading employment, etc. \"Art is degraded when it is regarded only as a trade.\"",
       "wordnet": "cause to feel shame; hurt the pride of; \"He humiliated his colleague by criticising him in front of the boss\"",
@@ -117,6 +121,11 @@
     "abut": {
       "webster": "To project; to terminate or border; to be contiguous; to meet; -- with on, upon, or against; as, his land abuts on the road.",
       "wordnet": "lie adjacent to another or share a boundary; \"Canada adjoins the U.S.\"; \"England marches with Scotland\"",
+      "selectedSource": "webster"
+    },
+    "aby": {
+      "webster": "1. To pay for; to suffer for; to atone for; to make amends for; to give satisfaction. [Obs.] Lest to thy peril thou aby it dear. Shak. 2. To endure; to abide. [Obs.] But nought that wanteth rest can long aby. Spenser.",
+      "wordnet": "make amends for; \"expiate one's sins\"",
       "selectedSource": "webster"
     },
     "abyss": {
@@ -626,6 +635,10 @@
       "wordnet": "a long narrow passage (as in a cave or woods)",
       "selectedSource": "webster"
     },
+    "ait": {
+      "webster": "An islet, or little isle, in a river or lake; an eyot. The ait where the osiers grew. R. Hodges (1649). Among green aits and meadows. Dickens.\n\nOat. [Scot.] Burns.",
+      "selectedSource": "webster"
+    },
     "aitch": {
       "webster": "The letter h or H.",
       "selectedSource": "webster"
@@ -665,6 +678,11 @@
     "alas": {
       "webster": "An exclamation expressive of sorrow, pity, or apprehension of evil; -- in old writers, sometimes followed by day or white; alas the day, like alack a day, or alas the white.",
       "wordnet": "by bad luck; \"unfortunately it rained all day\"; \"alas, I cannot stay\"",
+      "selectedSource": "webster"
+    },
+    "alb": {
+      "webster": "A vestment of white linen, reaching to the feet, an enveloping the person; -- in the Roman Catholic church, worn by those in holy orders when officiating at mass. It was formerly worn, at least by clerics, in daily life.",
+      "wordnet": "a white linen liturgical vestment with sleeves; worn by priests",
       "selectedSource": "webster"
     },
     "albedo": {
@@ -1086,6 +1104,10 @@
     "and": {
       "webster": "1. A particle which expresses the relation of connection or addition. It is used to conjoin a word with a word, a clause with a clause, or a sentence with a sentence. Note: (a) It is sometimes used emphatically; as, \"there are women and women,\" that is, two very different sorts of women. (b) By a rhetorical figure, notions, one of which is modificatory of the other, are connected by and; as, \"the tediousness and process of my travel,\" that is, the tedious process, etc.; \"thy fair and outward character,\" that is, thy outwardly fair character, Schmidt's Shak. Lex. 2. In order to; -- used instead of the infinitival to, especially after try, come, go. At least to try and teach the erring soul. Milton. 3. It is sometimes, in old songs, a mere expletive. When that I was and a little tiny boy. Shak. 4. If; though. See An, conj. [Obs.] Chaucer. As they will set an house on fire, and it were but to roast their eggs. Bacon. And so forth, and others; and the rest; and similar things; and other things or ingredients. The abbreviation, etc. (et cetera), or &c., is usually read and so forth.",
       "selectedSource": "webster"
+    },
+    "ane": {
+      "wordnet": "used of a single unit or thing; not two or more; \"`ane' is Scottish\"",
+      "selectedSource": "wordnet"
     },
     "anent": {
       "webster": "1. Over against; as, he lives anent the church. 2. About; concerning; in respect; as, he said nothing anent this particular.",

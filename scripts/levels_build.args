@@ -20,3 +20,4 @@
 --group-cross-pack-late-long-word-max-reuse 10
 --group-three-letter-signature-early-groups 4
 --group-difficulty-target-weight 2.5
+--bonus-three-letter-min-zipf 2.2

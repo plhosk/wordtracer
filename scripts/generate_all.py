@@ -18,6 +18,8 @@ AUTO_GROUP_WHEEL_SHAPE_MIX_RAW: dict[int, str] = {
     7: "6/1/0:0.10,5/2/0:0.19,5/1/1:0.13,4/2/1:0.16,4/3/0:0.13,3/3/1:0.10,3/4/0:0.06,2/5/0:0.08,2/4/1:0.05",
 }
 
+PROBLEMATIC_TXT = project_path("plans", "problematic.txt")
+
 
 class ArgumentFileParser(argparse.ArgumentParser):
     def convert_arg_line_to_args(self, arg_line: str) -> list[str]:
@@ -49,6 +51,13 @@ def parse_args() -> argparse.Namespace:
         dest="includelist",
         default=str(project_path("data", "raw", "includelist", "includelist.json")),
         help="Explicit include list for words to add to both main and bonus lexicons.",
+    )
+    parser.add_argument(
+        "--bonus-blocklist-override",
+        default=str(
+            project_path("data", "raw", "re-enable", "bonus_blocklist_overrides.txt")
+        ),
+        help="Optional blocklist-override list used only for bonus lexicon build.",
     )
     parser.add_argument(
         "--bonus-min-zipf",
@@ -605,6 +614,14 @@ def parse_args() -> argparse.Namespace:
         default=1,
         help="Minimum per-shape level quota per group when mix is enabled.",
     )
+    parser.add_argument(
+        "--skip-problematic-postprocess",
+        action="store_true",
+        help=(
+            "Skip automatic remove+bridge problematic-word postprocess even "
+            "when plans/problematic.txt exists."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -614,6 +631,28 @@ def run(script_dir: Path, *args: str) -> None:
         print("", flush=True)
     print("+", " ".join(cmd), flush=True)
     subprocess.run(cmd, cwd=script_dir.parent, check=True)
+
+
+def run_problematic_postprocess(script_dir: Path) -> None:
+    if not PROBLEMATIC_TXT.exists() or not PROBLEMATIC_TXT.is_file():
+        print(f"Skipping problematic postprocess (missing {PROBLEMATIC_TXT})")
+        return
+
+    print(f"Problematic postprocess enabled ({PROBLEMATIC_TXT} found)")
+    run(script_dir, str(script_dir / "remove_problematic_words.py"))
+    run(
+        script_dir,
+        str(script_dir / "bridge_disconnected.py"),
+        "--apply",
+        "--max-words",
+        "3",
+    )
+    run(
+        script_dir,
+        str(script_dir / "bridge_disconnected.py"),
+        "--max-words",
+        "3",
+    )
 
 
 def parse_float_list(raw: str) -> list[float]:
@@ -1433,6 +1472,13 @@ def main() -> None:
             str(args.includelist),
         ]
     )
+    bonus_blocklist_override = Path(args.bonus_blocklist_override)
+    if not bonus_blocklist_override.is_absolute():
+        bonus_blocklist_override = project_path(*bonus_blocklist_override.parts)
+    if bonus_blocklist_override.exists() and bonus_blocklist_override.is_file():
+        bonus_lexicon_cmd.extend(
+            ["--blocklist-override", str(bonus_blocklist_override)]
+        )
     if not use_wordfreq:
         bonus_lexicon_cmd.extend(["--wordfreq-source", "off"])
     run(script_dir, *bonus_lexicon_cmd)
@@ -1455,6 +1501,11 @@ def main() -> None:
     )
 
     run_grouped_pipeline(script_dir, args)
+
+    if args.skip_problematic_postprocess:
+        print("Skipping problematic postprocess (--skip-problematic-postprocess)")
+    else:
+        run_problematic_postprocess(script_dir)
 
     run(script_dir, str(script_dir / "analyze_levels_bundle.py"))
 

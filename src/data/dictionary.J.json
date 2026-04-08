@@ -85,6 +85,10 @@
       "wordnet": "a coarse durable twill-weave cotton fabric",
       "selectedSource": "webster"
     },
+    "jee": {
+      "webster": "See Gee.",
+      "selectedSource": "webster"
+    },
     "jeep": {
       "wordnet": "a car suitable for traveling over rough terrain",
       "selectedSource": "wordnet"

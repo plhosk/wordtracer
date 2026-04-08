@@ -65,6 +65,10 @@
       "wordnet": "an electronic device that generates a series of beeps when the person carrying it is being paged",
       "selectedSource": "wordnet"
     },
+    "pah": {
+      "webster": "An exclamation expressing disgust or contempt. See Bah. Fie! fie! fie! pah! pah! Give me an ounce of civet, good apothecary, to sweeten my imagination. Shak.\n\nA kind of stockaded intrenchment. [New Zealand.] Farrow.",
+      "selectedSource": "webster"
+    },
     "paid": {
       "webster": "1. Receiving pay; compensated; hired; as, a paid attorney. 2. Satisfied; contented. [Obs.] \"Paid of his poverty.\" Chaucer.",
       "wordnet": "marked by the reception of pay; \"paid work\"; \"a paid official\"; \"a paid announcement\"; \"a paid check\"",
@@ -1250,6 +1254,10 @@
     "pivot": {
       "webster": "1. A fixed pin or short axis, on the end of which a wheel or other body turns. 2. The end of a shaft or arbor which rests and turns in a support; as, the pivot of an arbor in a watch. 3. Hence, figuratively: A turning point or condition; that on which important results depend; as, the pivot of an enterprise. 4. (Mil.)  The officer or soldier who simply turns in his place whike the company or line moves around him in wheeling; -- called also pivot man. Pivot bridge, a form of drawbridge in which one span, called the pivot span, turns about a central vertical axis.  -- Pivot gun, a gun mounted on a pivot or revolving carriage, so as to turn in any direction.  -- Pivot tooth (Dentistry), an artificial crown attached to the root of a natural tooth by a pin or peg.\n\nTo place on a pivot. Clarke.",
       "wordnet": "turn on a pivot",
+      "selectedSource": "webster"
+    },
+    "pix": {
+      "webster": "See Pyx.",
       "selectedSource": "webster"
     },
     "place": {

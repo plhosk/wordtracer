@@ -1,6 +1,11 @@
 {
   "letter": "O",
   "sourceDefinitions": {
+    "oaf": {
+      "webster": "Originally, an elf's child; a changeling left by fairies or goblins; hence, a deformed or foolish child; a simpleton; an idiot.",
+      "wordnet": "an awkward stupid person",
+      "selectedSource": "webster"
+    },
     "oafish": {
       "webster": "Like an oaf; simple.  -- Oaf\"ish*ness, n.",
       "wordnet": "ill-mannered and coarse and contemptible in behavior or appearance; \"was boorish and insensitive\"; \"the loutish manners of a bully\"; \"her stupid oafish husband\"; \"aristocratic contempt for the swinish multitude\"",
@@ -80,6 +85,11 @@
       "wordnet": "discover or determine the existence, presence, or fact of; \"She detected high levels of lead in her drinking water\"; \"We found traces of lead in the paint\"",
       "selectedSource": "webster"
     },
+    "oca": {
+      "webster": "A Peruvian name for certain species of Oxalis (O. crenata, and O. tuberosa) which bear edible tubers.",
+      "wordnet": "South American wood sorrel cultivated for its edible tubers",
+      "selectedSource": "webster"
+    },
     "occur": {
       "webster": "1. To meet; to clash. [Obs.] The resistance of the bodies they occur with. Bentley. 2. To go in order to meet; to make reply. [Obs.] I must occur to one specious objection. Bentley. 3. To meet one's eye; to be found or met with; to present itself; to offer; to appear; to happen; to take place; as, I will write if opportunity occurs. In Scripture, though the word heir occur, yet there is no such thing as \"heir\" in our author's sense. Locke. 4. To meet or come to the mind; to suggest itself; to be presented to the imagination or memory. There doth not occur to me any use of this experiment for profit. Bacon.",
       "wordnet": "come to pass; \"What is happening?\"; \"The meeting took place off without an incidence\"; \"Nothing occurred that seemed important\"",
@@ -150,6 +160,14 @@
       "wordnet": "any property detected by the olfactory system",
       "selectedSource": "webster"
     },
+    "ods": {
+      "webster": "A corruption of God's; -- formerly used in oaths and ejaculatory phrases. \"Ods bodikin.\" \"Ods pity.\" Shak.",
+      "selectedSource": "webster"
+    },
+    "oe": {
+      "webster": "a diphthong, employed in the Latin language, and thence in the English language, as the representative of the Greek diphthong oe. In many words in common use, e alone stands instead of oe. Classicists prefer to write the diphthong oe separate in Latin words.",
+      "selectedSource": "webster"
+    },
     "oedema": {
       "webster": "A swelling from effusion of watery fluid in the cellular tissue beneath the skin or mucous membrance; dropsy of the subcutaneous cellular tissue. [Written also edema.]",
       "wordnet": "swelling from excessive accumulation of watery fluid in cells, tissues, or serous cavities",
@@ -195,6 +213,11 @@
     },
     "ogre": {
       "webster": "An imaginary monster, or hideous giant of fairy tales, who lived on human beings; hence, any frightful giant; a cruel monster. His schoolroom must have resembled an ogre's den. Maccaulay.",
+      "selectedSource": "webster"
+    },
+    "oh": {
+      "webster": "An exclamation expressing various emotions, according to the tone and manner, especially surprise, pain, sorrow, anxiety, or a wish. See the Note under O.",
+      "wordnet": "a midwestern state in north central United States in the Great Lakes region",
       "selectedSource": "webster"
     },
     "ohm": {
@@ -301,6 +324,10 @@
     "ology": {
       "webster": "A colloquial or humorous name for any science or branch of knowledge. He had a smattering of mechanics, of physiology, geology, mineralogy, and all other ologies whatsoever. De Quincey.",
       "wordnet": "an informal word (abstracted from words with this ending) for some unidentified branch of knowledge",
+      "selectedSource": "webster"
+    },
+    "om": {
+      "webster": "A mystic syllable or ejaculation used by Hindus and Buddhists in religious rites, -- orig. among the Hindus an exclamation of assent, like Amen, then an invocation, and later a symbol of the trinity formed by Vishnu, Siva, and Brahma. -- Om mani padme hun, a sacred formula of buddhism (esp. of the Lamaists) translated \"O, the Jewel in the Lotus, Amen,\" and referring to Amitabha, who is commonly represented as standing or sitting within a lotus.",
       "selectedSource": "webster"
     },
     "ombre": {
@@ -455,6 +482,10 @@
       "wordnet": "a musical work that has been created; \"the composition is written in four movements\"",
       "selectedSource": "webster"
     },
+    "or": {
+      "webster": "1. A noun suffix denoting an act; a state or quality; as in error, fervor, pallor, candor, etc. 2. A noun suffix denoting an agent or doer; as in auditor, one who hears; donor, one who gives; obligor, elevator. It is correlative to -ee. In general -or is appended to words of Latin, and -er to those of English, origin. See -er.\n\nA particle that marks an alternative; as, you may read or may write, -- that is, you may do one of the things at your pleasure, but not both. It corresponds to either. You may ride either to London or to Windsor. It often connects a series of words or propositions, presenting a choice of either; as, he may study law, or medicine, or divinity, or he may enter into trade. If man's convenience, health, Or safety interfere, his rights and claims Are paramount. Cowper. Note: Or may be used to join as alternatives terms expressing unlike things or ideas (as, is the orange sour or sweet), or different terms expressing the same thing or idea; as, this is a sphere, or globe. Note: Or sometimes begins a sentence. In this case it expresses an alternative or subjoins a clause differing from the foregoing. \"Or what man is there of you, who, if his son shall ask him for a loaf, will give him a stone\" Matt. vii. 9 (Rev. Ver. ). Or for either is archaic or poetic. Maugre thine heed, thou must for indigence Or steal, or beg, or borrow thy dispence. Chaucer.\n\nEre; before; sooner than. [Obs.] But natheless, while I have time and space, Or that I forther in this tale pace. Chaucer. Or ever, Or ere. See under Ever, and Ere.\n\nYellow or gold color, -- represented in drawing or engraving by small dots.",
+      "selectedSource": "webster"
+    },
     "ora": {
       "webster": "A money of account among the Anglo-Saxons, valued, in the Domesday Book, at twenty pence sterling.",
       "selectedSource": "webster"
@@ -557,6 +588,10 @@
     "ornery": {
       "wordnet": "having a difficult and contrary disposition; \"a cantankerous and venomous-tongued old lady\"- Dorothy Sayers",
       "selectedSource": "wordnet"
+    },
+    "ort": {
+      "webster": "A morsel left at a meal; a fragment; refuse; -- commonly used in the plural. Milton. Let him have time a beggar's orts to crave. Shak.",
+      "selectedSource": "webster"
     },
     "ortho": {
       "webster": "1. A combining form signifying straight, right, upright, correct, regular; as, orthodromy, orthodiagonal, orthodox, orthographic. 2. (Chem.)  A combining form (also used adjectively), designating: (a) (Inorganic Chem.) The one of several acids of the same element (as the phosphoric acids), which actually occurs with the greatest number of hydroxyl groups; as, orthophosphoric acid. Cf. Normal. (b) (Organic Chem.)  Connection with, or affinity to, one variety of isomerism, characteristic of the benzene compounds; -- contrasted with meta- or para-; as, the ortho position; hence, designating any substance showing such isomerism; as, an ortho compound. Note: In the graphic representation of the benzene nucleus (see Benzene nucleus, under Benzene), provisionally adopted, any substance exhibiting double substitution in adjacent and contiguous carbon atoms, as 1 & 2, 3 & 4, 4 & 5, etc., is designated by ortho-; as, orthoxylene; any substance exhibiting substitution of two carbon atoms with one intervening, as 1 & 3, 2 & 4, 3 & 5, 4 & 6, etc., by meta-; as, resorcin or metaxylene; any substance exhibiting substitution in opposite parts, as 1 & 4, 2 & 5, 3 & 6, by para-; as, hydroquinone or paraxylene.",
@@ -757,6 +792,10 @@
     "oxide": {
       "webster": "A binary compound of oxygen with an atom or radical, or a compound which is regarded as binary; as, iron oxide, ethyl oxide, nitrogen oxide, etc. Note: In the chemical nomenclature adopted by Guyton de Morveau, Lavoisier,and their associates, the term oxides was made to include all compounds of oxygen which had no acid (F. acide) properties, as contrasted with the acid, all of which were at that time supposed to contain oxygen. The orthography oxyde, oxyd, etc., was afterwards introduced in ignorance or disregard of the true etymology, but these forms are now obsolete in English. The spelling oxid is not common.",
       "wordnet": "any compound of oxygen with another element or a radical",
+      "selectedSource": "webster"
+    },
+    "oxy": {
+      "webster": "A prefix, also used adjectively, designating: (a) A compound containing oxygen. (b) A compound containing the hydroxyl group, more properly designated by hydroxy-. See Hydroxy-. Oxy acid. See Oxyacid (below).",
       "selectedSource": "webster"
     },
     "oyer": {

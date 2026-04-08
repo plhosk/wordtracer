@@ -59,6 +59,11 @@
       "wordnet": "tell or spin a yarn",
       "selectedSource": "webster"
     },
+    "yaw": {
+      "webster": "To rise in blisters, breaking in white froth, as cane juice in the clarifiers in sugar works.\n\nTo steer wild, or out of the line of her course; to deviate from her course, as when struck by a heavy sea; -- said of a ship. Just as he would lay the ship's course, all yawing being out of the question. Lowell.\n\nA movement of a vessel by which she temporarily alters her course; a deviation from a straight course in steering.",
+      "wordnet": "an erratic deflection from an intended course",
+      "selectedSource": "webster"
+    },
     "yawl": {
       "webster": "A small ship's boat, usually rowed by four or six oars. [Written also yaul.]\n\nTo cry out like a dog or cat; to howl; to yell. Tennyson. There howling Scyllas yawling round about. Fairfax.",
       "wordnet": "emit long loud cries; \"wail in self-pity\"; \"howl with sorrow\"",
@@ -167,6 +172,10 @@
       "wordnet": "the dark negative feminine principle in Chinese dualistic cosmology; \"the interaction of yin and yang maintains the harmony of the universe\"",
       "selectedSource": "webster"
     },
+    "yip": {
+      "wordnet": "a sharp high-pitched cry (especially by a dog)",
+      "selectedSource": "wordnet"
+    },
     "yips": {
       "wordnet": "nervous tension that causes an athlete to fail (especially causes golfers to miss short putts); \"to avoid the yips he changed his style of putting\"",
       "selectedSource": "wordnet"
@@ -196,6 +205,15 @@
     },
     "yolk": {
       "webster": "1. The yellow part of an egg; the vitellus. 2. (Zo\u00f6l.)  An oily secretion which naturally covers the wool of sheep. Yolk cord (Zo\u00f6l.), a slender cord or duct which connects the yolk glands with the egg chambers in certain insects, as in the aphids.  -- Yolk gland (Zo\u00f6l.), a special organ which secretes the yolk of the eggs in many turbellarians, and in some other invertebrates. See Illust. of Hermaphrodite in Appendix.  -- Yolk sack (Anat.), the umbilical vesicle. See under Unbilical.",
+      "selectedSource": "webster"
+    },
+    "yom": {
+      "webster": "Day; -- a Hebrew word used in the names of various Jewish feast days; as, Yom Kippur, the Day of Atonement; Yom Teruah (lit., day of shouting), the Feast of Trumpets.",
+      "selectedSource": "webster"
+    },
+    "yon": {
+      "webster": "At a distance, but within view; yonder. [Poetic] Read thy lot in yon celestial sign. Milton. Though fast yon shower be fleeting. Keble.\n\nYonder. [Obs. or Poetic] But, first and chiefest, with thee bring Him that yon soars on golden wing. Milton.",
+      "wordnet": "distant but within sight (`yon' is dialectal); \"yonder valley\"; \"the hills yonder\"; \"what is yon place?\"",
       "selectedSource": "webster"
     },
     "yond": {
@@ -231,6 +249,10 @@
     "youth": {
       "webster": "1. The quality or state of being young; youthfulness; juvenility. \"In my flower of youth.\" Milton. Such as in his face Youth smiled celestial. Milton. 2. The part of life that succeeds to childhood; the period of existence preceding maturity or age; the whole early part of life, from childhood, or, sometimes, from infancy, to manhood. He wondered that your lordship Would suffer him to spend his youth at home. Shak. Those who pass their youth in vice are justly condemned to spend their age in folly. Rambler. 3. A young person; especially, a young man. Seven youths from Athens yearly sent. Dryden. 4. Young persons, collectively. It is fit to read the best authors to youth first. B. Jonson.",
       "wordnet": "a young person (especially a young man or boy)",
+      "selectedSource": "webster"
+    },
+    "yow": {
+      "webster": "You. [Obs.] Chaucer.",
       "selectedSource": "webster"
     },
     "yowl": {

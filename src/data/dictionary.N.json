@@ -1,6 +1,11 @@
 {
   "letter": "N",
   "sourceDefinitions": {
+    "na": {
+      "webster": "No, not. See No. [Obs.] Chaucer.",
+      "wordnet": "a silvery soft waxy metallic element of the alkali metal group; occurs abundantly in natural compounds (especially in salt water); burns with a yellow flame and reacts violently in water; occurs in sea water and in the mineral halite (rock salt)",
+      "selectedSource": "webster"
+    },
     "naan": {
       "wordnet": "leavened bread baked in a clay oven in India; usually shaped like a teardrop",
       "selectedSource": "wordnet"
@@ -715,6 +720,10 @@
     "nowt": {
       "webster": "Neat cattle.",
       "selectedSource": "webster"
+    },
+    "nth": {
+      "wordnet": "last or greatest in an indefinitely large series; \"to the nth degree\"",
+      "selectedSource": "wordnet"
     },
     "nub": {
       "webster": "To push; to nudge; also, to beckon. [Prov. Eng.]\n\nA jag, or snag; a knob; a protuberance; also, the point or gist, as of a story. [Colloq.]",

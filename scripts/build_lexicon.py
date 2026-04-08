@@ -50,6 +50,12 @@ def parse_args() -> argparse.Namespace:
         help="Directory containing *.json blocklist files (repeatable).",
     )
     parser.add_argument(
+        "--blocklist-override",
+        action="append",
+        default=[],
+        help="Word list path(s) allowed even if blocklisted (repeatable).",
+    )
+    parser.add_argument(
         "--re-enable-list",
         default=str(project_path("data", "raw", "re-enable", "re-enable.txt")),
         help="Required word list; words not present here are excluded.",
@@ -193,7 +199,10 @@ def expand_list_paths(file_paths: list[str], dir_paths: list[str]) -> list[Path]
 
 
 def require_input_sources(
-    args: argparse.Namespace, blocklist_files: list[Path], includelist_files: list[Path]
+    args: argparse.Namespace,
+    blocklist_files: list[Path],
+    includelist_files: list[Path],
+    blocklist_override_files: list[Path],
 ) -> None:
     issues: list[str] = []
 
@@ -220,6 +229,10 @@ def require_input_sources(
     for path in includelist_files:
         if not path.exists() or not path.is_file():
             issues.append(f"includelist file missing: {path}")
+
+    for path in blocklist_override_files:
+        if not path.exists() or not path.is_file():
+            issues.append(f"blocklist override file missing: {path}")
 
     if args.source_mode in {"auto", "corpora", "union"}:
         wikipedia_source = resolve_path(args.wikipedia_source)
@@ -292,10 +305,19 @@ def main() -> None:
 
     blocklist_files = expand_list_paths(args.blocklist, args.blocklist_dir)
     includelist_files = [resolve_path(raw) for raw in args.includelist]
-    require_input_sources(args, blocklist_files, includelist_files)
+    blocklist_override_files = [resolve_path(raw) for raw in args.blocklist_override]
+    require_input_sources(
+        args,
+        blocklist_files,
+        includelist_files,
+        blocklist_override_files,
+    )
     re_enable_path = resolve_path(args.re_enable_list)
     re_enable_words = load_re_enable_words(re_enable_path)
     blocklist, blocklist_per_file = read_word_set(blocklist_files)
+    blocklist_override, blocklist_override_per_file = read_word_set(
+        blocklist_override_files
+    )
     includelist, includelist_per_file = read_word_set(includelist_files)
     rows, source_counts, warnings = select_rows(args)
 
@@ -364,11 +386,14 @@ def main() -> None:
             continue
 
         if word in blocklist:
-            reasons["blocked"] += 1
-            maybe_record_drop(
-                drop_samples, "blocked", args.drop_sample_limit, word, freq
-            )
-            continue
+            if word in blocklist_override:
+                reasons["blocklistOverride"] += 1
+            else:
+                reasons["blocked"] += 1
+                maybe_record_drop(
+                    drop_samples, "blocked", args.drop_sample_limit, word, freq
+                )
+                continue
         if word in includelist:
             kept.append(
                 {
@@ -441,6 +466,9 @@ def main() -> None:
             "blocklistCount": len(blocklist),
             "blocklistFiles": [str(path) for path in blocklist_files],
             "blocklistPerFile": blocklist_per_file,
+            "blocklistOverrideCount": len(blocklist_override),
+            "blocklistOverrideFiles": [str(path) for path in blocklist_override_files],
+            "blocklistOverridePerFile": blocklist_override_per_file,
             "includelistCount": len(includelist),
             "includelistFiles": [str(path) for path in includelist_files],
             "includelistPerFile": includelist_per_file,
@@ -467,6 +495,7 @@ def main() -> None:
             "tooShort": int(reasons["tooShort"]),
             "tooLong": int(reasons["tooLong"]),
             "blocked": int(reasons["blocked"]),
+            "blocklistOverride": int(reasons["blocklistOverride"]),
             "notInReEnableList": int(reasons["notInReEnableList"]),
             "shapeFiltered": int(reasons["shapeFiltered"]),
             "threeLetterLowZipf": int(reasons["threeLetterLowZipf"]),

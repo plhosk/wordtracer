@@ -429,10 +429,13 @@
         "bee",
         "beer",
         "cor",
+        "ewe",
         "ewer",
+        "obe",
         "orc",
         "ore",
         "owe",
+        "reb",
         "rec",
         "roc",
         "roe",
@@ -836,6 +839,7 @@
       ],
       "bonusWords": [
         "air",
+        "oxy",
         "pes",
         "pia",
         "pox",
@@ -1284,6 +1288,7 @@
         "kent",
         "key",
         "kyte",
+        "ree",
         "reek",
         "rent",
         "ret",
@@ -1292,6 +1297,7 @@
         "tent",
         "tree",
         "try",
+        "tye",
         "tyke",
         "yet"
       ],
@@ -1752,6 +1758,8 @@
         "ra"
       ],
       "bonusWords": [
+        "arb",
+        "arf",
         "arm",
         "army",
         "bar",
@@ -1770,7 +1778,8 @@
         "rafted",
         "ram",
         "rated",
-        "ray"
+        "ray",
+        "yar"
       ],
       "answers": [
         {
@@ -2176,9 +2185,11 @@
       "bonusWords": [
         "daw",
         "don",
+        "dor",
         "draw",
         "fro",
         "froward",
+        "kor",
         "naw",
         "nod",
         "nor",
@@ -3124,6 +3135,7 @@
         "mos",
         "mot",
         "mow",
+        "oms",
         "smolt"
       ],
       "answers": [
@@ -3488,6 +3500,7 @@
         "nor",
         "nos",
         "ons",
+        "rif",
         "she",
         "son"
       ],
@@ -3999,11 +4012,14 @@
       "bonusWords": [
         "gap",
         "glom",
+        "gul",
         "gum",
         "lap",
         "log",
         "lug",
+        "lum",
         "map",
+        "mog",
         "mol",
         "mug",
         "ossa",
@@ -4395,12 +4411,15 @@
       ],
       "bonusWords": [
         "ars",
+        "lar",
+        "oar",
         "ora",
         "orals",
         "ras",
         "sky",
         "sol",
         "sora",
+        "sou",
         "sura"
       ],
       "answers": [
@@ -4861,9 +4880,11 @@
       ],
       "bonusWords": [
         "ambo",
+        "amu",
         "bole",
         "boo",
         "boule",
+        "leu",
         "ole",
         "our",
         "ram",
@@ -5261,6 +5282,7 @@
         "ars",
         "art",
         "arts",
+        "gar",
         "gars",
         "gram",
         "grat",
@@ -5272,6 +5294,7 @@
         "marts",
         "mig",
         "migs",
+        "mim",
         "mis",
         "mist",
         "rag",
@@ -5714,6 +5737,7 @@
         "sp"
       ],
       "bonusWords": [
+        "arf",
         "arm",
         "far",
         "fig",
@@ -5723,7 +5747,8 @@
         "mig",
         "ram",
         "ray",
-        "spy"
+        "spy",
+        "yar"
       ],
       "answers": [
         {
@@ -6108,8 +6133,12 @@
         "does",
         "dow",
         "dows",
+        "ess",
         "lobo",
         "lobs",
+        "ods",
+        "oes",
+        "ose",
         "oses",
         "sew",
         "sews",
@@ -6117,7 +6146,8 @@
         "sod",
         "sow",
         "soy",
-        "yes"
+        "yes",
+        "yow"
       ],
       "answers": [
         {
@@ -6595,6 +6625,8 @@
         "drawl",
         "drawls",
         "draws",
+        "eld",
+        "els",
         "lad",
         "lade",
         "lads",
@@ -6624,6 +6656,7 @@
         "salmi",
         "sea",
         "seal",
+        "sel",
         "semi",
         "sim",
         "slim",
@@ -7261,8 +7294,10 @@
       ],
       "bonusWords": [
         "ohm",
+        "oke",
         "okes",
         "soke",
+        "sot",
         "tokes",
         "trikes"
       ],
@@ -8623,6 +8658,7 @@
         "o"
       ],
       "bonusWords": [
+        "alb",
         "and",
         "asp",
         "bah",
@@ -8633,11 +8669,14 @@
         "bond",
         "bops",
         "hand",
+        "hao",
         "haps",
         "hasp",
+        "hob",
         "hops",
         "lab",
         "land",
+        "lob",
         "lops",
         "ops",
         "spa"
@@ -9509,7 +9548,9 @@
         "churl",
         "hon",
         "hop",
+        "noh",
         "pun",
+        "rho",
         "run",
         "urn"
       ],
@@ -9899,7 +9940,10 @@
         "lr",
         "ts"
       ],
-      "bonusWords": [],
+      "bonusWords": [
+        "eme",
+        "mew"
+      ],
       "answers": [
         {
           "text": "truest",
@@ -10314,6 +10358,7 @@
         "dams",
         "dash",
         "deke",
+        "eke",
         "eked",
         "ekes",
         "ems",
@@ -10333,6 +10378,7 @@
         "hem",
         "hems",
         "hes",
+        "kea",
         "mad",
         "made",
         "mads",
@@ -10823,7 +10869,10 @@
         "die",
         "duo",
         "goo",
-        "nows"
+        "nows",
+        "oud",
+        "sei",
+        "sou"
       ],
       "answers": [
         {
@@ -11287,18 +11336,23 @@
         "als",
         "also",
         "door",
+        "dor",
         "dork",
         "dorks",
         "dorp",
         "dors",
+        "kop",
         "kops",
+        "kor",
         "kos",
         "lap",
         "laps",
+        "lar",
         "lark",
         "lars",
         "las",
         "odor",
+        "ods",
         "opal",
         "opals",
         "ops",
@@ -11306,6 +11360,7 @@
         "orals",
         "ordo",
         "ordos",
+        "ors",
         "pal",
         "pals",
         "pod",
@@ -11322,7 +11377,8 @@
         "skoal",
         "slap",
         "sod",
-        "sola"
+        "sola",
+        "sop"
       ],
       "answers": [
         {
@@ -11762,6 +11818,7 @@
       ],
       "bonusWords": [
         "lid",
+        "lob",
         "lot"
       ],
       "answers": [
@@ -12143,6 +12200,7 @@
         "dewing",
         "iris",
         "nip",
+        "ped",
         "pin",
         "prising",
         "sired",
@@ -12621,6 +12679,7 @@
         "fed",
         "feds",
         "feed",
+        "fez",
         "sad",
         "sade",
         "sae",
@@ -13414,15 +13473,19 @@
       "bonusWords": [
         "age",
         "agone",
+        "ane",
         "eng",
         "gan",
         "gen",
         "gone",
+        "nae",
         "nag",
         "nevi",
+        "nix",
         "none",
         "via",
-        "vie"
+        "vie",
+        "vig"
       ],
       "answers": [
         {
@@ -13831,9 +13894,11 @@
         "hot",
         "nah",
         "nan",
+        "noh",
         "noir",
         "nona",
         "not",
+        "nth",
         "riot",
         "tan",
         "than",
@@ -14346,6 +14411,7 @@
         "k"
       ],
       "bonusWords": [
+        "eon",
         "eons",
         "eth",
         "ethnos",
@@ -14365,6 +14431,7 @@
         "keys",
         "knot",
         "noes",
+        "noh",
         "nos",
         "nosey",
         "nosh",
@@ -14385,6 +14452,7 @@
         "tone",
         "tons",
         "tsk",
+        "tye",
         "tyee",
         "yeh",
         "yes",
@@ -15612,11 +15680,13 @@
         "berm",
         "berms",
         "elm",
+        "els",
         "ember",
         "ems",
         "helm",
         "hem",
         "hems",
+        "hep",
         "hes",
         "mel",
         "mels",
@@ -15628,6 +15698,7 @@
         "rebel",
         "rebs",
         "seep",
+        "sel",
         "she"
       ],
       "answers": [
@@ -16103,7 +16174,8 @@
         "toman",
         "ton",
         "toy",
-        "yam"
+        "yam",
+        "yon"
       ],
       "answers": [
         {
@@ -16544,9 +16616,12 @@
         "ago",
         "aim",
         "ami",
+        "gar",
         "goa",
+        "gor",
         "mig",
         "mir",
+        "oar",
         "ora",
         "own",
         "rag",
@@ -16967,6 +17042,7 @@
         "cis",
         "dis",
         "drees",
+        "reb",
         "rec",
         "red",
         "redes",
@@ -16974,6 +17050,7 @@
         "sec",
         "seer",
         "seis",
+        "sib",
         "sic",
         "sire"
       ],
@@ -17403,9 +17480,11 @@
         "ami",
         "amies",
         "ave",
+        "fie",
         "sea",
         "see",
-        "vees"
+        "vees",
+        "vim"
       ],
       "answers": [
         {
@@ -17783,6 +17862,7 @@
         "ecu",
         "eel",
         "lee",
+        "obe",
         "web",
         "weel"
       ],
@@ -18230,9 +18310,12 @@
         "macer",
         "meres",
         "mor",
+        "oca",
+        "oes",
         "orca",
         "ore",
         "ores",
+        "ose",
         "race",
         "rem",
         "res",
@@ -18701,6 +18784,7 @@
         "aced",
         "act",
         "acted",
+        "alb",
         "alt",
         "back",
         "bade",
@@ -19252,12 +19336,17 @@
       ],
       "bonusWords": [
         "bos",
+        "hin",
+        "hob",
         "hobs",
         "hon",
         "mash",
         "mass",
+        "noh",
         "nos",
+        "ohs",
         "ons",
+        "sob",
         "son"
       ],
       "answers": [
@@ -19694,7 +19783,8 @@
         "yu"
       ],
       "bonusWords": [
-        "sha"
+        "sha",
+        "yuk"
       ],
       "answers": [
         {
@@ -20131,6 +20221,7 @@
         "eth",
         "ice",
         "nit",
+        "nth",
         "the",
         "tie",
         "tin"
@@ -20584,7 +20675,9 @@
         "gamin",
         "gan",
         "mix",
-        "nag"
+        "nag",
+        "nim",
+        "nix"
       ],
       "answers": [
         {
@@ -21566,6 +21659,7 @@
         "cup",
         "ecu",
         "ells",
+        "els",
         "lex",
         "luce",
         "puce"
@@ -21985,12 +22079,15 @@
         "bit",
         "bos",
         "boy",
+        "bys",
+        "hao",
         "has",
         "hay",
         "its",
         "obit",
         "sha",
         "sit",
+        "sob",
         "soy",
         "tis",
         "yah",
@@ -22394,6 +22491,7 @@
         "abs",
         "ace",
         "aces",
+        "arb",
         "arbs",
         "arc",
         "arco",
@@ -22444,12 +22542,18 @@
         "ears",
         "era",
         "eras",
+        "oar",
         "oars",
+        "obe",
         "obes",
+        "oca",
+        "oes",
         "ora",
+        "ose",
         "race",
         "ras",
         "rase",
+        "sab",
         "sabe",
         "sabra",
         "sac",
@@ -22462,6 +22566,7 @@
         "sec",
         "sera",
         "soar",
+        "sob",
         "sora"
       ],
       "answers": [

@@ -462,6 +462,10 @@
       "wordnet": "an unborn or unhatched vertebrate in the later stages of development showing the main recognizable features of the mature animal",
       "selectedSource": "webster"
     },
+    "feu": {
+      "webster": "A free and gratuitous right to lands made to one for service to be performed by him; a tenure where the vassal, in place of military services, makes a return in grain or in money. Burrill.",
+      "selectedSource": "webster"
+    },
     "feud": {
       "webster": "1. A combination of kindred to avenge injuries or affronts, done or offered to any of their blood, on the offender and all his race. 2. A contention or quarrel; especially, an inveterate strife between families, clans, or parties; deadly hatred; contention satisfied only by bloodshed. Mutual feuds and battles betwixt their several tribes and kindreds. Purchas. Syn.  -- Affray; fray; broil; contest; dispute; strife.\n\nA stipendiary estate in land, held of superior, by service; the right which a vassal or tenant had to the lands or other immovable thing of his lord, to use the same and take the profists thereof hereditarily, rendering to his superior such duties and services as belong to military tenure, etc., the property of the soil always remaining in the lord or superior; a fief; a fee.",
       "wordnet": "a bitter quarrel between two parties",
@@ -480,6 +484,14 @@
     "fewer": {
       "wordnet": "(comparative of `few' used with count nouns) quantifier meaning a smaller number of; \"fewer birds came this year\"; \"the birds are fewer this year\"; \"fewer trains were late\"",
       "selectedSource": "wordnet"
+    },
+    "fey": {
+      "webster": "Fated; doomed. [Old Eng. & Scot.]\n\nFaith. [Obs.] Chaucer.\n\nTo cleanse; to clean out. [Obs.] Tusser.",
+      "selectedSource": "webster"
+    },
+    "fez": {
+      "webster": "A felt or cloth cap, usually red and having a tassel, -- a variety of the tarboosh. See Tarboosh. B. Taylor.",
+      "selectedSource": "webster"
     },
     "fiacre": {
       "webster": "A kind of French hackney coach.",
@@ -521,6 +533,14 @@
     "ficus": {
       "webster": "A genus of trees or shrubs, one species of which (F. Carica) produces the figs of commerce; the fig tree. Note: Ficus Indica is the banyan tree; F. religiosa, the peepul tree; F. elastica, the India-rubber tree.",
       "wordnet": "large genus of tropical trees or shrubs or climbers including fig trees",
+      "selectedSource": "webster"
+    },
+    "fid": {
+      "webster": "1. (Naut.)  A square bar of wood or iron, used to support the topmast, being passed through a hole or mortise at its heel, and resting on the trestle trees. 2. A wooden or metal bar or pin, used to support or steady anything. 3. A pin of hard wood, tapering to a point, used to open the strands of a rope in splicing. Note: There are hand fids and standing fids (which are larger than the others, and stand upon a flat base). An iron implement for this purpose is called a marline spike. 4. (Mil.)  A block of wood used in mounting and dismounting heavy guns.",
+      "selectedSource": "webster"
+    },
+    "fie": {
+      "webster": "An exclamation denoting contempt or dislike. See Fy. Fuller.",
       "selectedSource": "webster"
     },
     "fief": {
@@ -1125,6 +1145,10 @@
       "wordnet": "droplets of water vapor suspended in the air near the ground",
       "selectedSource": "webster"
     },
+    "foh": {
+      "webster": "An exclamation of abhorrence or contempt; poh; fle. Shak.",
+      "selectedSource": "webster"
+    },
     "foil": {
       "webster": "1. To tread under foot; to trample. King Richard . . . caused the ensigns of Leopold to be pulled down and foiled under foot. Knoless. Whom he did all to pieces breake and foyle, In filthy durt, and left so in the loathely soyle. Spenser. 2. To render (an effort or attempt) vain or nugatory; to baffle; to outwit; to balk; to frustrate; to defeat. And by foiled. Dryden. Her long locks that foil the painter's power. Byron. 3. To blunt; to dull; to spoil; as, to foil the scent in chase. Addison.\n\nTo defile; to soil. [Obs.]\n\n1. Failure of success when on the point of attainment; defeat; frustration; miscarriage. Milton. Nor e'er was fate so near a foil. Dryden. 2. A blunt weapon used in fencing, resembling a smallsword in the main, but usually lighter and having a button at the point. Blunt as the fencer's foils, which hit, but hurt not. Shak. socrates contended with a foil against Demosthenes with a word. Mitford. 3. The track or trail of an animal. To run a foil,to lead astray; to puzzle; -- alluding to the habits of some animals of running back over the same track to mislead their pursuers. Brewer.\n\n1. A leaf or very thin sheet of metal; as, brass foil; tin foil; gold foil. 2. (Jewelry)  A thin leaf of sheet copper silvered and burnished, and afterwards coated with transparent colors mixed with isinglass; -- employed by jewelers to give color or brilliancy to pastes and inferior stones. Ure. 3. Anything that serves by contrast of color or quality to adorn or set off another thing to advantage. As she a black silk cap on him began To set, for foil of his milk- white to serve. Sir P. Sidney. Hector has a foil to set him off. Broome. 4. A thin coat of tin, with quicksilver, laid on the back of a looking-glass, to cause reflection. 5. (Arch.)  The space between the cusps in Gothic architecture; a rounded or leaflike ornament, in windows, niches, etc. A group of foils is called trefoil, quatrefoil, quinquefoil, etc., according to the number of arcs of which it is composed. Foil stone, an imitation of a jewel or precious stone.",
       "wordnet": "a piece of thin and flexible sheet metal; \"the photographic film was wrapped in foil\"",
@@ -1376,6 +1400,10 @@
       "wordnet": "marked by skill in deception; \"cunning men often pass for wise\"; \"deep political machinations\"; \"a foxy scheme\"; \"a slick evasive answer\"; \"sly as a fox\"; \"tricky Dick\"; \"a wily old attorney\"",
       "selectedSource": "webster"
     },
+    "foy": {
+      "webster": "1. Faith; allegiance; fealty. [Obs.] Spenser. 2. A feast given by one about to leave a place. [Obs.] He did at the Dog give me, and some other friends of his, his foy, he being to set sail to-day. Pepys.",
+      "selectedSource": "webster"
+    },
     "foyer": {
       "webster": "1. A lobby in a theater; a greenroom. 2. The crucible or basin in a furnace which receives the molten metal. Knight.",
       "wordnet": "a large entrance or reception room or area",
@@ -1577,6 +1605,10 @@
       "webster": "1. Any matter used to produce heat by burning; that which feeds fire; combustible matter used for fires, as wood, coal, peat, etc. 2. Anything that serves to feed or increase passion or excitement. Artificial fuel, fuel consisting of small particles, as coal dust, sawdust, etc., consolidated into lumps or blocks.\n\n1. To feed with fuel. [Obs.] Never, alas I the dreadful name, That fuels the infernal flame. Cowley. 2. To store or furnish with fuel or firing. [Obs.] Well watered and well fueled. Sir H. Wotton.",
       "wordnet": "a substance that can be consumed to produce energy; \"more fuel is needed during the winter months\"; \"they developed alternative fuels for aircraft\"",
       "selectedSource": "webster"
+    },
+    "fug": {
+      "wordnet": "(British informal) an airless smoky smelly atmosphere",
+      "selectedSource": "wordnet"
     },
     "full": {
       "webster": "1. Filled up, having within its limits all that it can contain; supplied; not empty or vacant; -- said primarily of hollow vessels, and hence of anything else; as, a cup full of water; a house full of people. Had the throne been full, their meeting would not have been regular. Blackstone. 2. Abundantly furnished or provided; sufficient in. quantity, quality, or degree; copious; plenteous; ample; adequate; as, a full meal; a full supply; a full voice; a full compensation; a house full of furniture. 3. Not wanting in any essential quality; complete, entire; perfect; adequate; as, a full narrative; a person of full age; a full stop; a full face; the full moon. It came to pass, at the end of two full years, that Pharaoh dreamed. Gen. xii. 1. The man commands Like a full soldier. Shak. I can not Request a fuller satisfaction Than you have freely granted. Ford. 4. Sated; surfeited. I am full of the burnt offerings of rams. Is. i. 11. 5. Having the mind filled with ideas; stocked with knowledge; stored with information. Reading maketh a full man. Bacon. 6. Having the attention, thoughts, etc., absorbed in any matter, and the feelings more or less excited by it, as, to be full of some project. Every one is full of the miracles done by cold baths on decayed and weak constitutions. Locke. 7. Filled with emotions. The heart is so full that a drop overfills it. Lowell. 8. Impregnated; made pregnant. [Obs.] Ilia, the fair, . . . full of Mars. Dryden. At full, when full or complete. Shak.  -- Full age (Law) the age at which one attains full personal rights; majority; -- in England and the United States the age of 21 years. Abbott.  -- Full and by (Naut.), sailing closehauled, having all the sails full, and lying as near the wind as poesible.  -- Full band (Mus.), a band in which all the instruments are employed.  -- Full binding, the binding of a book when made wholly of leather, as distinguished from half binding.  -- Full bottom, a kind of wig full and large at the bottom.  -- Full brother or sister, a brother or sister having the same parents as another.  -- Full cry (Hunting), eager chase; -- said of hounds that have caught the scent, and give tongue together.  -- Full dress, the dress prescribed by authority or by etiquette to be worn on occasions of ceremony.  -- Full hand (Poker), three of a kind and a pair.  -- Full moon. (a) The moon with its whole disk illuminated, as when opposite to the sun. (b) The time when the moon is full.  -- Full organ (Mus.), the organ when all or most stops are out.  -- Full score (Mus.), a score in which all the parts for voices and instruments are given.  -- Full sea, high water.  -- Full swing, free course; unrestrained liberty; \"Leaving corrupt nature to . . . the full swing and freedom of its own extravagant actings.\" South (Colloq.) -- In full, at length; uncontracted; unabridged; written out in words, and not indicated by figures.  -- In full blast. See under Blast.\n\nComplete measure; utmost extent; the highest state or degree. The swan's-down feather, That stands upon the swell at full of tide. Shak. Full of the moon, the time of full moon.\n\nQuite; to the same degree; without abatement or diminution; with the whole force or effect; thoroughly; completely; exactly; entirely. The pawn I proffer shall be full as good. Dryden. The diapason closing full in man. Dryden. Full in the center of the sacred wood. Addison. Note: Full is placed before adjectives and adverbs to heighten or strengthen their signification. \"Full sad.\" Milton. \"Master of a full poor cell.\" Shak. \"Full many a gem of purest ray serene.\" T. Gray. Full is also prefixed to participles to express utmost extent or degree; as, full-bloomed, full-blown, full-crammed full-grown, full- laden, full-stuffed, etc. Such compounds, for the most part, are self-defining.\n\nTo become full or wholly illuminated; as, the moon fulls at midnight.\n\nTo thicken by moistening, heating, and pressing, as cloth; to mill; to make compact; to scour, cleanse, and thicken in a mill.\n\nTo become fulled or thickened; as, this material fulls well.",

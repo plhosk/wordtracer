@@ -503,6 +503,7 @@
         "e"
       ],
       "bonusWords": [
+        "eon",
         "ton"
       ],
       "answers": [
@@ -676,7 +677,9 @@
         "b",
         "us"
       ],
-      "bonusWords": [],
+      "bonusWords": [
+        "reb"
+      ],
       "answers": [
         {
           "text": "sure",

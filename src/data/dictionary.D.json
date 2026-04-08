@@ -865,6 +865,10 @@
       "wordnet": "a daily written record of (usually personal) experiences and observations",
       "selectedSource": "webster"
     },
+    "dib": {
+      "webster": "To dip. [Prov. Eng.] Walton.\n\n1. One of the small bones in the knee joints of sheep uniting the bones above and below the joints. 2. pl.  A child's game, played with dib bones.",
+      "selectedSource": "webster"
+    },
     "dibs": {
       "webster": "A sweet preparation or treacle of grape juice, much used in the East. Johnston.",
       "wordnet": "a claim of rights; \"I have dibs on that last slice of pizza\"",
@@ -1815,6 +1819,10 @@
       "webster": "1. Any tube or canal by which a fluid or other substance is conducted or conveyed. 2. (Anat.)  One of the vessels of an animal body by which the products of glandular secretion are conveyed to their destination. 3. (Bot.)  A large, elongated cell, either round or prismatic, usually found associated with woody fiber. Note: Ducts are classified, according to the character of the surface of their walls, or their structure, as annular, spiral, scalariform, etc. 4. Guidance; direction. [Obs.] Hammond.",
       "wordnet": "a bodily passage or tube lined with epithelial cells and conveying a secretion or other substance; \"the tear duct was obstructed\"; \"the alimentary canal\"; \"poison is released through a channel in the snake's fangs\"",
       "selectedSource": "webster"
+    },
+    "dud": {
+      "wordnet": "failing to detonate; especially not charged with an active explosive; \"he stepped on a dud mine\"",
+      "selectedSource": "wordnet"
     },
     "dude": {
       "webster": "A kind of dandy; especially, one characterized by an ultrafashionable style of dress and other affectations. [Recent] The social dude who affects English dress and English drawl. The American.",
