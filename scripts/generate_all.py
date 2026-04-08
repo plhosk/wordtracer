@@ -36,6 +36,15 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--seed", type=int, default=123)
     parser.add_argument(
+        "--pipeline-mode",
+        choices=("full", "updatebonus"),
+        default="full",
+        help=(
+            "Pipeline mode: 'full' runs the entire build; 'updatebonus' rebuilds "
+            "bonus lexicon, refreshes bonusWords on existing levels, then updates analysis/dictionary."
+        ),
+    )
+    parser.add_argument(
         "--bonus-lexicon",
         default=str(project_path("data", "processed", "lexicon_bonus.json")),
         help="Path for relaxed bonus lexicon JSON.",
@@ -1447,13 +1456,14 @@ def main() -> None:
 
     use_wordfreq = args.wordfreq_source != "off"
 
-    main_lexicon_cmd = [
-        str(script_dir / "build_lexicon.py"),
-    ]
-    main_lexicon_cmd.extend(["--includelist", str(args.includelist)])
-    if not use_wordfreq:
-        main_lexicon_cmd.extend(["--wordfreq-source", "off"])
-    run(script_dir, *main_lexicon_cmd)
+    if args.pipeline_mode == "full":
+        main_lexicon_cmd = [
+            str(script_dir / "build_lexicon.py"),
+        ]
+        main_lexicon_cmd.extend(["--includelist", str(args.includelist)])
+        if not use_wordfreq:
+            main_lexicon_cmd.extend(["--wordfreq-source", "off"])
+        run(script_dir, *main_lexicon_cmd)
 
     bonus_lexicon_cmd = [
         str(script_dir / "build_lexicon.py"),
@@ -1482,25 +1492,41 @@ def main() -> None:
     if not use_wordfreq:
         bonus_lexicon_cmd.extend(["--wordfreq-source", "off"])
     run(script_dir, *bonus_lexicon_cmd)
-    run(
-        script_dir,
-        str(script_dir / "extract_combos.py"),
-        "--combo-sizes",
-        args.combo_sizes,
-    )
 
-    run(
-        script_dir,
-        str(script_dir / "build_wordnet_dictionary.py"),
-        "--source",
-        str(args.wordnet_source),
-        "--out",
-        str(args.wordnet_dictionary),
-        "--stats-out",
-        str(args.wordnet_dictionary_stats),
-    )
+    if args.pipeline_mode == "full":
+        run(
+            script_dir,
+            str(script_dir / "extract_combos.py"),
+            "--combo-sizes",
+            args.combo_sizes,
+        )
 
-    run_grouped_pipeline(script_dir, args)
+        run(
+            script_dir,
+            str(script_dir / "build_wordnet_dictionary.py"),
+            "--source",
+            str(args.wordnet_source),
+            "--out",
+            str(args.wordnet_dictionary),
+            "--stats-out",
+            str(args.wordnet_dictionary_stats),
+        )
+
+    if args.pipeline_mode == "full":
+        run_grouped_pipeline(script_dir, args)
+    else:
+        run(
+            script_dir,
+            str(script_dir / "refresh_bonus_words.py"),
+            "--levels-dir",
+            str(project_path("src", "data")),
+            "--bonus-lexicon",
+            str(args.bonus_lexicon),
+            "--max-word-len",
+            str(args.max_word_len),
+            "--min-bonus-token-count",
+            str(args.min_bonus_token_count),
+        )
 
     if args.skip_problematic_postprocess:
         print("Skipping problematic postprocess (--skip-problematic-postprocess)")

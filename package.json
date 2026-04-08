@@ -26,7 +26,8 @@
     "fdroid:prepare-release": "uv run python scripts/fdroid_prepare_release.py",
     "icons:web": "magick images/icon1680cropped.png -define icon:auto-resize=16,32,48 public/favicon.ico && magick images/icon1680cropped.png -resize 32x32 public/favicon.png",
     "preview": "npm run build && vite preview --host",
-    "levels:build": "uv run python -u scripts/generate_all.py @scripts/levels_build.args"
+    "levels:build": "uv run python -u scripts/generate_all.py @scripts/levels_build.args",
+    "levels:updatebonus": "uv run python -u scripts/generate_all.py @scripts/levels_build.args --pipeline-mode updatebonus"
   },
   "keywords": [],
   "author": "",
